@@ -1,4 +1,7 @@
-# Attributes (Thuộc tính)
+
+# MODULE ROOM MANAGEMENT
+
+## Attributes (Thuộc tính)
 | Thuộc tính| Kiểu dữ liệu |
 |-----------|--------------|
 | Mã Phòng  | INT          |
@@ -6,7 +9,7 @@
 | Loại Phòng| String       |
 | Tầng      | INT          |
 | Sức chứa  | INT          |
-| Diện Tích | DOUBLE       |
+| Diện Tích | float        |
 | Trạng thái| String       |
 | Mô tả     | String       |
 | Hình ảnh  | VARCHAR(255) |
@@ -28,7 +31,35 @@ flowchart TD
     E --> F
     F --> G[Hiển thị danh sách quản lý phòng]
 ```
-### Quyền
+**Quyền**
 - Thêm, xoá, sửa  thông tin phòng.
 - Thay đổi trạng thái phòng.
 - Quản lý hình ảnh của phòng
+
+## STAFF
+```mermaid
+flowchart TD
+    A[Đăng nhập] --> B[Xem danh sách phòng]
+    B --> C[Kiểm tra trạng thái]
+    C --> D[Check-in]
+    C --> E[Check-out]
+    D --> F[Cập nhật trạng thái phòng]
+    E --> F
+```
+**Quyền**
+- Xem danh sách phòng
+- Cập nhật trạng thái phòng
+- Cập nhật tình trạng của phòng
+
+## CUSTOMER
+```mermaid
+flowchart TD
+    A[Truy cập vào hệ thống] --> B[Xem danh sách phòng]
+    B --> C[Lọc / Tìm kiếm phòng]
+    C --> D[Xem chi tiết phòng]
+    D --> E[Đặt phòng]
+```
+**Quyền**
+- Xem danh sách phòng
+- Xem thông tin của phòng
+- Đặt phòng
