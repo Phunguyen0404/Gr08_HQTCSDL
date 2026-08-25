@@ -10,6 +10,43 @@ Hệ thống quản lý khách sạn: quản lý phòng, đặt phòng, khách h
 - Quản lý khách hàng
 - Quản lý hóa đơn / thanh toán
 
+## Quản trị hệ thống và báo cáo thống kê
+#1. Quản trị hệ thống
+a.Xem danh sách nhân viên
+Get/api/admin/staff
+- Admin vào trang quản lí
+- Gọi API
+- Hệ thống trả về danh sách nhân viên
+
+b.Xem thông tin nhân viên
+Get/api/admin/staff/:id
+- Admin chọn một nhân viên
+- Gọi API với ID của nhân viên
+- Hệ thống trả về thông tin nhân viên đó
+
+c.Khóa/mở khóa tài khoản
+PATCH/api/admin/staff/:id/status
+- Admin bấm khóa hoặc mở khóa
+- Gửi id để + thêm trạng mới 
+- Hệ thống cập nhật trạng thái tài khoản
+
+#2. Báo cáo thống kê
+a.Xem thống kê doanh thu
+Get/admin/reports/revenue
+- Admin vào trang báo cáo thống kê
+- Chọn khoảng thời gian hoặc xem theo ngày/tháng
+- Gọi API
+- Hệ thống lấy dữ liệu doanh thu
+- Trả về thống kê doanh thu cho Admin
+
+b.Xem tỷ lệ lấp đầy phòng
+Get/api/admin/ reports/occupancy
+- Admin vào trang báo cáo thống kê
+- Chọn khoảng thời gian cần xem
+- Gọi API
+- Hệ thống lấy lấy dữ liệu phòng và lưu trú
+- Trả về tỷ lệ lấp đầy phòng cho admin.
+
 ## 🛠️ Công nghệ sử dụng
 
 | Thành phần | Công nghệ |
