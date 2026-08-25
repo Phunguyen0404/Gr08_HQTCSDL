@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Phòng</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-mark">H</span>
+                <div>
+                    <strong>Hotel</strong>
+                    <small>Management</small>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="dashboard.html">Tổng quan</a>
+                <a href="rooms.html" class="active">Phòng</a>
+                <a href="bookings.html">Đặt phòng</a>
+                <a href="customers.html">Khách hàng</a>
+                <a href="invoices.html">Hóa đơn</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Quản lý khách sạn</p>
+                    <h1>Quản lý phòng</h1>
+                </div>
+
+                <div class="user-badge">
+                    <span class="avatar">AD</span>
+                    <div>
+                        <strong>Admin</strong>
+                        <small>Quản trị viên</small>
+                    </div>
+                </div>
+            </header>
+
+            <section class="stats-grid">
+                <article class="stat-card accent-blue">
+                    <div>
+                        <span>Tổng phòng</span>
+                        <strong id="totalRooms">0</strong>
+                    </div>
+                    <i>🏨</i>
+                </article>
+
+                <article class="stat-card accent-green">
+                    <div>
+                        <span>Phòng trống</span>
+                        <strong id="availableRooms">0</strong>
+                    </div>
+                    <i>✅</i>
+                </article>
+
+                <article class="stat-card accent-orange">
+                    <div>
+                        <span>Đang thuê</span>
+                        <strong id="occupiedRooms">0</strong>
+                    </div>
+                    <i>🛏️</i>
+                </article>
+
+                <article class="stat-card accent-red">
+                    <div>
+                        <span>Bảo trì</span>
+                        <strong id="maintenanceRooms">0</strong>
+                    </div>
+                    <i>🛠️</i>
+                </article>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h2>Thông tin phòng</h2>
+                </div>
+
+                <form id="roomForm" class="room-form">
+                    <input type="hidden" id="roomId">
+
+                    <div class="form-grid">
+                        <label>
+                            <span>Mã phòng</span>
+                            <input id="roomCode" type="text" placeholder="VD: P101" required>
+                        </label>
+
+                        <label>
+                            <span>Tên phòng</span>
+                            <input id="roomName" type="text" placeholder="VD: Phòng Deluxe 101" required>
+                        </label>
+
+                        <label>
+                            <span>Loại phòng</span>
+                            <select id="roomType" required>
+                                <option value="Standard">Standard</option>
+                                <option value="Deluxe">Deluxe</option>
+                                <option value="Suite">Suite</option>
+                                <option value="Family">Family</option>
+                                <option value="VIP">VIP</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            <span>Giá / đêm</span>
+                            <input id="roomPrice" type="number" min="0" step="1000" placeholder="1200000" required>
+                        </label>
+
+                        <label>
+                            <span>Trạng thái</span>
+                            <select id="roomStatus" required>
+                                <option value="Trống">Trống</option>
+                                <option value="Đang thuê">Đang thuê</option>
+                                <option value="Bảo trì">Bảo trì</option>
+                                <option value="Đặt trước">Đặt trước</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            <span>Sức chứa</span>
+                            <input id="roomCapacity" type="number" min="1" max="10" value="2" required>
+                        </label>
+                    </div>
+
+                    <label class="full-width">
+                        <span>Ghi chú</span>
+                        <textarea id="roomNote" rows="3" placeholder="Nhập ghi chú về phòng..."></textarea>
+                    </label>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">Làm mới</button>
+                        <button type="submit" class="btn btn-primary">Lưu phòng</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h2>Danh sách phòng</h2>
+
+                    <div class="toolbar">
+                        <input id="searchInput" type="search" placeholder="Tìm kiếm mã / tên phòng">
+                        <select id="statusFilter">
+                            <option value="all">Tất cả trạng thái</option>
+                            <option value="Trống">Trống</option>
+                            <option value="Đang thuê">Đang thuê</option>
+                            <option value="Bảo trì">Bảo trì</option>
+                            <option value="Đặt trước">Đặt trước</option>
+                        </select>
+                        <select id="sortSelect">
+                            <option value="code-asc">Sắp xếp: Mã phòng A-Z</option>
+                            <option value="code-desc">Sắp xếp: Mã phòng Z-A</option>
+                            <option value="price-asc">Giá thấp đến cao</option>
+                            <option value="price-desc">Giá cao đến thấp</option>
+                            <option value="name-asc">Tên phòng A-Z</option>
+                            <option value="status-asc">Trạng thái</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã phòng</th>
+                                <th>Tên phòng</th>
+                                <th>Loại</th>
+                                <th>Giá / đêm</th>
+                                <th>Sức chứa</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roomTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/rooms.js" defer></script>
+</body>
+
+</html>
