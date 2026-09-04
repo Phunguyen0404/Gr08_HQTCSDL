@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Loại Phòng</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-mark">H</span>
+                <div>
+                    <strong>Hotel</strong>
+                    <small>Management</small>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="dashboard.html">Tổng quan</a>
+                <a href="rooms.html">Phòng</a>
+                <a href="room-types.html" class="active">Loại phòng</a>
+                <a href="bookings.html">Đặt phòng</a>
+                <a href="customers.html">Khách hàng</a>
+                <a href="invoices.html">Hóa đơn</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">Quản lý khách sạn</p>
+                    <h1>Quản lý loại phòng</h1>
+                </div>
+
+                <div class="user-badge">
+                    <span class="avatar">AD</span>
+                    <div>
+                        <strong>Admin</strong>
+                        <small>Quản trị viên</small>
+                    </div>
+                </div>
+            </header>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h2>Thông tin loại phòng</h2>
+                </div>
+
+                <form id="roomTypeForm" class="room-form">
+                    <input type="hidden" id="roomTypeId">
+
+                    <div class="form-grid">
+                        <label>
+                            <span>Tên loại phòng</span>
+                            <input id="roomTypeName" type="text" placeholder="VD: Deluxe" required>
+                        </label>
+
+                        <label>
+                            <span>Giá mặc định / đêm</span>
+                            <input id="roomTypePrice" type="number" min="0" step="1000" placeholder="1200000" required>
+                        </label>
+
+                        <label>
+                            <span>Sức chứa tối đa</span>
+                            <input id="roomTypeCapacity" type="number" min="1" max="10" value="2" required>
+                        </label>
+                    </div>
+
+                    <label class="full-width" style="margin-top: 16px;">
+                        <span>Mô tả</span>
+                        <textarea id="roomTypeDescription" rows="3" placeholder="Nhập mô tả về loại phòng..."></textarea>
+                    </label>
+
+                    <div class="form-actions" style="margin-top: 16px;">
+                        <button type="reset" class="btn btn-secondary">Làm mới</button>
+                        <button type="submit" class="btn btn-primary">Lưu loại phòng</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h2>Danh sách loại phòng</h2>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên loại phòng</th>
+                                <th>Giá mặc định</th>
+                                <th>Sức chứa</th>
+                                <th>Mô tả</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roomTypeTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/api.js" defer></script>
+    <script src="../js/roomTypes.js" defer></script>
+</body>
+
+</html>

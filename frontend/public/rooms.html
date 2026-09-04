@@ -22,6 +22,7 @@
             <nav class="nav-menu">
                 <a href="dashboard.html">Tổng quan</a>
                 <a href="rooms.html" class="active">Phòng</a>
+                <a href="room-types.html">Loại phòng</a>
                 <a href="bookings.html">Đặt phòng</a>
                 <a href="customers.html">Khách hàng</a>
                 <a href="invoices.html">Hóa đơn</a>
@@ -80,6 +81,24 @@
 
             <section class="panel">
                 <div class="panel-header">
+                    <h2>Kiểm tra phòng trống</h2>
+                </div>
+                <form id="checkAvailabilityForm" class="toolbar" style="margin-bottom: 0;">
+                    <label style="flex-direction: row; align-items: center; gap: 8px;">
+                        <span>Từ ngày:</span>
+                        <input type="date" id="checkInDate" required>
+                    </label>
+                    <label style="flex-direction: row; align-items: center; gap: 8px;">
+                        <span>Đến ngày:</span>
+                        <input type="date" id="checkOutDate" required>
+                    </label>
+                    <button type="submit" class="btn btn-primary">Kiểm tra</button>
+                    <button type="button" id="resetCheckAvailability" class="btn btn-secondary" style="display: none;">Hủy kiểm tra</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
                     <h2>Thông tin phòng</h2>
                 </div>
 
@@ -100,11 +119,7 @@
                         <label>
                             <span>Loại phòng</span>
                             <select id="roomType" required>
-                                <option value="Standard">Standard</option>
-                                <option value="Deluxe">Deluxe</option>
-                                <option value="Suite">Suite</option>
-                                <option value="Family">Family</option>
-                                <option value="VIP">VIP</option>
+                                <option value="" disabled selected>-- Chọn loại phòng --</option>
                             </select>
                         </label>
 
@@ -185,6 +200,7 @@
         </main>
     </div>
 
+    <script src="../js/api.js" defer></script>
     <script src="../js/rooms.js" defer></script>
 </body>
 

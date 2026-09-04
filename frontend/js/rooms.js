@@ -1,111 +1,12 @@
-const initialRooms = [
-    {
-        id: 1,
-        code: 'P101',
-        name: 'Phòng Deluxe 101',
-        type: 'Deluxe',
-        price: 1200000,
-        capacity: 2,
-        status: 'Trống',
-        note: 'View hướng hồ bơi'
-    },
-    {
-        id: 2,
-        code: 'P102',
-        name: 'Phòng Standard 102',
-        type: 'Standard',
-        price: 850000,
-        capacity: 2,
-        status: 'Đang thuê',
-        note: 'Phòng cho 2 người'
-    },
-    {
-        id: 3,
-        code: 'P201',
-        name: 'Phòng Suite 201',
-        type: 'Suite',
-        price: 2200000,
-        capacity: 4,
-        status: 'Đặt trước',
-        note: 'Cho gia đình'
-    },
-    {
-        id: 4,
-        code: 'P205',
-        name: 'Phòng Family 205',
-        type: 'Family',
-        price: 1800000,
-        capacity: 5,
-        status: 'Bảo trì',
-        note: 'Đang sửa máy lạnh'
-    },
-    {
-        id: 5,
-        code: 'P202',
-        name: 'Phòng Standard 202',
-        type: 'Standard',
-        price: 900000,
-        capacity: 2,
-        status: 'Trống',
-        note: 'Gần thang máy'
-    },
-    {
-        id: 6,
-        code: 'P203',
-        name: 'Phòng Deluxe 203',
-        type: 'Deluxe',
-        price: 1350000,
-        capacity: 3,
-        status: 'Đang thuê',
-        note: 'Có giường king size'
-    },
-    {
-        id: 7,
-        code: 'P301',
-        name: 'Phòng VIP 301',
-        type: 'VIP',
-        price: 3200000,
-        capacity: 2,
-        status: 'Trống',
-        note: 'Phòng cao cấp'
-    },
-    {
-        id: 8,
-        code: 'P302',
-        name: 'Phòng Family 302',
-        type: 'Family',
-        price: 1950000,
-        capacity: 4,
-        status: 'Đặt trước',
-        note: 'Phù hợp gia đình lớn'
-    },
-    {
-        id: 9,
-        code: 'P303',
-        name: 'Phòng Suite 303',
-        type: 'Suite',
-        price: 2500000,
-        capacity: 3,
-        status: 'Bảo trì',
-        note: 'Sửa tủ lạnh'
-    },
-    {
-        id: 10,
-        code: 'P401',
-        name: 'Phòng Standard 401',
-        type: 'Standard',
-        price: 950000,
-        capacity: 2,
-        status: 'Trống',
-        note: 'Phòng gần hồ bơi'
-    }
-];
+
 
 const state = {
-    rooms: [...initialRooms],
+    rooms: [],
+    roomTypes: [],
     search: '',
     filter: 'all',
-    sortBy: 'code-asc'
+    sortBy: 'code-asc',
+    availabilityCheckMode: false // true if we are showing only available rooms
 };
 
 const form = document.getElementById('roomForm');
@@ -121,6 +22,12 @@ const tableBody = document.getElementById('roomTableBody');
 const searchInput = document.getElementById('searchInput');
 const statusFilter = document.getElementById('statusFilter');
 const sortSelect = document.getElementById('sortSelect');
+
+// Availability Check Form
+const checkAvailabilityForm = document.getElementById('checkAvailabilityForm');
+const checkInDate = document.getElementById('checkInDate');
+const checkOutDate = document.getElementById('checkOutDate');
+const resetCheckAvailabilityBtn = document.getElementById('resetCheckAvailability');
 
 function formatCurrency(value) {
     return new Intl.NumberFormat('vi-VN', {
@@ -138,6 +45,45 @@ function getStatusClass(status) {
     };
     return map[status] || 'badge-trong';
 }
+
+async function loadData() {
+    try {
+        const [rooms, roomTypes] = await Promise.all([
+            RoomAPI.getAll(),
+            RoomTypeAPI.getAll()
+        ]);
+        
+        state.rooms = rooms;
+        state.roomTypes = roomTypes;
+        
+        populateRoomTypesDropdown();
+        render();
+    } catch (error) {
+        alert('Lỗi khi tải dữ liệu: ' + error.message);
+    }
+}
+
+function populateRoomTypesDropdown() {
+    roomType.innerHTML = '<option value="" disabled selected>-- Chọn loại phòng --</option>';
+    state.roomTypes.forEach(rt => {
+        const option = document.createElement('option');
+        option.value = rt.id;
+        option.textContent = rt.name;
+        // store default price & capacity for auto-fill
+        option.dataset.price = rt.price;
+        option.dataset.capacity = rt.capacity;
+        roomType.appendChild(option);
+    });
+}
+
+// Auto-fill price and capacity when room type changes
+roomType.addEventListener('change', (e) => {
+    const selectedOption = e.target.options[e.target.selectedIndex];
+    if (selectedOption && selectedOption.dataset.price) {
+        roomPrice.value = selectedOption.dataset.price;
+        roomCapacity.value = selectedOption.dataset.capacity;
+    }
+});
 
 function renderStats() {
     const total = state.rooms.length;
@@ -192,19 +138,31 @@ function renderTable() {
     const sortedRooms = sortRooms(filteredRooms);
 
     if (!sortedRooms.length) {
+        let msg = "Không có phòng nào phù hợp.";
+        if (state.availabilityCheckMode) {
+            msg = "Không tìm thấy phòng trống trong khoảng thời gian này.";
+        }
         tableBody.innerHTML = `
       <tr class="empty-row">
-        <td colspan="7">Không có phòng nào phù hợp.</td>
+        <td colspan="7">${msg}</td>
       </tr>
     `;
         return;
     }
 
-    tableBody.innerHTML = sortedRooms.map(room => `
+    tableBody.innerHTML = sortedRooms.map(room => {
+        // Resolve room type name if we have the id
+        let typeName = room.roomType;
+        if (room.roomTypeId) {
+            const rt = state.roomTypes.find(t => t.id == room.roomTypeId);
+            if (rt) typeName = rt.name;
+        }
+
+        return `
     <tr>
       <td>${room.code}</td>
       <td>${room.name}</td>
-      <td>${room.type}</td>
+      <td>${typeName || ''}</td>
       <td>${formatCurrency(room.price)}</td>
       <td>${room.capacity} người</td>
       <td><span class="badge ${getStatusClass(room.status)}">${room.status}</span></td>
@@ -215,22 +173,21 @@ function renderTable() {
         </div>
       </td>
     </tr>
-  `).join('');
+  `}).join('');
 }
 
 function resetForm() {
     form.reset();
     roomId.value = '';
-    roomType.value = 'Standard';
+    roomType.value = '';
     roomStatus.value = 'Trống';
-    roomCapacity.value = 2;
 }
 
 function fillForm(room) {
     roomId.value = room.id;
     roomCode.value = room.code;
     roomName.value = room.name;
-    roomType.value = room.type;
+    roomType.value = room.roomTypeId || '';
     roomPrice.value = room.price;
     roomStatus.value = room.status;
     roomCapacity.value = room.capacity;
@@ -238,51 +195,61 @@ function fillForm(room) {
 }
 
 function render() {
-    renderStats();
+    if (!state.availabilityCheckMode) {
+        renderStats();
+    }
     renderTable();
 }
 
-function handleSubmit(event) {
+async function handleSubmit(event) {
     event.preventDefault();
 
+    const selectedType = roomType.options[roomType.selectedIndex];
+    
     const data = {
         code: roomCode.value.trim(),
         name: roomName.value.trim(),
-        type: roomType.value,
+        roomTypeId: Number(roomType.value),
+        roomType: selectedType ? selectedType.text : '',
         price: Number(roomPrice.value),
         status: roomStatus.value,
         capacity: Number(roomCapacity.value),
         note: roomNote.value.trim()
     };
 
-    if (!data.code || !data.name || !data.price || !data.capacity) {
-        alert('Vui lòng nhập đầy đủ thông tin phòng.');
+    if (!data.code || !data.name || !data.price || !data.capacity || !data.roomTypeId) {
+        alert('Vui lòng nhập đầy đủ thông tin phòng (Mã, Tên, Loại, Giá, Sức chứa).');
         return;
     }
 
     const id = roomId.value;
 
-    if (id) {
-        state.rooms = state.rooms.map(room =>
-            room.id === Number(id) ? { ...room, ...data } : room
-        );
-    } else {
-        state.rooms.unshift({
-            id: Date.now(),
-            ...data
-        });
+    try {
+        if (id) {
+            await RoomAPI.update(id, data);
+            alert('Cập nhật phòng thành công!');
+        } else {
+            await RoomAPI.create(data);
+            alert('Thêm mới phòng thành công!');
+        }
+        resetForm();
+        if(!state.availabilityCheckMode) {
+            loadData();
+        } else {
+            // If in check mode, better to reset everything to see new room normally
+            resetAvailabilityCheck();
+        }
+    } catch (error) {
+        alert('Lỗi: ' + error.message);
     }
-
-    resetForm();
-    render();
 }
 
-function handleTableClick(event) {
+async function handleTableClick(event) {
     const button = event.target.closest('button[data-action]');
     if (!button) return;
 
-    const roomIdValue = Number(button.dataset.id);
-    const room = state.rooms.find(item => item.id === roomIdValue);
+    const roomIdValue = button.dataset.id;
+    const room = state.rooms.find(item => item.id == roomIdValue);
     if (!room) return;
 
     const action = button.dataset.action;
@@ -297,9 +264,51 @@ function handleTableClick(event) {
         const confirmDelete = window.confirm(`Bạn có muốn xóa phòng ${room.name}?`);
         if (!confirmDelete) return;
 
-        state.rooms = state.rooms.filter(item => item.id !== roomIdValue);
-        render();
+        try {
+            await RoomAPI.delete(roomIdValue);
+            alert('Xóa phòng thành công!');
+            if(!state.availabilityCheckMode) {
+                loadData();
+            } else {
+                state.rooms = state.rooms.filter(item => item.id != roomIdValue);
+                render();
+            }
+        } catch (error) {
+            alert('Lỗi khi xóa: ' + error.message);
+        }
     }
+}
+
+// Availability Functions
+async function handleCheckAvailability(event) {
+    event.preventDefault();
+    const cin = checkInDate.value;
+    const cout = checkOutDate.value;
+    
+    if(!cin || !cout) return;
+
+    try {
+        const availableRooms = await RoomAPI.getAvailable(cin, cout);
+        state.rooms = availableRooms;
+        state.availabilityCheckMode = true;
+        
+        // Hide total stats if in check mode, maybe show check mode header
+        document.querySelector('.stats-grid').style.opacity = '0.5';
+        
+        resetCheckAvailabilityBtn.style.display = 'inline-block';
+        renderTable();
+        alert(`Tìm thấy ${availableRooms.length} phòng trống.`);
+    } catch(error) {
+        alert('Lỗi khi kiểm tra: ' + error.message);
+    }
+}
+
+function resetAvailabilityCheck() {
+    checkAvailabilityForm.reset();
+    resetCheckAvailabilityBtn.style.display = 'none';
+    state.availabilityCheckMode = false;
+    document.querySelector('.stats-grid').style.opacity = '1';
+    loadData();
 }
 
 function handleSearch(event) {
@@ -323,12 +332,16 @@ sortSelect.addEventListener('change', handleSort);
 form.addEventListener('submit', handleSubmit);
 form.addEventListener('reset', () => {
     setTimeout(() => {
-        roomType.value = 'Standard';
+        roomType.value = '';
         roomStatus.value = 'Trống';
         roomCapacity.value = 2;
     }, 0);
 });
 tableBody.addEventListener('click', handleTableClick);
 
+checkAvailabilityForm.addEventListener('submit', handleCheckAvailability);
+resetCheckAvailabilityBtn.addEventListener('click', resetAvailabilityCheck);
+
+// Init
 resetForm();
-render();
+loadData();
