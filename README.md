@@ -95,6 +95,29 @@ Get/api/admin/ reports/occupancy
 | Database | MySQL |
 | Auth | JWT |
 
+## Chạy MySQL bằng Docker
+
+1. Tạo file môi trường:
+
+```bash
+cp .env.example .env
+```
+
+2. Khởi động database:
+
+```bash
+docker compose up -d
+```
+
+3. Chạy backend:
+
+```bash
+npm install
+npm run dev
+```
+
+MySQL sẽ chạy trong Docker ở `127.0.0.1:3307`, và lần khởi tạo đầu tiên sẽ tự import [`database/schema.sql`](/Users/sinhtran/HQTCSDL2026/Gr08_HQTCSDL/database/schema.sql) cùng [`database/seed.sql`](/Users/sinhtran/HQTCSDL2026/Gr08_HQTCSDL/database/seed.sql).
+
 ## 📁 Cấu trúc thư mục
 
 ```

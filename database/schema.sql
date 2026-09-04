@@ -28,8 +28,47 @@ CREATE TABLE TAI_KHOAN (
     CONSTRAINT UQ_TAI_KHOAN_TenDangNhap
         UNIQUE (TenDangNhap)
 ) ENGINE = InnoDB;
+-- Task 3
+DROP TRIGGER IF EXISTS trg_TAI_KHOAN_ValidateInsert;
+DELIMITER $$
+CREATE TRIGGER trg_TAI_KHOAN_ValidateInsert
+BEFORE INSERT ON TAI_KHOAN
+FOR EACH ROW
+BEGIN
+    -- 1. Username không được NULL hoặc rỗng
+    IF NEW.TenDangNhap IS NULL
+       OR TRIM(NEW.TenDangNhap) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TenDangNhap khong duoc de trong';
+    END IF;
 
+    -- 2. Username phải có độ dài từ 8 đến 30 ký tự
+    IF CHAR_LENGTH(NEW.TenDangNhap) < 8
+       OR CHAR_LENGTH(NEW.TenDangNhap) > 30 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TenDangNhap phai co tu 8 den 30 ky tu';
+    END IF;
 
+    -- 3. Username chỉ được chứa chữ cái Latin và chữ số
+    IF NEW.TenDangNhap NOT REGEXP '^[A-Za-z0-9]+$' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TenDangNhap chi duoc chua chu cai va chu so';
+    END IF;
+
+    -- 4. Username phải có ít nhất một chữ cái
+    IF NEW.TenDangNhap NOT REGEXP '[A-Za-z]' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'TenDangNhap phai co it nhat mot chu cai';
+    END IF;
+
+    -- 5. Password hash không được NULL hoặc rỗng
+    IF NEW.MatKhauHash IS NULL
+       OR TRIM(NEW.MatKhauHash) = '' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'MatKhauHash khong duoc de trong';
+    END IF;
+END$$
+DELIMITER ;
 -- ============================================================
 -- 2. KHACH_HANG
 -- ============================================================

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Hotel Management</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <main class="main-content">
+        <section class="panel">
+            <p class="eyebrow">Hotel Management</p>
+            <h1 id="authTitle">Đăng nhập</h1>
+            <div id="authMessage" role="status" aria-live="polite"></div>
+
+            <form id="loginForm" class="room-form">
+                <label for="loginUsername">
+                    <span>Tên đăng nhập</span>
+                    <input id="loginUsername" name="username" type="text" autocomplete="username" required>
+                </label>
+                <label for="loginPassword">
+                    <span>Mật khẩu</span>
+                    <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+                </label>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Đăng nhập</button>
+                </div>
+            </form>
+
+            <form id="registerForm" class="room-form" hidden>
+                <label for="registerUsername">
+                    <span>Tên đăng nhập</span>
+                    <input id="registerUsername" name="username" type="text" minlength="8" maxlength="30" autocomplete="username" required>
+                </label>
+                <label for="registerPassword">
+                    <span>Mật khẩu</span>
+                    <input id="registerPassword" name="password" type="password" minlength="8" maxlength="30" autocomplete="new-password" required>
+                </label>
+                <label for="registerConfirmPassword">
+                    <span>Xác nhận mật khẩu</span>
+                    <input id="registerConfirmPassword" name="confirmPassword" type="password" minlength="8" maxlength="30" autocomplete="new-password" required>
+                </label>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Đăng ký</button>
+                </div>
+            </form>
+
+            <p>
+                <span id="authSwitchText">Chưa có tài khoản?</span>
+                <button id="authSwitch" class="btn btn-secondary" type="button">Đăng ký</button>
+            </p>
+        </section>
+    </main>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+</html>
