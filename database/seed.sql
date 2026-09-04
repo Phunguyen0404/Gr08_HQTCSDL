@@ -24,21 +24,21 @@ INSERT INTO TAI_KHOAN
 VALUES
 (
     'TK001',
-    'admin01',
+    'admin001',
     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
     'ADMIN',
     'ACTIVE'
 ),
 (
     'TK002',
-    'staff01',
+    'staff001',
     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
     'STAFF',
     'ACTIVE'
 ),
 (
     'TK003',
-    'staff02',
+    'staff002',
     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
     'STAFF',
     'ACTIVE'
@@ -145,10 +145,10 @@ INSERT INTO NHAN_VIEN
     ChucVu,
     TrangThai,
     NgaySinh,
-    GioiTinhNV,
-    SoDienThoaiNV,
-    EmailNV,
-    DiaChiNV,
+    GioiTinh,
+    SoDienThoai,
+    Email,
+    DiaChi,
     NgayVaoLam
 )
 VALUES
@@ -255,7 +255,7 @@ INSERT INTO PHONG
     MaLoaiPhong,
     Tang,
     TrangThai,
-    MoTaPhong
+    MoTa
 )
 VALUES
 (
