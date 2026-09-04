@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý tài khoản nhân viên</title>
+
+```
+<link rel="stylesheet" href="../css/staff.css">
+```
+
+</head>
+
+<body>
+
+```
+<!-- Sidebar -->
+<aside class="sidebar">
+
+    <div class="logo">
+        <span>🏨</span>
+        <strong>HOTEL<br>MANAGEMENT</strong>
+    </div>
+
+    <nav class="menu">
+
+        <a href="dashboard.html" class="menu-item">
+            <span>▣</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="staff.html" class="menu-item active">
+            <span>👥</span>
+            <span>Tài khoản nhân viên</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span>🏨</span>
+            <span>Phòng</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span>📅</span>
+            <span>Đặt phòng</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span>💰</span>
+            <span>Hóa đơn</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span>📈</span>
+            <span>Báo cáo</span>
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <a href="#" class="menu-item">
+            <span>⚙️</span>
+            <span>Cài đặt</span>
+        </a>
+
+        <a href="#" class="menu-item">
+            <span>🚪</span>
+            <span>Đăng xuất</span>
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- Main content -->
+<main class="main-content">
+
+    <!-- Header -->
+    <header class="top-header">
+
+        <div>
+            <h1>Quản lý tài khoản nhân viên</h1>
+            <p>Quản lý thông tin và trạng thái tài khoản nhân viên</p>
+        </div>
+
+        <div class="admin-info">
+
+            <div class="admin-avatar">
+                NL
+            </div>
+
+            <div>
+                <strong>Nguyễn Thị Lan</strong>
+                <small>Quản trị viên</small>
+            </div>
+
+            <span>▼</span>
+
+        </div>
+
+    </header>
+
+
+    <!-- Toolbar -->
+    <section class="toolbar">
+
+        <div class="search-box">
+
+            <span>🔍</span>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Tìm kiếm theo mã NV, họ tên hoặc email..."
+            >
+
+        </div>
+
+        <button class="add-btn" id="addStaffBtn">
+            + Thêm nhân viên
+        </button>
+
+    </section>
+
+
+    <!-- Statistics -->
+    <section class="staff-stats">
+
+        <div class="stat-box">
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <div>
+                <span>Tổng nhân viên</span>
+                <strong id="totalStaff">3</strong>
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div>
+                <span>Đang hoạt động</span>
+                <strong id="activeStaff">3</strong>
+            </div>
+
+        </div>
+
+
+        <div class="stat-box">
+
+            <div class="stat-icon">
+                🔒
+            </div>
+
+            <div>
+                <span>Đã khóa</span>
+                <strong id="lockedStaff">0</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Staff table -->
+    <section class="staff-table-section">
+
+        <div class="section-header">
+
+            <div>
+                <h2>Danh sách nhân viên</h2>
+                <p>Thông tin các tài khoản nhân viên trong hệ thống</p>
+            </div>
+
+            <select id="statusFilter">
+
+                <option value="ALL">
+                    Tất cả trạng thái
+                </option>
+
+                <option value="ACTIVE">
+                    Đang hoạt động
+                </option>
+
+                <option value="INACTIVE">
+                    Đã khóa
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Table -->
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Mã NV</th>
+                        <th>Nhân viên</th>
+                        <th>Email</th>
+                        <th>Chức vụ</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày vào làm</th>
+                        <th>Thao tác</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="staffTableBody">
+
+                    <!-- NV001 -->
+                    <tr>
+
+                        <td>
+                            NV001
+                        </td>
+
+                        <td>
+
+                            <div class="staff-info">
+
+                                <div class="staff-avatar">
+                                    NL
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Nguyễn Thị Lan
+                                    </strong>
+
+                                    <small>
+                                        0902000001
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            lan.nguyen@hotel.com
+                        </td>
+
+                        <td>
+                            Quản lý
+                        </td>
+
+                        <td>
+                            <span class="role admin">
+                                ADMIN
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status active">
+                                Đang hoạt động
+                            </span>
+                        </td>
+
+                        <td>
+                            10/01/2023
+                        </td>
+
+                        <td>
+
+                            <button class="lock-btn">
+                                🔒 Khóa
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- NV002 -->
+                    <tr>
+
+                        <td>
+                            NV002
+                        </td>
+
+                        <td>
+
+                            <div class="staff-info">
+
+                                <div class="staff-avatar">
+                                    TM
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Trần Văn Minh
+                                    </strong>
+
+                                    <small>
+                                        0902000002
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            minh.tran@hotel.com
+                        </td>
+
+                        <td>
+                            Lễ tân
+                        </td>
+
+                        <td>
+                            <span class="role staff">
+                                STAFF
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status active">
+                                Đang hoạt động
+                            </span>
+                        </td>
+
+                        <td>
+                            15/03/2024
+                        </td>
+
+                        <td>
+
+                            <button class="lock-btn">
+                                🔒 Khóa
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- NV003 -->
+                    <tr>
+
+                        <td>
+                            NV003
+                        </td>
+
+                        <td>
+
+                            <div class="staff-info">
+
+                                <div class="staff-avatar">
+                                    LH
+                                </div>
+
+                                <div>
+                                    <strong>
+                                        Lê Thị Hoa
+                                    </strong>
+
+                                    <small>
+                                        0902000003
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            hoa.le@hotel.com
+                        </td>
+
+                        <td>
+                            Lễ tân
+                        </td>
+
+                        <td>
+                            <span class="role staff">
+                                STAFF
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="status active">
+                                Đang hoạt động
+                            </span>
+                        </td>
+
+                        <td>
+                            01/06/2024
+                        </td>
+
+                        <td>
+
+                            <button class="lock-btn">
+                                🔒 Khóa
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- JavaScript -->
+<script src="../js/staff.js"></script>
+```
+
+</body>
+</html>

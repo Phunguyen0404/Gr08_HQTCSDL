@@ -16,67 +16,86 @@ async function loadDashboard() {
             );
         }
 
-        // =========================
+        console.log("DỮ LIỆU DASHBOARD:", data);
+
+        // ==========================================
         // 1. THẺ THỐNG KÊ
-        // =========================
+        // ==========================================
 
         const statCards = document.querySelectorAll(".stat-card");
 
+        // ------------------------------------------
         // Doanh thu hôm nay
+        // Backend: data.revenue.today
+        // ------------------------------------------
         if (statCards[0]) {
             const title = statCards[0].querySelector("h2");
 
             if (title) {
-                title.textContent =
-                    formatMoney(data.revenue.doanhThuHomNay);
+                title.textContent = formatMoney(
+                    data.revenue?.today || 0
+                );
             }
 
             const text = statCards[0].querySelector("p");
 
             if (text) {
-                text.textContent = "Dữ liệu từ hệ thống";
+                text.innerHTML =
+                    '<span>Dữ liệu thực tế từ hệ thống</span>';
             }
         }
 
+        // ------------------------------------------
         // Doanh thu tháng
+        // Backend: data.revenue.month
+        // ------------------------------------------
         if (statCards[1]) {
             const title = statCards[1].querySelector("h2");
 
             if (title) {
-                title.textContent =
-                    formatMoney(data.revenue.doanhThuThang);
+                title.textContent = formatMoney(
+                    data.revenue?.month || 0
+                );
             }
 
             const text = statCards[1].querySelector("p");
 
             if (text) {
-                text.textContent = "Dữ liệu từ hệ thống";
+                text.innerHTML =
+                    '<span>Dữ liệu thực tế từ hệ thống</span>';
             }
         }
 
+        // ------------------------------------------
         // Tỷ lệ lấp đầy
+        // Backend: data.occupancy
+        // ------------------------------------------
         if (statCards[2]) {
             const title = statCards[2].querySelector("h2");
 
             if (title) {
                 title.textContent =
-                    `${data.occupancy.tyLeLapDay}%`;
+                    `${Number(data.occupancy || 0).toFixed(2)}%`;
             }
 
             const text = statCards[2].querySelector("p");
 
             if (text) {
-                text.textContent = "Dữ liệu từ hệ thống";
+                text.innerHTML =
+                    '<span>Dữ liệu thực tế từ hệ thống</span>';
             }
         }
 
+        // ------------------------------------------
         // Tài khoản nhân viên
+        // Backend: data.staff.total
+        // ------------------------------------------
         if (statCards[3]) {
             const title = statCards[3].querySelector("h2");
 
             if (title) {
                 title.textContent =
-                    data.staff.tongNhanVien;
+                    data.staff?.total || 0;
             }
 
             const activeText =
@@ -84,85 +103,82 @@ async function loadDashboard() {
 
             if (activeText) {
                 activeText.textContent =
-                    `${data.staff.dangHoatDong} đang hoạt động`;
+                    `${data.staff?.active || 0} đang hoạt động`;
             }
         }
 
 
-        // =========================
+        // ==========================================
         // 2. BIỂU ĐỒ DOANH THU
-        // =========================
+        // ==========================================
 
-        const bars = document.querySelectorAll(".bar");
-        const chartData = data.revenueChart || [];
+        const bars =
+            document.querySelectorAll(".bar");
 
-        if (bars.length > 0) {
+        const chartData =
+            data.revenueChart || [];
 
-            // Xóa dữ liệu giả
-            bars.forEach(bar => {
-                bar.style.height = "0%";
+        // Xóa toàn bộ chiều cao giả
+        bars.forEach(bar => {
+            bar.style.height = "0%";
+        });
+
+        if (chartData.length > 0 && bars.length > 0) {
+
+            const values = chartData.map(item =>
+                Number(item.doanhThu || 0)
+            );
+
+            const maxRevenue =
+                Math.max(...values, 1);
+
+            chartData.forEach((item, index) => {
+
+                if (index >= bars.length) {
+                    return;
+                }
+
+                const value =
+                    Number(item.doanhThu || 0);
+
+                const height =
+                    (value / maxRevenue) * 100;
+
+                bars[index].style.height =
+                    `${height}%`;
+
+                const wrapper =
+                    bars[index].closest(".bar-wrapper");
+
+                if (wrapper) {
+
+                    const label =
+                        wrapper.querySelector("span");
+
+                    if (label) {
+                        label.textContent =
+                            formatChartDate(item.ngay);
+                    }
+                }
+
+                // Hiện doanh thu khi rê chuột
+                bars[index].title =
+                    formatMoney(value);
             });
-
-            if (chartData.length > 0) {
-
-                const values = chartData.map(item =>
-                    Number(item.doanhThu || 0)
-                );
-
-                const maxRevenue =
-                    Math.max(...values, 1);
-
-                chartData.forEach((item, index) => {
-
-                    if (index >= bars.length) {
-                        return;
-                    }
-
-                    const value =
-                        Number(item.doanhThu || 0);
-
-                    const height =
-                        (value / maxRevenue) * 100;
-
-                    bars[index].style.height =
-                        `${height}%`;
-
-                    // HTML hiện tại:
-                    // .bar-wrapper
-                    //     .bar
-                    //     span
-                    const wrapper =
-                        bars[index].closest(".bar-wrapper");
-
-                    if (wrapper) {
-
-                        const label =
-                            wrapper.querySelector("span");
-
-                        if (label) {
-                            label.textContent =
-                                formatDate(item.ngay);
-                        }
-                    }
-                });
-            }
         }
 
 
-        // =========================
+        // ==========================================
         // 3. TỶ LỆ LẤP ĐẦY
-        // =========================
+        // ==========================================
+
+        const occupancyRate =
+            Number(data.occupancy || 0);
 
         const circle =
             document.querySelector(".circle");
 
-        const occupancyRate =
-            Number(
-                data.occupancy.tyLeLapDay || 0
-            );
-
         if (circle) {
-
             circle.style.background =
                 `conic-gradient(
                     #c59b5f 0 ${occupancyRate}%,
@@ -176,21 +192,21 @@ async function loadDashboard() {
             );
 
         if (circleValue) {
-
             circleValue.textContent =
-                `${occupancyRate}%`;
+                `${occupancyRate.toFixed(2)}%`;
         }
 
 
-        // =========================
+        // ==========================================
         // 4. TRẠNG THÁI PHÒNG
-        // =========================
+        // ==========================================
 
         const roomCounts = {
             AVAILABLE: 0,
             OCCUPIED: 0,
             CLEANING: 0,
-            MAINTENANCE: 0
+            MAINTENANCE: 0,
+            OUT_OF_SERVICE: 0
         };
 
         (data.rooms || []).forEach(room => {
@@ -198,8 +214,12 @@ async function loadDashboard() {
             const status =
                 room.TrangThai;
 
-            if (roomCounts.hasOwnProperty(status)) {
-
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    roomCounts,
+                    status
+                )
+            ) {
                 roomCounts[status] =
                     Number(room.soLuong || 0);
             }
@@ -215,59 +235,54 @@ async function loadDashboard() {
 
             // Đang sử dụng
             if (rows[0]) {
-
                 const number =
                     rows[0].querySelector("strong");
 
                 if (number) {
                     number.textContent =
-                        roomCounts.OCCUPIED;
+                        `${roomCounts.OCCUPIED} phòng`;
                 }
             }
 
             // Phòng trống
             if (rows[1]) {
-
                 const number =
                     rows[1].querySelector("strong");
 
                 if (number) {
                     number.textContent =
-                        roomCounts.AVAILABLE;
+                        `${roomCounts.AVAILABLE} phòng`;
                 }
             }
 
             // Đang dọn
             if (rows[2]) {
-
                 const number =
                     rows[2].querySelector("strong");
 
                 if (number) {
                     number.textContent =
-                        roomCounts.CLEANING;
+                        `${roomCounts.CLEANING} phòng`;
                 }
             }
 
             // Bảo trì
             if (rows[3]) {
-
                 const number =
                     rows[3].querySelector("strong");
 
                 if (number) {
                     number.textContent =
-                        roomCounts.MAINTENANCE;
+                        `${roomCounts.MAINTENANCE} phòng`;
                 }
             }
         }
 
 
-        // =========================
+        // ==========================================
         // 5. DANH SÁCH NHÂN VIÊN
-        // =========================
+        // ==========================================
 
-        // HTML hiện tại không có class staff-table
         const staffTableBody =
             document.querySelector(
                 ".staff-panel table tbody"
@@ -285,6 +300,7 @@ async function loadDashboard() {
                 const initials =
                     getInitials(staff.HoTen);
 
+                // Trạng thái tài khoản
                 let statusText =
                     "Đang hoạt động";
 
@@ -294,35 +310,54 @@ async function loadDashboard() {
                 if (
                     staff.trangThaiTaiKhoan === "LOCKED"
                 ) {
+                    statusText =
+                        "Đã khóa";
 
-                    statusText = "Đã khóa";
-                    statusClass = "locked";
+                    statusClass =
+                        "locked";
+                }
 
-                } else if (
+                if (
                     staff.trangThaiTaiKhoan === "INACTIVE"
                 ) {
-
                     statusText =
                         "Không hoạt động";
 
-                    statusClass = "locked";
+                    statusClass =
+                        "locked";
+                }
+
+                // Vai trò thật từ TAI_KHOAN
+                let roleText =
+                    staff.VaiTro || "STAFF";
+
+                if (roleText === "ADMIN") {
+                    roleText = "Admin";
+                } else if (roleText === "STAFF") {
+                    roleText = "Staff";
+                } else if (roleText === "CUSTOMER") {
+                    roleText = "Customer";
                 }
 
                 row.innerHTML = `
                     <td>
                         <div class="staff-info">
 
-                            <div class="avatar">
+                            <div class="staff-avatar">
                                 ${escapeHTML(initials)}
                             </div>
 
                             <div>
                                 <strong>
-                                    ${escapeHTML(staff.HoTen)}
+                                    ${escapeHTML(
+                                        staff.HoTen
+                                    )}
                                 </strong>
 
                                 <small>
-                                    ${escapeHTML(staff.MaNV)}
+                                    ${escapeHTML(
+                                        staff.MaNV
+                                    )}
                                 </small>
                             </div>
 
@@ -330,11 +365,15 @@ async function loadDashboard() {
                     </td>
 
                     <td>
-                        ${escapeHTML(staff.Email)}
+                        ${escapeHTML(
+                            staff.Email || ""
+                        )}
                     </td>
 
                     <td>
-                        Staff
+                        <span class="role staff">
+                            ${escapeHTML(roleText)}
+                        </span>
                     </td>
 
                     <td>
@@ -344,13 +383,16 @@ async function loadDashboard() {
                     </td>
 
                     <td>
-                        ${formatDate(staff.NgayVaoLam)}
+                        ${formatDate(
+                            staff.NgayVaoLam
+                        )}
                     </td>
 
                     <td>
                         <button class="btn-action">
                             ${
-                                staff.trangThaiTaiKhoan === "LOCKED"
+                                staff.trangThaiTaiKhoan ===
+                                "LOCKED"
                                     ? "Mở khóa"
                                     : "Khóa"
                             }
@@ -368,13 +410,16 @@ async function loadDashboard() {
             "Lỗi kết nối Dashboard:",
             error
         );
+
+        // Không để dữ liệu giả tiếp tục tồn tại
+        clearFakeDashboardData();
     }
 }
 
 
-// =========================
+// ==========================================
 // ĐỊNH DẠNG TIỀN
-// =========================
+// ==========================================
 
 function formatMoney(value) {
 
@@ -389,9 +434,9 @@ function formatMoney(value) {
 }
 
 
-// =========================
+// ==========================================
 // ĐỊNH DẠNG NGÀY
-// =========================
+// ==========================================
 
 function formatDate(value) {
 
@@ -421,9 +466,38 @@ function formatDate(value) {
 }
 
 
-// =========================
+// ==========================================
+// ĐỊNH DẠNG NGÀY CHO BIỂU ĐỒ
+// ==========================================
+
+function formatChartDate(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    const date =
+        new Date(value);
+
+    if (isNaN(date.getTime())) {
+        return value;
+    }
+
+    const day =
+        String(date.getDate())
+            .padStart(2, "0");
+
+    const month =
+        String(date.getMonth() + 1)
+            .padStart(2, "0");
+
+    return `${day}/${month}`;
+}
+
+
+// ==========================================
 // LẤY CHỮ CÁI ĐẦU TÊN
-// =========================
+// ==========================================
 
 function getInitials(name) {
 
@@ -448,9 +522,9 @@ function getInitials(name) {
 }
 
 
-// =========================
+// ==========================================
 // ESCAPE HTML
-// =========================
+// ==========================================
 
 function escapeHTML(value) {
 
@@ -467,4 +541,57 @@ function escapeHTML(value) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+
+// ==========================================
+// XÓA DỮ LIỆU GIẢ NẾU API LỖI
+// ==========================================
+
+function clearFakeDashboardData() {
+
+    const statCards =
+        document.querySelectorAll(".stat-card");
+
+    if (statCards[0]) {
+        const title =
+            statCards[0].querySelector("h2");
+
+        if (title) {
+            title.textContent = "0 ₫";
+        }
+    }
+
+    if (statCards[1]) {
+        const title =
+            statCards[1].querySelector("h2");
+
+        if (title) {
+            title.textContent = "0 ₫";
+        }
+    }
+
+    if (statCards[2]) {
+        const title =
+            statCards[2].querySelector("h2");
+
+        if (title) {
+            title.textContent = "0%";
+        }
+    }
+
+    if (statCards[3]) {
+        const title =
+            statCards[3].querySelector("h2");
+
+        if (title) {
+            title.textContent = "0";
+        }
+    }
+
+    document
+        .querySelectorAll(".bar")
+        .forEach(bar => {
+            bar.style.height = "0%";
+        });
 }
