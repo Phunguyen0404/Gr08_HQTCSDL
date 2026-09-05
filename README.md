@@ -1,11 +1,3 @@
-Dưới đây là nội dung chi tiết bạn có thể copy trực tiếp vào file **`README.md`** để gửi cho các thành viên trong team. Nội dung này được thiết kế theo đúng quy trình chuẩn để hạn chế tối đa conflict và tránh vỡ code nhánh `DEV`.
-
-
-
----
-
-
-
 ### 📝 Hướng dẫn đồng bộ nhánh Feature với nhánh DEV mới
 
 
