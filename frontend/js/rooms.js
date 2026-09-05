@@ -52,10 +52,10 @@ async function loadData() {
             RoomAPI.getAll(),
             RoomTypeAPI.getAll()
         ]);
-        
+
         state.rooms = rooms;
         state.roomTypes = roomTypes;
-        
+
         populateRoomTypesDropdown();
         render();
     } catch (error) {
@@ -205,7 +205,7 @@ async function handleSubmit(event) {
     event.preventDefault();
 
     const selectedType = roomType.options[roomType.selectedIndex];
-    
+
     const data = {
         code: roomCode.value.trim(),
         name: roomName.value.trim(),
@@ -233,7 +233,7 @@ async function handleSubmit(event) {
             alert('Thêm mới phòng thành công!');
         }
         resetForm();
-        if(!state.availabilityCheckMode) {
+        if (!state.availabilityCheckMode) {
             loadData();
         } else {
             // If in check mode, better to reset everything to see new room normally
@@ -267,7 +267,7 @@ async function handleTableClick(event) {
         try {
             await RoomAPI.delete(roomIdValue);
             alert('Xóa phòng thành công!');
-            if(!state.availabilityCheckMode) {
+            if (!state.availabilityCheckMode) {
                 loadData();
             } else {
                 state.rooms = state.rooms.filter(item => item.id != roomIdValue);
@@ -284,21 +284,24 @@ async function handleCheckAvailability(event) {
     event.preventDefault();
     const cin = checkInDate.value;
     const cout = checkOutDate.value;
-    
-    if(!cin || !cout) return;
+
+    if (!cin || !cout) return;
 
     try {
         const availableRooms = await RoomAPI.getAvailable(cin, cout);
         state.rooms = availableRooms;
         state.availabilityCheckMode = true;
-        
-        // Hide total stats if in check mode, maybe show check mode header
-        document.querySelector('.stats-grid').style.opacity = '0.5';
-        
+
+        // Hide stats if in check mode
+        const statsPanel = document.querySelector('.staff-stats');
+        if (statsPanel) {
+            statsPanel.style.opacity = '0.5';
+        }
+
         resetCheckAvailabilityBtn.style.display = 'inline-block';
         renderTable();
         alert(`Tìm thấy ${availableRooms.length} phòng trống.`);
-    } catch(error) {
+    } catch (error) {
         alert('Lỗi khi kiểm tra: ' + error.message);
     }
 }
@@ -307,7 +310,10 @@ function resetAvailabilityCheck() {
     checkAvailabilityForm.reset();
     resetCheckAvailabilityBtn.style.display = 'none';
     state.availabilityCheckMode = false;
-    document.querySelector('.stats-grid').style.opacity = '1';
+    const statsPanel = document.querySelector('.staff-stats');
+    if (statsPanel) {
+        statsPanel.style.opacity = '1';
+    }
     loadData();
 }
 
