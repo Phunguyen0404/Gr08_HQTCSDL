@@ -396,3 +396,89 @@
     .room-grid{grid-template-columns:1fr;}
     .search-btn{grid-column:1 / -1;}
   }
+  /* ---------- Booking form additions ---------- */
+  .input-field{
+    font-family:'Space Mono', monospace;
+    font-size:15px;
+    color:var(--deep);
+    border:none;
+    background:transparent;
+    padding:0;
+    width:100%;
+  }
+  .input-field:focus{outline:none;}
+
+  .form-message{
+    max-width:1200px;
+    margin:16px auto 0;
+    padding:0 6vw;
+    font-size:13px;
+    color:var(--ochre-dark);
+    min-height:18px;
+  }
+  .form-message.error{color:#B23A3A;}
+  .form-message.success{color:#2F7A4F;}
+
+  .empty-state{
+    color:var(--ink-soft);
+    font-size:14px;
+    grid-column:1 / -1;
+  }
+
+  .ticket.selected{
+    outline:2px solid var(--ochre);
+    outline-offset:2px;
+  }
+
+  .booking-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .booking-row{
+    background:var(--white);
+    border-radius:8px;
+    padding:18px 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    box-shadow:0 12px 30px -24px rgba(18,41,43,0.5);
+  }
+  .booking-row .info h4{
+    font-family:'Fraunces', serif;
+    font-size:16px;
+    color:var(--deep);
+    margin:0 0 4px;
+  }
+  .booking-row .info p{
+    margin:0;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .status-pill{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    padding:5px 12px;
+    border-radius:20px;
+    text-transform:uppercase;
+  }
+  .status-pending{background:#F4E9D6;color:var(--ochre-dark);}
+  .status-confirmed{background:#DDEAE6;color:var(--slate);}
+  .status-checked_in{background:#DCE8F4;color:#2E5E8C;}
+  .status-completed{background:#E3E7DC;color:#4C5B3D;}
+  .status-cancelled{background:#F3DEDE;color:#B23A3A;}
+  .status-no_show{background:#EEE;color:#666;}
+  .cancel-btn{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    padding:9px 16px;
+    border-radius:4px;
+    font-size:12.5px;
+    transition:border-color .2s, color .2s;
+  }
+  .cancel-btn:hover{border-color:#B23A3A;color:#B23A3A;}
+  .cancel-btn:disabled{opacity:0.4;cursor:not-allowed;}
