@@ -1008,26 +1008,28 @@ STATUS
 
 }
 
-/* ========================================
-ACTION BUTTON
-======================================== */
+.empty-message {
+    padding: 16px;
+    color: #64748b;
+    font-size: 14px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px dashed #dbe3e8;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
 
-.lock-btn,
-.unlock-btn {
-    border: none;
+border-radius: 6px;
 
+padding: 7px 11px;
 
-    border-radius: 6px;
+font-size: 12px;
 
-    padding: 7px 11px;
+cursor: pointer;
 
-    font-size: 12px;
+font-weight: 600;
 
-    cursor: pointer;
-
-    font-weight: 600;
-
-    transition: background 0.2s;
+transition: background 0.2s;
 
 
 }

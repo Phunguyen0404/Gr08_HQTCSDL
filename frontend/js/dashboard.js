@@ -24,16 +24,16 @@ async function loadDashboard() {
 
         const statCards = document.querySelectorAll(".stat-card");
 
-        // ------------------------------------------
-        // Doanh thu hôm nay
-        // Backend: data.revenue.today
-        // ------------------------------------------
+        const revenue = data.revenue || {};
+        const occupancy = data.occupancy || {};
+        const staffInfo = data.staff || {};
+
         if (statCards[0]) {
             const title = statCards[0].querySelector("h2");
 
             if (title) {
                 title.textContent = formatMoney(
-                    data.revenue?.today || 0
+                    Number(revenue.today ?? revenue.doanhThuHomNay ?? 0)
                 );
             }
 
@@ -45,16 +45,12 @@ async function loadDashboard() {
             }
         }
 
-        // ------------------------------------------
-        // Doanh thu tháng
-        // Backend: data.revenue.month
-        // ------------------------------------------
         if (statCards[1]) {
             const title = statCards[1].querySelector("h2");
 
             if (title) {
                 title.textContent = formatMoney(
-                    data.revenue?.month || 0
+                    Number(revenue.month ?? revenue.doanhThuThang ?? 0)
                 );
             }
 
@@ -66,16 +62,12 @@ async function loadDashboard() {
             }
         }
 
-        // ------------------------------------------
-        // Tỷ lệ lấp đầy
-        // Backend: data.occupancy
-        // ------------------------------------------
         if (statCards[2]) {
             const title = statCards[2].querySelector("h2");
+            const occupancyRateValue = Number(occupancy.tyLeLapDay ?? 0);
 
             if (title) {
-                title.textContent =
-                    `${Number(data.occupancy || 0).toFixed(2)}%`;
+                title.textContent = `${occupancyRateValue.toFixed(2)}%`;
             }
 
             const text = statCards[2].querySelector("p");
@@ -86,16 +78,11 @@ async function loadDashboard() {
             }
         }
 
-        // ------------------------------------------
-        // Tài khoản nhân viên
-        // Backend: data.staff.total
-        // ------------------------------------------
         if (statCards[3]) {
             const title = statCards[3].querySelector("h2");
 
             if (title) {
-                title.textContent =
-                    data.staff?.total || 0;
+                title.textContent = Number(staffInfo.total ?? staffInfo.tongNhanVien ?? 0);
             }
 
             const activeText =
@@ -103,7 +90,7 @@ async function loadDashboard() {
 
             if (activeText) {
                 activeText.textContent =
-                    `${data.staff?.active || 0} đang hoạt động`;
+                    `${Number(staffInfo.active ?? staffInfo.dangHoatDong ?? 0)} đang hoạt động`;
             }
         }
 
@@ -173,7 +160,7 @@ async function loadDashboard() {
         // ==========================================
 
         const occupancyRate =
-            Number(data.occupancy || 0);
+            Number(data.occupancy?.tyLeLapDay ?? 0);
 
         const circle =
             document.querySelector(".circle");
@@ -350,14 +337,14 @@ async function loadDashboard() {
                             <div>
                                 <strong>
                                     ${escapeHTML(
-                                        staff.HoTen
-                                    )}
+                    staff.HoTen
+                )}
                                 </strong>
 
                                 <small>
                                     ${escapeHTML(
-                                        staff.MaNV
-                                    )}
+                    staff.MaNV
+                )}
                                 </small>
                             </div>
 
@@ -366,8 +353,8 @@ async function loadDashboard() {
 
                     <td>
                         ${escapeHTML(
-                            staff.Email || ""
-                        )}
+                    staff.Email || ""
+                )}
                     </td>
 
                     <td>
@@ -384,18 +371,17 @@ async function loadDashboard() {
 
                     <td>
                         ${formatDate(
-                            staff.NgayVaoLam
-                        )}
+                    staff.NgayVaoLam
+                )}
                     </td>
 
                     <td>
                         <button class="btn-action">
-                            ${
-                                staff.trangThaiTaiKhoan ===
-                                "LOCKED"
-                                    ? "Mở khóa"
-                                    : "Khóa"
-                            }
+                            ${staff.trangThaiTaiKhoan ===
+                        "LOCKED"
+                        ? "Mở khóa"
+                        : "Khóa"
+                    }
                         </button>
                     </td>
                 `;

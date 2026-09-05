@@ -55,10 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             tableBody.innerHTML = "";
 
-            emptyMessage.textContent =
-                "Không thể kết nối đến hệ thống.";
-
-            emptyMessage.style.display = "block";
+            if (emptyMessage) {
+                emptyMessage.textContent =
+                    "Không thể kết nối đến hệ thống.";
+                emptyMessage.style.display = "block";
+            }
 
         }
     }
@@ -74,15 +75,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (data.length === 0) {
 
-            emptyMessage.textContent =
-                "Không có nhân viên nào.";
-
-            emptyMessage.style.display = "block";
+            if (emptyMessage) {
+                emptyMessage.textContent =
+                    "Không có nhân viên nào.";
+                emptyMessage.style.display = "block";
+            }
 
             return;
         }
 
-        emptyMessage.style.display = "none";
+        if (emptyMessage) {
+            emptyMessage.style.display = "none";
+        }
 
 
         data.forEach(staff => {
@@ -359,12 +363,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (visibleCount === 0) {
 
-            emptyMessage.textContent =
-                "Không tìm thấy nhân viên phù hợp.";
+            if (emptyMessage) {
+                emptyMessage.textContent =
+                    "Không tìm thấy nhân viên phù hợp.";
+                emptyMessage.style.display = "block";
+            }
 
-            emptyMessage.style.display = "block";
-
-        } else {
+        } else if (emptyMessage) {
 
             emptyMessage.style.display = "none";
 
