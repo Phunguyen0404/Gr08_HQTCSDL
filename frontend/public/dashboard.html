@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,24 +26,39 @@
 
         <nav class="menu">
 
-            <a href="#" class="menu-item active">
+            <a href="dashboard.html" class="menu-item active">
                 <span>▣</span>
                 <span>Dashboard</span>
             </a>
 
-            <a href="#staff" class="menu-item">
+            <a href="staff.html" class="menu-item">
                 <span>👥</span>
                 <span>Tài khoản nhân viên</span>
             </a>
 
-            <a href="#revenue" class="menu-item">
-                <span>💰</span>
-                <span>Doanh thu</span>
+            <a href="rooms.html" class="menu-item">
+                <span>🏨</span>
+                <span>Phòng</span>
             </a>
 
-            <a href="#occupancy" class="menu-item">
-                <span>🏨</span>
-                <span>Tỷ lệ lấp đầy</span>
+            <a href="room-types.html" class="menu-item">
+                <span>🧩</span>
+                <span>Loại phòng</span>
+            </a>
+
+            <a href="bookings.html" class="menu-item">
+                <span>📅</span>
+                <span>Đặt phòng</span>
+            </a>
+
+            <a href="customers.html" class="menu-item">
+                <span>👥</span>
+                <span>Khách hàng</span>
+            </a>
+
+            <a href="invoices.html" class="menu-item">
+                <span>💰</span>
+                <span>Hóa đơn</span>
             </a>
 
         </nav>
@@ -80,10 +96,7 @@
 
                 <div class="search-box">
                     <span>⌕</span>
-                    <input
-                        type="text"
-                        placeholder="Tìm kiếm..."
-                    >
+                    <input type="text" placeholder="Tìm kiếm...">
                 </div>
 
                 <button class="notification">
@@ -565,6 +578,11 @@
         </footer>
 
     </main>
+    <!--Kết nối Dashboard với API -->
+    <script src="../js/dashboard.js"></script>
+
+
 
 </body>
+
 </html>

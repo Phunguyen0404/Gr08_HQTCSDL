@@ -1,14 +1,8 @@
-# Hotel Management System
+### 📝 Hướng dẫn đồng bộ nhánh Feature với nhánh DEV mới
 
-Hệ thống quản lý khách sạn: quản lý phòng, đặt phòng, khách hàng và hóa đơn. Backend viết bằng Node.js/Express, frontend HTML/CSS/JS thuần, cơ sở dữ liệu MySQL.
 
-## 📌 Tính năng chính
 
-- Đăng nhập / đăng ký, phân quyền người dùng (JWT)
-- Quản lý phòng (thêm/sửa/xóa, trạng thái phòng)
-- Đặt phòng / hủy phòng (kiểm tra trùng lịch, tránh race condition bằng transaction + lock)
-- Quản lý khách hàng
-- Quản lý hóa đơn / thanh toán
+> **LƯU Ý QUAN TRỌNG:** Nhánh `DEV` hiện đã được tạo và đẩy lên Remote. Để tránh xung đột code (conflict) và lỗi làm vỡ dự án, **tất cả thành viên tuyệt đối không tạo Pull Request merge thẳng vào DEV khi chưa làm các bước dưới đây ở máy cá nhân (local).**
 
 ## Quản trị hệ thống và báo cáo thống kê
 #1. Quản trị hệ thống
@@ -88,91 +82,103 @@ Get/api/admin/ reports/occupancy
 
 ## 🛠️ Công nghệ sử dụng
 
-| Thành phần | Công nghệ |
-|---|---|
-| Backend | Node.js, Express |
-| Frontend | HTML, CSS, JavaScript thuần |
-| Database | MySQL |
-| Auth | JWT |
 
-## 📁 Cấu trúc thư mục
+---
 
-```
-hotel-management/
-│
-├── database/                    # Script liên quan CSDL, tách riêng khỏi backend
-│   ├── schema.sql                # Tạo bảng, khóa chính, khóa ngoại, ràng buộc
-│   └── seed.sql                  # Dữ liệu mẫu để test
-│
-├── backend/                     # Server-side (Node.js/Express)
-│   ├── config/
-│   │   └── db.js                  # Khởi tạo kết nối MySQL (pool connection)
-│   │
-│   ├── controllers/              # Nhận request, gọi Service xử lý, trả response
-│   │   ├── authController.js
-│   │   ├── roomController.js
-│   │   ├── bookingController.js
-│   │   ├── customerController.js
-│   │   └── invoiceController.js
-│   │
-│   ├── services/                 # Business logic: transaction, tính toán, ràng buộc nghiệp vụ
-│   │   ├── bookingService.js     # Kiểm tra trùng lịch, transaction, lock tránh race condition
-│   │   └── invoiceService.js      # Tính tiền, tạo hóa đơn
-│   │
-│   ├── models/                   # Hàm truy vấn CSDL cho từng bảng
-│   │   ├── User.js
-│   │   ├── Room.js
-│   │   ├── Booking.js
-│   │   ├── Customer.js
-│   │   └── Invoice.js
-│   │
-│   ├── routes/                   # Định nghĩa endpoint API, map URL → Controller
-│   │   ├── authRoutes.js
-│   │   ├── roomRoutes.js
-│   │   ├── bookingRoutes.js
-│   │   ├── customerRoutes.js
-│   │   └── invoiceRoutes.js
-│   │
-│   ├── middleware/
-│   │   ├── authMiddleware.js       # Kiểm tra JWT, xác thực, phân quyền
-│   │   ├── errorHandler.js         # Bắt lỗi tập trung, format response lỗi thống nhất
-│   │   └── validators/
-│   │       ├── bookingValidator.js
-│   │       └── authValidator.js
-│   │
-│   ├── utils/
-│   │   └── helpers.js              # Format ngày giờ, tạo mã đặt phòng random...
-│   │
-│   ├── .env                      # Biến môi trường thật (KHÔNG commit lên Git)
-│   ├── .env.example              # Mẫu biến môi trường để setup nhanh
-│   ├── server.js                 # Khởi chạy Express app, gắn route, middleware
-│   └── package.json
-│
-├── frontend/                    # Client-side (HTML/CSS/JS thuần)
-│   ├── public/
-│   │   ├── index.html             # Trang đăng nhập / trang chủ
-│   │   ├── dashboard.html         # Trang tổng quan quản trị
-│   │   ├── rooms.html             # Quản lý phòng
-│   │   ├── bookings.html          # Quản lý đặt phòng
-│   │   ├── customers.html         # Quản lý khách hàng
-│   │   └── invoices.html          # Hóa đơn
-│   │
-│   ├── css/
-│   │   ├── style.css               # Style dùng chung
-│   │   └── dashboard.css           # Style riêng trang quản trị
-│   │
-│   ├── js/
-│   │   ├── api.js                  # Hàm gọi API dùng chung (wrap fetch/axios)
-│   │   ├── auth.js                 # Đăng nhập, lưu token, kiểm tra phiên
-│   │   ├── rooms.js
-│   │   ├── bookings.js
-│   │   ├── customers.js
-│   │   └── invoices.js
-│   │
-│   └── assets/
-│       └── images/
-│
-├── .gitignore
-├── README.md
-└── CONVENTIONS.md               # Quy ước nhóm (naming, git flow, API format...)
-```
+
+
+#### 🔄 Quy trình cập nhật code cho các nhánh Feature cũ
+
+
+
+Nếu bạn đang làm việc trên một nhánh `feature` đã tạo từ trước, hãy thực hiện lần lượt các bước sau tại Terminal máy của bạn:
+
+
+
+1. **Chuyển về nhánh Feature của bạn:** Bước 1.
+
+Đảm bảo bạn đang đứng ở đúng nhánh tính năng đang làm việc và đã commit hết các thay đổi hiện tại:
+
+
+
+
+git checkout feature/ten-nhanh-cua-ban
+
+git status
+
+
+
+
+*(Nếu còn file chưa commit, hãy `git add` và `git commit` trước).*
+
+
+
+
+
+2. **Kéo nhánh DEV mới nhất từ Remote về:** Bước 2.
+
+Tải thông tin các nhánh mới nhất từ server và gộp nhánh `DEV` vào nhánh tính năng của bạn tại máy local:
+
+
+
+
+git fetch origin
+
+git merge origin/dev
+
+
+
+
+
+
+3. **Giải quyết Xung đột (Conflict) nếu có:** Bước 3.
+
+* Nếu terminal báo **CONFLICT**, hãy mở VS Code (hoặc IDE đang dùng) để kiểm tra các file bị lỗi.
+
+* Chọn giữ lại code đúng (Accept Current / Incoming / Both Changes).
+
+* Sau khi sửa xong hết các file conflict, chạy lệnh:
+
+
+
+
+git add .
+
+git commit -m "fix: resolve conflict with dev"
+
+
+
+
+4. **Kiểm tra ứng dụng tại máy local (Test):** Bước 4.
+
+Chạy thử project tại máy bạn (build/run app) để đảm bảo tính năng của bạn và code từ nhánh `DEV` hoạt động bình thường, không làm hỏng ứng dụng.
+
+
+
+
+
+5. **Đẩy code sạch lên Remote & Tạo Pull Request:** Bước 5.
+
+Sau khi đã test chạy ổn định, đẩy code từ local lên lại nhánh feature trên remote:
+
+git push origin feature/ten-nhanh-cua-ban
+
+Cuối cùng, lên GitHub/GitLab tạo **Pull Request (PR)** từ `feature/ten-nhanh-cua-ban` vào `DEV`.
+
+
+
+
+
+---
+
+
+
+#### 📌 Quy tắc làm việc từ thời điểm này trở đi:
+
+
+
+1. **Tạo nhánh mới:** Mọi nhánh tính năng mới từ bây giờ phải được tạo ra từ nhánh `DEV` (`git checkout dev` -> `git pull` -> `git checkout -b feature/tinh-nang-moi`).
+
+2. **Không commit trực tiếp:** Không đẩy code thẳng lên nhánh `DEV`. Mọi thay đổi đều phải thông qua Pull Request.
+
+---
