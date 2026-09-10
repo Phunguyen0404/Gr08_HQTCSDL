@@ -1019,20 +1019,6 @@ STATUS
     margin-bottom: 12px;
 }
 
-border-radius: 6px;
-
-padding: 7px 11px;
-
-font-size: 12px;
-
-cursor: pointer;
-
-font-weight: 600;
-
-transition: background 0.2s;
-
-
-}
 
 .lock-btn {
     background: #fff1f1;

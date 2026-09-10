@@ -17,13 +17,25 @@ function hasOverlap(startA, endA, startB, endB) {
     return startA < endB && endA > startB;
 }
 
+/* Chuẩn hóa trạng thái phòng để hỗ trợ cả "available" và "Trống". */
+function normalizeRoomStatus(status) {
+    if (typeof status !== 'string') {
+        return '';
+    }
+
+    return status.trim().toLowerCase();
+}
+
 /* Kiểm tra phòng có trống trong khoảng thời gian không. */
 function isRoomAvailable(room, bookings = [], checkIn, checkOut) {
     if (!room) {
         return false;
     }
 
-    if (room.status && room.status !== 'available') {
+    const roomStatus = normalizeRoomStatus(room.status);
+    const availableStatuses = new Set(['available', 'trống', 'trong', 'vacant', 'free']);
+
+    if (roomStatus && !availableStatuses.has(roomStatus)) {
         return false;
     }
 

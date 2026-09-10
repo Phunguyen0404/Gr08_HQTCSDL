@@ -4,6 +4,83 @@
 
 > **LƯU Ý QUAN TRỌNG:** Nhánh `DEV` hiện đã được tạo và đẩy lên Remote. Để tránh xung đột code (conflict) và lỗi làm vỡ dự án, **tất cả thành viên tuyệt đối không tạo Pull Request merge thẳng vào DEV khi chưa làm các bước dưới đây ở máy cá nhân (local).**
 
+## Quản trị hệ thống và báo cáo thống kê
+#1. Quản trị hệ thống
+a.Xem danh sách nhân viên
+Get/api/admin/staff
+- Admin vào trang quản lí
+- Gọi API
+- Hệ thống trả về danh sách nhân viên
+
+b.Xem thông tin nhân viên
+Get/api/admin/staff/:id
+- Admin chọn một nhân viên
+- Gọi API với ID của nhân viên
+- Hệ thống trả về thông tin nhân viên đó
+
+c.Khóa/mở khóa tài khoản
+PATCH/api/admin/staff/:id/status
+- Admin bấm khóa hoặc mở khóa
+- Gửi id để + thêm trạng mới 
+- Hệ thống cập nhật trạng thái tài khoản
+
+┌─------------------------------------------------------------------------------------------------┐
+│ 🏨 HOTEL MANAGEMENT                                     |⌕|tìm kiếm...      |🔔|   Admin ▼     |
+|-------------------------------------------------------------------------------------------------|
+│🏠 Dashboard    │    QUẢN LÍ NHÂN VIÊN                                                           │
+│--------------------------------------------------------------------------------------------------|   
+|               | ┌----------------------┐    ┌----------------------┐  ┌--------------------┐     |
+│ 👤 Tài khoản | ||💰|DOANH THU HÔM NAY |    ||📊| DOANH THU THÁNG |  ||🏨| TỶ LỆ LẤP ĐẦY  |     |    
+|               | |       12.500.000$    |    |     185.500.000$     |  |           78%      |     |
+|    nhân viên  | └----------------------┘   └----------------------┘ └----------------------┘     |
+|               |                                                                                  |                              |               |                                                                                  | 
+|               |   ┌-------------------------------------------┐                                  | 
+|  💰Doanh thu |   | DOANH THU                7 ngày gần nhất▼ |                                   |
+|              |    |thống kê doanh thu theo ngày               |           -------------          |
+|🏨 tỉ lệ     |     | 20M  ---------------------------|\\|------|         -  TỈ LỆ    ... -        | 
+|   lấp đầy    |    |                                 |\\| |\\| |        -  LẤP ĐẦY         -      |
+|              |    | 15M  ----------------|\\|-------|\\|-|\\|-|       -       ----          -    |
+|              |    |            |\\|      |\\| |\\|  |\\| |\\| |      -      -     -         -    |
+|              |    | 10M  ------|\\|-|\\|-|\\|-|\\|--|\\|-|\\| |      -      - 78% -         -    |
+|              |    |      |\\|  |\\| |\\| |\\| |\\|  |\\| |\\| |     -         ----          -    |
+|              |    | 5M   |\\|--|\\|-|\\|-|\\|-|\\|--|\\|-|\\| |     -   ĐSD    39P           -   | # ĐANG SỬ DỤNG
+|              |    |      |\\|  |\\| |\\| |\\| |\\|  |\\| |\\| |      -  PT     11P           -   | # PHÒNG TRỐNG`ww2
+|              |    | 0M   |\\|--|\\|-|\\|-|\\|-|\\|--|\\|-|\\| |        -ĐD     3P           -    | #ĐANG DỌN
+|              |    |       T2    T3   T4   T5   T6    T7   CN  |        - BT    2P         -      | #BẢO TRÌ
+|              |    └-------------------------------------------┘           --------------         |
+|              |                                                                                   |                              |              |    QUẢN LÍ TÀI KHOẢN NHÂN VIÊN              |+ THÊM NHÂN VIÊN|                    |
+│              |  ┌-------------------------------------------------------------------------------┐|
+│              |  │  Nhân viên   │ Email                  |vai trò   | Trạng thái     |  Ngày tạo ||
+│              |  └-------------------------------------------------------------------------------┘|
+│              |  │  Nguyễn Văn A │Nguyenvana@gmail.com   │Nhân viên │ Đang hoạt động | 1/8/2026  ||
+│              |  │  Trần Thị B   │Tranthib@gmail.com     │Nhân viên | Đang hoạt động | 4/8/2026  ||  
+│              |  │  Lê Văn C     │Levanc@gmail.com       │Nhân viên │ Đã khóa        | 21/8/2026 ||
+│              |  │  Phạm Thị D   │Phamthid@gmail.com     │Nhân viên │ Đang hoạt động | 10/7/2026 || 
+│ |AD |ADMIN   |  └-------------------------------------------------------------------------------┘|
+│ Quản trị viên|                                                                                   |
+│┌----------┐  |                                                                                   |
+│  ĐĂNG XUẤT   |                                                                                   |
+|└----------┘  |                                                                                   | 
+└--------------------------------------------------------------------------------------------------┘
+#2. Báo cáo thống kê
+a.Xem thống kê doanh thu
+Get/admin/reports/revenue
+- Admin vào trang báo cáo thống kê
+- Chọn khoảng thời gian hoặc xem theo ngày/tháng
+- Gọi API
+- Hệ thống lấy dữ liệu doanh thu
+- Trả về thống kê doanh thu cho Admin
+
+b.Xem tỷ lệ lấp đầy phòng
+Get/api/admin/ reports/occupancy
+- Admin vào trang báo cáo thống kê
+- Chọn khoảng thời gian cần xem
+- Gọi API
+- Hệ thống lấy lấy dữ liệu phòng và lưu trú
+- Trả về tỷ lệ lấp đầy phòng cho admin.
+
+
+## 🛠️ Công nghệ sử dụng
 
 
 ---
@@ -24,15 +101,11 @@ Nếu bạn đang làm việc trên một nhánh `feature` đã tạo từ trư�
 
 
 
-```bash
 
 git checkout feature/ten-nhanh-cua-ban
 
 git status
 
-
-
-```
 
 
 
@@ -48,15 +121,11 @@ Tải thông tin các nhánh mới nhất từ server và gộp nhánh `DEV` và
 
 
 
-```bash
 
 git fetch origin
 
 git merge origin/dev
 
-
-
-```
 
 
 
@@ -70,18 +139,8 @@ git merge origin/dev
 
 * Sau khi sửa xong hết các file conflict, chạy lệnh:
 
-
-
-```bash
-
 git add .
-
 git commit -m "fix: resolve conflict with dev"
-
-
-
-```
-
 
 
 
@@ -98,17 +157,7 @@ Chạy thử project tại máy bạn (build/run app) để đảm bảo tính n
 
 Sau khi đã test chạy ổn định, đẩy code từ local lên lại nhánh feature trên remote:
 
-
-
-```bash
-
 git push origin feature/ten-nhanh-cua-ban
-
-
-
-```
-
-
 
 Cuối cùng, lên GitHub/GitLab tạo **Pull Request (PR)** từ `feature/ten-nhanh-cua-ban` vào `DEV`.
 
