@@ -2,18 +2,32 @@ require('dotenv').config();
 
 const express = require('express');
 const pool = require('../config/db');
+
+// ─── Routes ──────────────────────────────────────────────────────────────────
 const authRoutes = require('../routes/authRoutes');
+const roomRoutes = require('../routes/roomRoutes');
+const bookingRoutes = require('../routes/bookingRoutes');
+const customerRoutes = require('../routes/customerRoutes');
+const invoiceRoutes = require('../routes/invoiceRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/api/auth', authRoutes);
 
+// ─── API Endpoints ────────────────────────────────────────────────────────────
+app.use('/api/auth', authRoutes);          // Public: /api/auth/login, /api/auth/register
+app.use('/api/rooms', roomRoutes);          // Protected: ADMIN, STAFF
+app.use('/api/bookings', bookingRoutes);    // Protected: ADMIN, STAFF, CUSTOMER
+app.use('/api/customers', customerRoutes);  // Protected: ADMIN, STAFF
+app.use('/api/invoices', invoiceRoutes);    // Protected: ADMIN, STAFF
+
+// ─── Health check ─────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
-  res.send('Hello Express!');
+  res.json({ status: 'ok', message: 'Hotel Management API đang chạy.' });
 });
 
+// ─── Start server ─────────────────────────────────────────────────────────────
 async function startServer() {
   try {
     const connection = await pool.getConnection();

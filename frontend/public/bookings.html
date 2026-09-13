@@ -21,7 +21,7 @@
     <a href="#">Về chúng tôi</a>
     <a href="#">Liên hệ</a>
   </nav>
-  <a class="header-cta" href="#rooms">Đăng nhập</a>
+  <a class="header-cta" href="index.html" id="logoutBtn">Đăng xuất</a>
 </header>
 
 <section class="hero">
@@ -173,5 +173,13 @@
   © 2026 Hẹ Hẹ Hẹ
 </footer>
 
+    <script src="../js/authGuard.js"></script>
+    <script>
+        authGuard.requireAuth(['ADMIN', 'STAFF', 'CUSTOMER']);
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            authGuard.logout();
+        });
+    </script>
 </body>
 </html>
