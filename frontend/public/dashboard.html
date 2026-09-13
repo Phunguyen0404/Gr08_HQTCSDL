@@ -26,21 +26,40 @@
 
         <nav class="menu">
 
-            <a href="#" class="menu-item active">
+            <!-- DASHBOARD -->
+            <a href="dashboard.html" class="menu-item active">
                 <span>▣</span>
                 <span>Dashboard</span>
             </a>
 
+
+            <!-- STAFF -->
             <a href="staff.html" class="menu-item">
                 <span>👥</span>
                 <span>Tài khoản nhân viên</span>
             </a>
 
+
+            <!-- CUSTOMER -->
+            <a href="http://localhost:3000/customers.html" class="menu-item">
+                <span>👤</span>
+                <span>Customer</span>
+            </a>
+            <!--INVOICES-->
+            <a href="http://localhost:3000/invoices.html" class="menu-item">
+                <span>🧾</span>
+                <span>Hóa đơn</span>
+            </a>
+
+
+            <!-- DOANH THU -->
             <a href="#revenue" class="menu-item">
                 <span>💰</span>
                 <span>Doanh thu</span>
             </a>
 
+
+            <!-- TỶ LỆ LẤP ĐẦY -->
             <a href="#occupancy" class="menu-item">
                 <span>🏨</span>
                 <span>Tỷ lệ lấp đầy</span>
@@ -74,8 +93,10 @@
     </aside>
 
 
+
     <!-- ================= MAIN ================= -->
     <main class="main">
+
 
         <!-- ================= HEADER ================= -->
         <header class="header">
@@ -137,10 +158,12 @@
         </header>
 
 
+
         <!-- ================= STATISTICS ================= -->
         <section class="statistics">
 
-            <!-- Doanh thu hôm nay -->
+
+            <!-- DOANH THU HÔM NAY -->
             <div class="stat-card">
 
                 <div class="stat-icon revenue-icon">
@@ -153,21 +176,18 @@
                         Doanh thu hôm nay
                     </span>
 
-                    <h2>
-                        12.500.000 ₫
-                    </h2>
-
-                    <p class="increase">
-                        ↑ 12.5%
-                        <span>so với hôm qua</span>
-                    </p>
+                    <h2>0đ </h2>
+                    <p class = "increase"
+                       Đang tải dữ liệu...
+                </p>
 
                 </div>
 
             </div>
 
 
-            <!-- Doanh thu tháng -->
+
+            <!-- DOANH THU THÁNG -->
             <div class="stat-card">
 
                 <div class="stat-icon month-icon">
@@ -194,7 +214,8 @@
             </div>
 
 
-            <!-- Tỷ lệ lấp đầy -->
+
+            <!-- TỶ LỆ LẤP ĐẦY -->
             <div class="stat-card">
 
                 <div class="stat-icon occupancy-icon">
@@ -221,7 +242,8 @@
             </div>
 
 
-            <!-- Tài khoản nhân viên -->
+
+            <!-- TÀI KHOẢN NHÂN VIÊN -->
             <div class="stat-card">
 
                 <div class="stat-icon staff-icon">
@@ -251,11 +273,13 @@
         </section>
 
 
+
         <!-- ================= REVENUE + OCCUPANCY ================= -->
         <section
             class="content-grid"
             id="revenue"
         >
+
 
             <!-- ================= REVENUE ================= -->
             <div class="panel revenue-panel">
@@ -294,7 +318,8 @@
                 </div>
 
 
-                <!-- Biểu đồ -->
+
+                <!-- BIỂU ĐỒ -->
                 <div class="chart">
 
                     <div class="chart-y">
@@ -319,6 +344,7 @@
 
                         <div class="bars">
 
+
                             <div class="bar-wrapper">
 
                                 <div
@@ -329,6 +355,7 @@
                                 <span>T2</span>
 
                             </div>
+
 
 
                             <div class="bar-wrapper">
@@ -343,6 +370,7 @@
                             </div>
 
 
+
                             <div class="bar-wrapper">
 
                                 <div
@@ -353,6 +381,7 @@
                                 <span>T4</span>
 
                             </div>
+
 
 
                             <div class="bar-wrapper">
@@ -367,6 +396,7 @@
                             </div>
 
 
+
                             <div class="bar-wrapper">
 
                                 <div
@@ -379,6 +409,7 @@
                             </div>
 
 
+
                             <div class="bar-wrapper">
 
                                 <div
@@ -389,6 +420,7 @@
                                 <span>T7</span>
 
                             </div>
+
 
 
                             <div class="bar-wrapper">
@@ -409,6 +441,7 @@
                 </div>
 
             </div>
+
 
 
             <!-- ================= OCCUPANCY ================= -->
@@ -439,6 +472,7 @@
                 </div>
 
 
+
                 <div class="occupancy-circle">
 
                     <div class="circle">
@@ -460,7 +494,9 @@
                 </div>
 
 
+
                 <div class="room-status">
+
 
                     <div>
 
@@ -475,6 +511,7 @@
                         </strong>
 
                     </div>
+
 
 
                     <div>
@@ -492,6 +529,7 @@
                     </div>
 
 
+
                     <div>
 
                         <span class="status-dot cleaning"></span>
@@ -505,6 +543,7 @@
                         </strong>
 
                     </div>
+
 
 
                     <div>
@@ -526,6 +565,7 @@
             </div>
 
         </section>
+
 
 
         <!-- ================= STAFF MANAGEMENT ================= -->
@@ -554,6 +594,7 @@
                 </button>
 
             </div>
+
 
 
             <div class="table-wrapper">
@@ -593,9 +634,11 @@
                     </thead>
 
 
+
                     <tbody>
 
-                        <!-- Nhân viên 1 -->
+
+                        <!-- NHÂN VIÊN 1 -->
                         <tr>
 
                             <td>
@@ -662,7 +705,8 @@
                         </tr>
 
 
-                        <!-- Nhân viên 2 -->
+
+                        <!-- NHÂN VIÊN 2 -->
                         <tr>
 
                             <td>
@@ -729,7 +773,8 @@
                         </tr>
 
 
-                        <!-- Nhân viên 3 -->
+
+                        <!-- NHÂN VIÊN 3 -->
                         <tr>
 
                             <td>
@@ -796,7 +841,8 @@
                         </tr>
 
 
-                        <!-- Nhân viên 4 -->
+
+                        <!-- NHÂN VIÊN 4 -->
                         <tr>
 
                             <td>
@@ -871,6 +917,7 @@
         </section>
 
 
+
         <!-- ================= FOOTER ================= -->
         <footer>
 
@@ -887,7 +934,8 @@
     </main>
 
 
-    <!-- Dashboard API -->
+
+    <!-- ================= DASHBOARD API ================= -->
     <script src="../js/dashboard.js"></script>
 
 </body>

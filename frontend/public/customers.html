@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer - Hotel Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f8fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* ================================
+           HEADER
+        ================================= */
+
+        .header {
+            height: 70px;
+
+            background: #0f4c81;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn,
+        .invoice-btn {
+            color: white;
+
+            text-decoration: none;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            transition: 0.2s;
+
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .invoice-btn {
+            background: #198754;
+        }
+
+        .invoice-btn:hover {
+            background: #157347;
+        }
+
+        /* ================================
+           MAIN
+        ================================= */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+
+            margin: 35px auto;
+        }
+
+        .page-title {
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #0f4c81;
+
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: #6b7280;
+
+            margin-bottom: 25px;
+        }
+
+        /* ================================
+           CUSTOMER INFO
+        ================================= */
+
+        .customer-box {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 22px 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.08);
+
+            border-left: 5px solid #0f4c81;
+        }
+
+        .customer-title {
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+
+            color: #0f4c81;
+        }
+
+        .customer-code {
+            color: #555;
+        }
+
+        /* ================================
+           BOOKING SECTION
+        ================================= */
+
+        .section-title {
+            font-size: 22px;
+
+            font-weight: bold;
+
+            margin-bottom: 18px;
+
+            color: #1f2937;
+        }
+
+        .booking-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 20px;
+        }
+
+        /* ================================
+           BOOKING CARD
+        ================================= */
+
+        .booking-card {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 24px;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.08);
+
+            border: 1px solid #e5e7eb;
+        }
+
+        .booking-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding-bottom: 18px;
+
+            margin-bottom: 18px;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .booking-code {
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #0f4c81;
+        }
+
+        /* ================================
+           STATUS
+        ================================= */
+
+        .status {
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            background: #dcfce7;
+
+            color: #166534;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* ================================
+           BOOKING INFO
+        ================================= */
+
+        .booking-info {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 15px 30px;
+        }
+
+        .info-item {
+            padding: 12px 15px;
+
+            background: #f8fafc;
+
+            border-radius: 8px;
+
+            color: #374151;
+
+            line-height: 1.5;
+        }
+
+        .info-item strong {
+            color: #0f4c81;
+        }
+
+        /* ================================
+           LOADING
+        ================================= */
+
+        .loading {
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ================================
+           EMPTY
+        ================================= */
+
+        .empty {
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            box-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ================================
+           ERROR
+        ================================= */
+
+        .error {
+            background: #fef2f2;
+
+            border: 1px solid #fecaca;
+
+            color: #b91c1c;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+            line-height: 1.6;
+        }
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 0 18px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .header-buttons {
+                gap: 5px;
+            }
+
+            .back-btn,
+            .invoice-btn {
+                padding: 8px 10px;
+
+                font-size: 12px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .booking-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .booking-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="header">
+
+        <div class="header-title">
+            HOTEL MANAGEMENT
+        </div>
+
+
+        <div class="header-buttons">
+
+            <!-- HÓA ĐƠN -->
+
+            <a
+                id="invoiceBtn"
+                href="#"
+                class="invoice-btn"
+            >
+                🧾 Hóa đơn
+            </a>
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="http://localhost:3000/dashboard.html"
+                class="back-btn"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
+
+    <main class="container">
+
+
+        <h1 class="page-title">
+            Customer
+        </h1>
+
+
+        <p class="page-description">
+            Lịch sử đặt phòng của khách hàng
+        </p>
+
+
+        <!-- =====================================
+             CUSTOMER INFORMATION
+        ====================================== -->
+
+        <section class="customer-box">
+
+            <div class="customer-title">
+                Thông tin khách hàng
+            </div>
+
+
+            <div class="customer-code">
+
+                Mã khách hàng:
+
+                <strong id="customerCode">
+                    KH001
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             BOOKING HISTORY
+        ====================================== -->
+
+        <h2 class="section-title">
+            Lịch sử đặt phòng
+        </h2>
+
+
+        <div
+            id="bookingList"
+            class="booking-list"
+        >
+
+            <div class="loading">
+                Đang tải lịch sử đặt phòng...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        // =====================================================
+        // CUSTOMER HIỆN TẠI
+        // =====================================================
+
+        const maKH = 'KH001';
+
+
+        // =====================================================
+        // API LỊCH SỬ ĐẶT PHÒNG
+        // =====================================================
+
+        const API_URL =
+            'http://localhost:3000/api/customer/'
+            + maKH
+            + '/bookings';
+
+
+        // =====================================================
+        // NÚT HÓA ĐƠN
+        // =====================================================
+
+        const invoiceBtn =
+            document.getElementById(
+                'invoiceBtn'
+            );
+
+
+        /*
+         * Truyền mã khách hàng sang invoices.html
+         *
+         * Ví dụ:
+         *
+         * customers.html
+         *       ↓
+         * maKH = KH001
+         *       ↓
+         * invoices.html?maKH=KH001
+         */
+
+        invoiceBtn.href =
+            'http://localhost:3000/invoices.html'
+            + '?maKH='
+            + encodeURIComponent(maKH);
+
+
+        // =====================================================
+        // HIỂN THỊ MÃ KHÁCH HÀNG
+        // =====================================================
+
+        document.getElementById(
+            'customerCode'
+        ).textContent = maKH;
+
+
+        // =====================================================
+        // BOOKING LIST
+        // =====================================================
+
+        const bookingList =
+            document.getElementById(
+                'bookingList'
+            );
+
+
+        // =====================================================
+        // ĐỊNH DẠNG NGÀY GIỜ
+        // =====================================================
+
+        function formatDate(dateString) {
+
+            if (!dateString) {
+
+                return 'Không có dữ liệu';
+
+            }
+
+
+            const date =
+                new Date(dateString);
+
+
+            if (
+                isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return 'Không có dữ liệu';
+
+            }
+
+
+            return date.toLocaleString(
+                'vi-VN',
+                {
+                    hour: '2-digit',
+                    minute: '2-digit',
+
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }
+            );
+
+        }
+
+
+        // =====================================================
+        // ĐỊNH DẠNG TIỀN
+        // =====================================================
+
+        function formatMoney(value) {
+
+            const number =
+                Number(value);
+
+
+            if (
+                isNaN(number)
+            ) {
+
+                return '0 VNĐ';
+
+            }
+
+
+            return number.toLocaleString(
+                'vi-VN'
+            )
+            + ' VNĐ';
+
+        }
+
+
+        // =====================================================
+        // HIỂN THỊ BOOKING
+        // =====================================================
+
+        function displayBookings(bookings) {
+
+            if (!bookingList) {
+
+                return;
+
+            }
+
+
+            // Không có booking
+
+            if (
+                !Array.isArray(bookings)
+                || bookings.length === 0
+            ) {
+
+                bookingList.innerHTML = `
+
+                    <div class="empty">
+
+                        Bạn chưa có lịch sử đặt phòng.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            // Có booking
+
+            bookingList.innerHTML =
+                bookings.map(
+                    function (booking) {
+
+                        return `
+
+                            <div class="booking-card">
+
+                                <div class="booking-header">
+
+                                    <div class="booking-code">
+
+                                        Mã đặt phòng:
+                                        ${booking.MaBookingCode || 'Không có'}
+
+                                    </div>
+
+
+                                    <div class="status">
+
+                                        ${booking.TrangThai || 'Không có'}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="booking-info">
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Phòng:
+                                        </strong>
+
+                                        ${booking.SoPhong || 'Không có'}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Loại phòng:
+                                        </strong>
+
+                                        ${booking.TenLoaiPhong || 'Không có'}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Ngày đặt:
+                                        </strong>
+
+                                        ${formatDate(
+                                            booking.NgayDat
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Ngày nhận:
+                                        </strong>
+
+                                        ${formatDate(
+                                            booking.NgayNhanDuKien
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Ngày trả:
+                                        </strong>
+
+                                        ${formatDate(
+                                            booking.NgayTraDuKien
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Số người:
+                                        </strong>
+
+                                        ${booking.SoNguoiDuKien ?? 0}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Tiền cọc:
+                                        </strong>
+
+                                        ${formatMoney(
+                                            booking.TienCocDuKien
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Đơn giá:
+                                        </strong>
+
+                                        ${formatMoney(
+                                            booking.DonGiaDat
+                                        )}
+
+                                    </div>
+
+
+                                    <div class="info-item">
+
+                                        <strong>
+                                            Ghi chú:
+                                        </strong>
+
+                                        ${booking.GhiChu || 'Không có'}
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+                ).join('');
+
+        }
+
+
+        // =====================================================
+        // HIỂN THỊ LỖI
+        // =====================================================
+
+        function displayError(message) {
+
+            if (!bookingList) {
+
+                return;
+
+            }
+
+
+            bookingList.innerHTML = `
+
+                <div class="error">
+
+                    <strong>
+                        Không thể tải lịch sử đặt phòng.
+                    </strong>
+
+                    <br><br>
+
+                    ${message}
+
+                </div>
+
+            `;
+
+        }
+
+
+        // =====================================================
+        // GỌI API
+        // =====================================================
+
+        async function loadBookingHistory() {
+
+            if (!bookingList) {
+
+                return;
+
+            }
+
+
+            bookingList.innerHTML = `
+
+                <div class="loading">
+
+                    Đang tải lịch sử đặt phòng...
+
+                </div>
+
+            `;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        'Server trả về HTTP '
+                        + response.status
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (!data.success) {
+
+                    throw new Error(
+                        data.message
+                        || 'API trả về lỗi'
+                    );
+
+                }
+
+
+                displayBookings(
+                    data.bookings
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    'Lỗi tải lịch sử đặt phòng:',
+                    error
+                );
+
+
+                displayError(
+                    'Không thể kết nối đến server.'
+                );
+
+            }
+
+        }
+
+
+        // =====================================================
+        // CHẠY
+        // =====================================================
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                loadBookingHistory();
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

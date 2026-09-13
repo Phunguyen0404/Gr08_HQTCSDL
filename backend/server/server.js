@@ -5,7 +5,6 @@ const path = require('path');
 //==========================
 require('dotenv').config({
     path: path.resolve(__dirname, '../../.env')
-
 });
 
 console.log('>>> SERVER.JS DANG CHAY <<<');
@@ -35,6 +34,10 @@ const pool = require('../config/db');
 app.use(cors());
 app.use(express.json());
 
+app.use(express.static(
+    path.join(__dirname, '../../frontend/public')
+));
+
 // ============================================================
 // TEST SERVER
 // ============================================================
@@ -42,7 +45,10 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send('Hello Express!');
 });
-
+//Serve JavaSvcript
+app.use('/js',express.static(
+    path.join(__dirname, '../../fronetend/js')
+));
 // ============================================================
 // API DASHBOARD
 // ============================================================
@@ -272,6 +278,156 @@ app.get('/api/staff', async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Không thể lấy dữ liệu nhân viên',
+            error: error.message
+        });
+    }
+});
+
+// ============================================================
+// API LỊCH SỬ ĐẶT PHÒNG CUSTOMER
+// ============================================================
+
+app.get('/api/customer/:maKH/bookings', async (req, res) => {
+    try {
+
+        const { maKH } = req.params;
+
+        const [bookings] = await pool.query(`
+            SELECT
+                DP.MaDatPhong,
+                DP.MaBookingCode,
+                DP.NgayDat,
+                DP.NgayNhanDuKien,
+                DP.NgayTraDuKien,
+                DP.SoNguoiDuKien,
+                DP.TienCocDuKien,
+                DP.TrangThai,
+                DP.GhiChu,
+
+                P.MaPhong,
+                P.SoPhong,
+
+                LP.MaLoaiPhong,
+                LP.TenLoaiPhong,
+
+                CT.DonGiaDat,
+                CT.GhiChuChiTiet
+
+            FROM DAT_PHONG DP
+
+            JOIN CHI_TIET_DAT_PHONG CT
+                ON DP.MaDatPhong = CT.MaDatPhong
+
+            JOIN PHONG P
+                ON CT.MaPhong = P.MaPhong
+
+            JOIN LOAI_PHONG LP
+                ON P.MaLoaiPhong = LP.MaLoaiPhong
+
+            WHERE DP.MaKH = ?
+
+            ORDER BY DP.NgayDat DESC
+        `, [maKH]);
+
+        res.json({
+            success: true,
+            maKH: maKH,
+            bookings: bookings
+        });
+
+    } catch (error) {
+
+        console.error(
+            'LỖI API LỊCH SỬ ĐẶT PHÒNG:',
+            error
+        );
+
+        res.status(500).json({
+            success: false,
+            message: 'Không thể lấy lịch sử đặt phòng',
+            error: error.message
+        });
+    }
+});
+
+// ============================================================
+// API HÓA ĐƠN CUSTOMER
+// ============================================================
+
+app.get('/api/customer/:maKH/invoices', async (req, res) => {
+    try {
+
+        const { maKH } = req.params;
+
+        const [invoices] = await pool.query(`
+            SELECT
+                HD.MaHoaDon,
+                HD.MaLuuTru,
+                HD.NgayLap,
+                HD.TongTienPhong,
+                HD.Thue,
+                HD.GiamGia,
+                HD.TongTien,
+                HD.TrangThai,
+                HD.GhiChuHoaDon,
+
+                DP.MaBookingCode,
+
+                COALESCE(
+                    SUM(
+                        CASE
+                            WHEN TT.TrangThai = 'PAID'
+                            THEN TT.SoTien
+                            ELSE 0
+                        END
+                    ),
+                    0
+                ) AS DaThanhToan
+
+            FROM HOA_DON HD
+
+            JOIN LUU_TRU LT
+                ON HD.MaLuuTru = LT.MaLuuTru
+
+            JOIN DAT_PHONG DP
+                ON LT.MaDatPhong = DP.MaDatPhong
+
+            LEFT JOIN THANH_TOAN TT
+                ON HD.MaHoaDon = TT.MaHoaDon
+
+            WHERE DP.MaKH = ?
+
+            GROUP BY
+                HD.MaHoaDon,
+                HD.MaLuuTru,
+                HD.NgayLap,
+                HD.TongTienPhong,
+                HD.Thue,
+                HD.GiamGia,
+                HD.TongTien,
+                HD.TrangThai,
+                HD.GhiChuHoaDon,
+                DP.MaBookingCode
+
+            ORDER BY HD.NgayLap DESC
+        `, [maKH]);
+
+        res.json({
+            success: true,
+            maKH: maKH,
+            invoices: invoices
+        });
+
+    } catch (error) {
+
+        console.error(
+            'LỖI API HÓA ĐƠN CUSTOMER:',
+            error
+        );
+
+        res.status(500).json({
+            success: false,
+            message: 'Không thể lấy dữ liệu hóa đơn',
             error: error.message
         });
     }

@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Hóa đơn của tôi</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+
+        /* ================================
+           HEADER
+        ================================= */
+
+        .header {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+
+        .customer-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: #374151;
+            font-weight: 500;
+        }
+
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #2563eb;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+        }
+
+
+        /* ================================
+           CONTAINER
+        ================================= */
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+
+            margin: 35px auto;
+        }
+
+
+        /* ================================
+           PAGE HEADER
+        ================================= */
+
+        .page-header {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px 30px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+
+        .page-header h1 {
+            font-size: 28px;
+
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+        }
+
+
+        .customer-code {
+            color: #6b7280;
+
+            font-size: 15px;
+        }
+
+
+        .customer-code span {
+            color: #2563eb;
+
+            font-weight: bold;
+        }
+
+
+        /* ================================
+           BACK BUTTON
+        ================================= */
+
+        .back-btn {
+            display: inline-block;
+
+            margin-top: 18px;
+
+            padding: 10px 16px;
+
+            background: #2563eb;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .back-btn:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* ================================
+           LOADING
+        ================================= */
+
+        .loading {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 35px;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+
+        /* ================================
+           INVOICE CARD
+        ================================= */
+
+        .invoice-card {
+            background: white;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            padding: 25px;
+
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+
+            border-left: 5px solid #2563eb;
+        }
+
+
+        .invoice-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 20px;
+
+            padding-bottom: 18px;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+
+        .invoice-code {
+            font-size: 19px;
+
+            font-weight: bold;
+
+            color: #1e3a8a;
+
+            margin-bottom: 7px;
+        }
+
+
+        .booking-code {
+            font-size: 14px;
+
+            color: #6b7280;
+        }
+
+
+        .invoice-status {
+            background: #dcfce7;
+
+            color: #166534;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        /* ================================
+           INVOICE INFO
+        ================================= */
+
+        .invoice-info {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 14px;
+
+            padding-top: 20px;
+        }
+
+
+        .info-item {
+            padding: 13px 15px;
+
+            background: #f8fafc;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            color: #4b5563;
+        }
+
+
+        .info-item strong {
+            display: block;
+
+            color: #374151;
+
+            margin-bottom: 5px;
+        }
+
+
+        .info-item.total {
+            background: #eff6ff;
+
+            color: #1d4ed8;
+
+            font-size: 16px;
+        }
+
+
+        .info-item.total strong {
+            color: #1e40af;
+        }
+
+
+        .info-item.paid {
+            background: #f0fdf4;
+
+            color: #15803d;
+
+            font-size: 16px;
+        }
+
+
+        .info-item.paid strong {
+            color: #166534;
+        }
+
+
+        .info-item.remaining {
+            background: #fff7ed;
+
+            color: #c2410c;
+
+            font-size: 16px;
+        }
+
+
+        .info-item.remaining strong {
+            color: #9a3412;
+        }
+
+
+        /* ================================
+           EMPTY
+        ================================= */
+
+        .empty {
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+
+        /* ================================
+           ERROR
+        ================================= */
+
+        .error {
+            background: #fef2f2;
+
+            border: 1px solid #fecaca;
+
+            color: #b91c1c;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 0 18px;
+            }
+
+
+            .container {
+                width: 94%;
+            }
+
+
+            .invoice-info {
+                grid-template-columns: 1fr;
+            }
+
+
+            .invoice-header {
+                flex-direction: column;
+            }
+
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================================
+         HEADER
+    ================================= -->
+
+    <header class="header">
+
+        <div class="logo">
+            🏨 HOTEL MANAGEMENT
+        </div>
+
+
+        <div class="customer-area">
+
+            <span>Khách hàng</span>
+
+            <div class="avatar">
+                KH
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================================
+         MAIN
+    ================================= -->
+
+    <main class="container">
+
+
+        <!-- PAGE HEADER -->
+
+        <section class="page-header">
+
+            <h1>
+                Hóa đơn của tôi
+            </h1>
+
+
+            <div class="customer-code">
+
+                Mã khách hàng:
+
+                <span id="customerCode">
+                    ---
+                </span>
+
+            </div>
+
+
+            <a
+                id="backBtn"
+                class="back-btn"
+                href="customers.html"
+            >
+                ← Quay lại lịch sử đặt phòng
+            </a>
+
+        </section>
+
+
+
+        <!-- LOADING -->
+
+        <div
+            id="loading"
+            class="loading"
+        >
+            Đang tải dữ liệu hóa đơn...
+        </div>
+
+
+
+        <!-- INVOICE LIST -->
+
+        <section
+            id="invoiceList"
+        ></section>
+
+
+    </main>
+
+
+
+    <!-- ================================
+         JAVASCRIPT
+    ================================= -->
+
+    <script>
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+
+                // ============================================
+                // LẤY MÃ KHÁCH HÀNG
+                // ============================================
+
+                const params =
+                    new URLSearchParams(
+                        window.location.search
+                    );
+
+
+                /*
+                    Nếu URL là:
+
+                    invoices.html?maKH=KH001
+
+                    thì lấy KH001.
+
+                    Nếu mở trực tiếp:
+
+                    invoices.html
+
+                    thì mặc định dùng KH001.
+                */
+
+                const maKH =
+                    params.get('maKH')
+                    || 'KH001';
+
+
+
+                // ============================================
+                // HIỂN THỊ MÃ KHÁCH HÀNG
+                // ============================================
+
+                const customerCode =
+                    document.getElementById(
+                        'customerCode'
+                    );
+
+
+                if (customerCode) {
+
+                    customerCode.textContent =
+                        maKH;
+
+                }
+
+
+
+                // ============================================
+                // API HÓA ĐƠN
+                // ============================================
+
+                const API_URL =
+                    'http://localhost:3000/api/customer/'
+                    + encodeURIComponent(maKH)
+                    + '/invoices';
+
+
+
+                // ============================================
+                // NÚT QUAY LẠI
+                // ============================================
+
+                const backBtn =
+                    document.getElementById(
+                        'backBtn'
+                    );
+
+
+                if (backBtn) {
+
+                    /*
+                        Dùng customers.html tương đối
+                        để chạy được bằng Live Server.
+                    */
+
+                    backBtn.href =
+                        'customers.html';
+
+                }
+
+
+
+                // ============================================
+                // ĐỊNH DẠNG NGÀY
+                // ============================================
+
+                function formatDate(
+                    dateString
+                ) {
+
+                    if (!dateString) {
+
+                        return 'Không có dữ liệu';
+
+                    }
+
+
+                    const date =
+                        new Date(dateString);
+
+
+                    if (
+                        isNaN(
+                            date.getTime()
+                        )
+                    ) {
+
+                        return 'Không có dữ liệu';
+
+                    }
+
+
+                    return date.toLocaleString(
+                        'vi-VN',
+                        {
+                            hour: '2-digit',
+                            minute: '2-digit',
+
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        }
+                    );
+
+                }
+
+
+
+                // ============================================
+                // ĐỊNH DẠNG TIỀN
+                // ============================================
+
+                function formatMoney(
+                    value
+                ) {
+
+                    const number =
+                        Number(value);
+
+
+                    if (isNaN(number)) {
+
+                        return '0 VNĐ';
+
+                    }
+
+
+                    return number.toLocaleString(
+                        'vi-VN'
+                    ) + ' VNĐ';
+
+                }
+
+
+
+                // ============================================
+                // HIỂN THỊ HÓA ĐƠN
+                // ============================================
+
+                function displayInvoices(
+                    invoices
+                ) {
+
+                    const invoiceList =
+                        document.getElementById(
+                            'invoiceList'
+                        );
+
+
+                    if (!invoiceList) {
+
+                        console.error(
+                            'Không tìm thấy invoiceList'
+                        );
+
+                        return;
+
+                    }
+
+
+
+                    // Không có hóa đơn
+
+                    if (
+                        !Array.isArray(invoices)
+                        || invoices.length === 0
+                    ) {
+
+                        invoiceList.innerHTML = `
+
+                            <div class="empty">
+
+                                Bạn chưa có hóa đơn nào.
+
+                            </div>
+
+                        `;
+
+                        return;
+
+                    }
+
+
+
+                    // Có hóa đơn
+
+                    invoiceList.innerHTML =
+                        invoices.map(
+                            function (invoice) {
+
+
+                                const tongTien =
+                                    Number(
+                                        invoice.TongTien
+                                        || 0
+                                    );
+
+
+
+                                let daThanhToan =
+                                    Number(
+                                        invoice.DaThanhToan
+                                        || 0
+                                    );
+
+
+
+                                const trangThai =
+                                    String(
+                                        invoice.TrangThai
+                                        || ''
+                                    ).toUpperCase();
+
+
+
+                                /*
+                                    Nếu hóa đơn PAID
+                                    thì chắc chắn đã thanh toán đủ.
+                                    
+                                    Trường hợp API hiện tại trả
+                                    DaThanhToan = 0 nhưng TrangThai
+                                    = PAID thì dùng TongTien.
+                                */
+
+                                if (
+                                    trangThai === 'PAID'
+                                ) {
+
+                                    daThanhToan =
+                                        tongTien;
+
+                                }
+
+
+
+                                const conLai =
+                                    Math.max(
+                                        tongTien
+                                        - daThanhToan,
+                                        0
+                                    );
+
+
+
+                                return `
+
+                                    <div
+                                        class="invoice-card"
+                                    >
+
+
+                                        <!-- HEADER -->
+
+                                        <div
+                                            class="invoice-header"
+                                        >
+
+                                            <div>
+
+                                                <div
+                                                    class="invoice-code"
+                                                >
+
+                                                    Mã hóa đơn:
+                                                    ${
+                                                        invoice.MaHoaDon
+                                                        || 'Không có'
+                                                    }
+
+                                                </div>
+
+
+                                                <div
+                                                    class="booking-code"
+                                                >
+
+                                                    Mã đặt phòng:
+                                                    ${
+                                                        invoice.MaBookingCode
+                                                        || 'Không có'
+                                                    }
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div
+                                                class="invoice-status"
+                                            >
+
+                                                ${
+                                                    invoice.TrangThai
+                                                    || 'Không có'
+                                                }
+
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <!-- INFO -->
+
+                                        <div
+                                            class="invoice-info"
+                                        >
+
+
+                                            <!-- NGÀY LẬP -->
+
+                                            <div
+                                                class="info-item"
+                                            >
+
+                                                <strong>
+                                                    Ngày lập:
+                                                </strong>
+
+                                                ${
+                                                    formatDate(
+                                                        invoice.NgayLap
+                                                    )
+                                                }
+
+                                            </div>
+
+
+
+                                            <!-- TIỀN PHÒNG -->
+
+                                            <div
+                                                class="info-item"
+                                            >
+
+                                                <strong>
+                                                    Tiền phòng:
+                                                </strong>
+
+                                                ${
+                                                    formatMoney(
+                                                        invoice.TongTienPhong
+                                                    )
+                                                }
+
+                                            </div>
+
+
+
+                                            <!-- THUẾ -->
+
+                                            <div
+                                                class="info-item"
+                                            >
+
+                                                <strong>
+                                                    Thuế:
+                                                </strong>
+
+                                                ${
+                                                    formatMoney(
+                                                        invoice.Thue
+                                                    )
+                                                }
+
+                                            </div>
+
+
+
+                                            <!-- GIẢM GIÁ -->
+
+                                            <div
+                                                class="info-item"
+                                            >
+
+                                                <strong>
+                                                    Giảm giá:
+                                                </strong>
+
+                                                ${
+                                                    formatMoney(
+                                                        invoice.GiamGia
+                                                    )
+                                                }
+
+                                            </div>
+
+
+
+                                            <!-- TỔNG TIỀN -->
+
+                                            <div
+                                                class="info-item total"
+                                            >
+
+                                                <strong>
+                                                    Tổng tiền:
+                                                </strong>
+
+                                                ${
+                                                    formatMoney(
+                                                        tongTien
+                                                    )
+                                                }
+
+                                            </div>
+
+
+
+                                            <!-- ĐÃ THANH TOÁN -->
+
+                                            <div
+                                                class="info-item paid"
+                                            >
+
+                                                <strong>
+                                                    Đã thanh toán:
+                                                </strong>
+
+                                                ${
+                                                    formatMoney(
+                                                        daThanhToan
+                                                    )
+                                                }
+
+                                            </div>
+
+
+
+                                            <!-- CÒN LẠI -->
+
+                                            <div
+                                                class="info-item remaining"
+                                            >
+
+                                                <strong>
+                                                    Còn lại:
+                                                </strong>
+
+                                                ${
+                                                    formatMoney(
+                                                        conLai
+                                                    )
+                                                }
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                `;
+
+                            }
+                        ).join('');
+
+                }
+
+
+
+                // ============================================
+                // HIỂN THỊ LỖI
+                // ============================================
+
+                function displayError(
+                    message
+                ) {
+
+                    const invoiceList =
+                        document.getElementById(
+                            'invoiceList'
+                        );
+
+
+                    const loading =
+                        document.getElementById(
+                            'loading'
+                        );
+
+
+
+                    if (loading) {
+
+                        loading.style.display =
+                            'none';
+
+                    }
+
+
+
+                    if (invoiceList) {
+
+                        invoiceList.innerHTML = `
+
+                            <div class="error">
+
+                                <strong>
+                                    Không thể tải dữ liệu hóa đơn.
+                                </strong>
+
+                                <br><br>
+
+                                ${message}
+
+                            </div>
+
+                        `;
+
+                    }
+
+                }
+
+
+
+                // ============================================
+                // GỌI API
+                // ============================================
+
+                async function loadInvoices() {
+
+
+                    const invoiceList =
+                        document.getElementById(
+                            'invoiceList'
+                        );
+
+
+                    const loading =
+                        document.getElementById(
+                            'loading'
+                        );
+
+
+
+                    if (!invoiceList) {
+
+                        console.error(
+                            'Không tìm thấy invoiceList'
+                        );
+
+                        return;
+
+                    }
+
+
+
+                    try {
+
+
+                        console.log(
+                            'Đang gọi API:',
+                            API_URL
+                        );
+
+
+
+                        const response =
+                            await fetch(
+                                API_URL
+                            );
+
+
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                'Server trả về HTTP '
+                                + response.status
+                            );
+
+                        }
+
+
+
+                        const data =
+                            await response.json();
+
+
+
+                        console.log(
+                            'Dữ liệu hóa đơn:',
+                            data
+                        );
+
+
+
+                        if (!data.success) {
+
+                            throw new Error(
+                                data.message
+                                || 'API trả về lỗi'
+                            );
+
+                        }
+
+
+
+                        if (loading) {
+
+                            loading.style.display =
+                                'none';
+
+                        }
+
+
+
+                        displayInvoices(
+                            data.invoices
+                        );
+
+
+                    }
+                    catch (error) {
+
+
+                        console.error(
+                            'Lỗi tải hóa đơn:',
+                            error
+                        );
+
+
+                        displayError(
+                            'Không thể kết nối đến server. '
+                            + error.message
+                        );
+
+                    }
+
+                }
+
+
+
+                // ============================================
+                // CHẠY
+                // ============================================
+
+                loadInvoices();
+
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
