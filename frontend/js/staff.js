@@ -1,503 +1,730 @@
-document.addEventListener("DOMContentLoaded", () => {
+const API_URL = "/api/staff";
 
-    const API_URL = "http://localhost:3000/api/staff";
-
-    const searchInput = document.getElementById("searchInput");
-    const statusFilter = document.getElementById("statusFilter");
-    const tableBody = document.getElementById("staffTableBody");
-    const emptyMessage = document.getElementById("emptyMessage");
-
-    const totalStaff = document.getElementById("totalStaff");
-    const activeStaff = document.getElementById("activeStaff");
-    const lockedStaff = document.getElementById("lockedStaff");
-
-    const addStaffBtn = document.getElementById("addStaffBtn");
-
-    let staffData = [];
+let staffList = [];
 
 
-    // =========================================================
-    // 1. LẤY DỮ LIỆU NHÂN VIÊN TỪ BACKEND
-    // =========================================================
+// =====================================================
+// FORMAT DATE
+// =====================================================
 
-    async function loadStaff() {
+function formatDate(value) {
 
-        try {
+    if (!value) {
+        return "-";
+    }
 
-            const response = await fetch(API_URL);
+    const date = new Date(value);
 
-            if (!response.ok) {
-                throw new Error(
-                    `HTTP ${response.status}`
-                );
-            }
+    if (isNaN(date.getTime())) {
+        return "-";
+    }
 
-            const result = await response.json();
+    return date.toLocaleDateString("vi-VN");
+}
 
-            if (!result.success) {
-                throw new Error(
-                    result.message || "Không thể lấy dữ liệu"
-                );
-            }
 
-            staffData = result.data || [];
+// =====================================================
+// GET STATUS
+// =====================================================
 
-            renderStaff(staffData);
+function getStatus(staff) {
 
-            updateStatistics();
+    return String(
+        staff.trangThaiTaiKhoan ||
+        staff.TrangThaiTaiKhoan ||
+        staff.TrangThai ||
+        staff.trangThaiNhanVien ||
+        "ACTIVE"
+    ).toUpperCase();
+}
 
-        } catch (error) {
 
-            console.error(
-                "Lỗi kết nối danh sách nhân viên:",
-                error
-            );
+// =====================================================
+// GET NAME
+// =====================================================
 
-            tableBody.innerHTML = "";
+function getName(staff) {
 
-            emptyMessage.textContent =
-                "Không thể kết nối đến hệ thống.";
+    return staff.HoTen || "Không có tên";
+}
 
-            emptyMessage.style.display = "block";
 
-        }
+// =====================================================
+// GET INITIALS
+// =====================================================
+
+function getInitials(name) {
+
+    if (!name) {
+        return "?";
+    }
+
+    const words = name.trim().split(/\s+/);
+
+    if (words.length === 1) {
+        return words[0].substring(0, 2).toUpperCase();
+    }
+
+    return (
+        words[0][0] +
+        words[words.length - 1][0]
+    ).toUpperCase();
+}
+
+
+// =====================================================
+// STATUS HTML
+// =====================================================
+
+function getStatusHTML(status) {
+
+    if (status === "ACTIVE") {
+
+        return `
+            <span class="status-badge active">
+                <span class="status-dot"></span>
+                Hoạt động
+            </span>
+        `;
     }
 
 
-    // =========================================================
-    // 2. HIỂN THỊ DANH SÁCH NHÂN VIÊN
-    // =========================================================
+    if (status === "LOCKED") {
 
-    function renderStaff(data) {
-
-        tableBody.innerHTML = "";
-
-        if (data.length === 0) {
-
-            emptyMessage.textContent =
-                "Không có nhân viên nào.";
-
-            emptyMessage.style.display = "block";
-
-            return;
-        }
-
-        emptyMessage.style.display = "none";
-
-
-        data.forEach(staff => {
-
-            const row = document.createElement("tr");
-
-            const accountStatus =
-                staff.trangThaiTaiKhoan || "ACTIVE";
-
-            const employeeStatus =
-                staff.trangThaiNhanVien || "ACTIVE";
-
-            const status =
-                accountStatus === "LOCKED"
-                    ? "LOCKED"
-                    : employeeStatus;
-
-
-            // -------------------------------------------------
-            // ĐỊNH DẠNG NGÀY
-            // -------------------------------------------------
-
-            let ngayVaoLam = "";
-
-            if (staff.NgayVaoLam) {
-
-                const date =
-                    new Date(staff.NgayVaoLam);
-
-                ngayVaoLam =
-                    date.toLocaleDateString("vi-VN");
-
-            }
-
-
-            // -------------------------------------------------
-            // TRẠNG THÁI
-            // -------------------------------------------------
-
-            const isActive =
-                status === "ACTIVE";
-
-            const statusClass =
-                isActive
-                    ? "active"
-                    : "locked";
-
-            const statusText =
-                isActive
-                    ? "Đang hoạt động"
-                    : "Đã khóa";
-
-
-            // -------------------------------------------------
-            // NÚT
-            // -------------------------------------------------
-
-            const buttonClass =
-                isActive
-                    ? "action-btn"
-                    : "action-btn unlock-btn";
-
-            const buttonText =
-                isActive
-                    ? "🔒 Khóa"
-                    : "🔓 Mở khóa";
-
-
-            // -------------------------------------------------
-            // DỮ LIỆU TÌM KIẾM
-            // -------------------------------------------------
-
-            const searchData = [
-
-                staff.MaNV,
-                staff.HoTen,
-                staff.Email,
-                staff.SoDienThoai,
-                staff.ChucVu,
-                staff.VaiTro
-
-            ]
-                .filter(Boolean)
-                .join(" ")
-                .toLowerCase();
-
-
-            row.dataset.search = searchData;
-
-            row.dataset.status = status;
-
-            row.dataset.manv = staff.MaNV;
-
-
-            // -------------------------------------------------
-            // HTML
-            // -------------------------------------------------
-
-            row.innerHTML = `
-
-                <td>${staff.MaNV || ""}</td>
-
-                <td>
-                    ${staff.HoTen || ""}
-                </td>
-
-                <td>
-                    ${staff.Email || ""}
-                </td>
-
-                <td>
-                    ${staff.ChucVu || ""}
-                </td>
-
-                <td>
-                    ${staff.VaiTro || ""}
-                </td>
-
-                <td>
-
-                    <span class="status ${statusClass}">
-
-                        <i></i>
-
-                        ${statusText}
-
-                    </span>
-
-                </td>
-
-                <td>
-                    ${ngayVaoLam}
-                </td>
-
-                <td>
-
-                    <button
-                        type="button"
-                        class="${buttonClass}"
-                        data-action="${isActive ? "lock" : "unlock"}"
-                    >
-                        ${buttonText}
-                    </button>
-
-                </td>
-
-            `;
-
-
-            tableBody.appendChild(row);
-
-        });
-
+        return `
+            <span class="status-badge locked">
+                <span class="status-dot"></span>
+                Đã khóa
+            </span>
+        `;
     }
 
 
-    // =========================================================
-    // 3. THỐNG KÊ
-    // =========================================================
+    if (status === "INACTIVE") {
 
-    function updateStatistics() {
-
-        const total =
-            staffData.length;
-
-        const active =
-            staffData.filter(staff => {
-
-                return (
-                    staff.trangThaiTaiKhoan === "ACTIVE"
-                    &&
-                    staff.trangThaiNhanVien === "ACTIVE"
-                );
-
-            }).length;
-
-
-        const locked =
-            staffData.filter(staff => {
-
-                return (
-                    staff.trangThaiTaiKhoan === "LOCKED"
-                );
-
-            }).length;
-
-
-        totalStaff.textContent = total;
-
-        activeStaff.textContent = active;
-
-        lockedStaff.textContent = locked;
-
+        return `
+            <span class="status-badge inactive">
+                <span class="status-dot"></span>
+                Không hoạt động
+            </span>
+        `;
     }
 
 
-    // =========================================================
-    // 4. TÌM KIẾM + LỌC
-    // =========================================================
+    return `
+        <span class="status-badge inactive">
+            <span class="status-dot"></span>
+            ${status}
+        </span>
+    `;
+}
 
-    function filterStaff() {
 
-        const keyword =
-            searchInput.value
-                .trim()
-                .toLowerCase();
+// =====================================================
+// LOAD STAFF
+// =====================================================
 
-        const selectedStatus =
-            statusFilter.value;
+async function loadStaff() {
 
+    const tbody =
+        document.getElementById("staffTableBody");
 
-        const rows =
-            tableBody.querySelectorAll("tr");
 
-
-        let visibleCount = 0;
-
-
-        rows.forEach(row => {
-
-            const searchData =
-                row.dataset.search || "";
-
-            const rowStatus =
-                row.dataset.status || "";
-
-
-            const matchKeyword =
-                searchData.includes(keyword);
-
-
-            let matchStatus = true;
-
-
-            if (selectedStatus !== "ALL") {
-
-                if (
-                    selectedStatus === "ACTIVE"
-                ) {
-
-                    matchStatus =
-                        rowStatus === "ACTIVE";
-
-                } else {
-
-                    matchStatus =
-                        rowStatus === "LOCKED"
-                        ||
-                        rowStatus === "INACTIVE";
-
-                }
-
-            }
-
-
-            if (
-                matchKeyword
-                &&
-                matchStatus
-            ) {
-
-                row.style.display = "";
-
-                visibleCount++;
-
-            } else {
-
-                row.style.display = "none";
-
-            }
-
-        });
-
-
-        if (visibleCount === 0) {
-
-            emptyMessage.textContent =
-                "Không tìm thấy nhân viên phù hợp.";
-
-            emptyMessage.style.display = "block";
-
-        } else {
-
-            emptyMessage.style.display = "none";
-
-        }
-
-    }
-
-
-    searchInput.addEventListener(
-        "input",
-        filterStaff
-    );
-
-
-    statusFilter.addEventListener(
-        "change",
-        filterStaff
-    );
-
-
-    // =========================================================
-    // 5. NÚT KHÓA / MỞ KHÓA
-    // =========================================================
-
-    tableBody.addEventListener(
-        "click",
-        event => {
-
-            const button =
-                event.target.closest(".action-btn");
-
-
-            if (!button) {
-                return;
-            }
-
-
-            const row =
-                button.closest("tr");
-
-
-            if (!row) {
-                return;
-            }
-
-
-            const currentStatus =
-                row.dataset.status;
-
-
-            const status =
-                row.querySelector(".status");
-
-
-            if (currentStatus === "ACTIVE") {
-
-                // ---------------------------------------------
-                // ACTIVE → LOCKED
-                // ---------------------------------------------
-
-                row.dataset.status = "LOCKED";
-
-                status.className =
-                    "status locked";
-
-                status.innerHTML =
-                    "<i></i> Đã khóa";
-
-
-                button.className =
-                    "action-btn unlock-btn";
-
-                button.dataset.action =
-                    "unlock";
-
-                button.innerHTML =
-                    "🔓 Mở khóa";
-
-
-            } else {
-
-                // ---------------------------------------------
-                // LOCKED → ACTIVE
-                // ---------------------------------------------
-
-                row.dataset.status = "ACTIVE";
-
-                status.className =
-                    "status active";
-
-                status.innerHTML =
-                    "<i></i> Đang hoạt động";
-
-
-                button.className =
-                    "action-btn";
-
-                button.dataset.action =
-                    "lock";
-
-                button.innerHTML =
-                    "🔒 Khóa";
-
-            }
-
-        }
-    );
-
-
-    // =========================================================
-    // 6. NÚT THÊM NHÂN VIÊN
-    // =========================================================
-
-    if (addStaffBtn) {
-
-        addStaffBtn.addEventListener(
-            "click",
-            () => {
-
-                alert(
-                    "Chức năng thêm nhân viên sẽ được kết nối với database ở bước tiếp theo."
-                );
-
-            }
+    if (!tbody) {
+        console.error(
+            "Không tìm thấy staffTableBody"
         );
 
+        return;
     }
 
 
-    // =========================================================
-    // 7. KHỞI ĐỘNG
-    // =========================================================
+    tbody.innerHTML = `
+        <tr>
+            <td
+                colspan="8"
+                class="staff-message"
+            >
+                Đang tải dữ liệu nhân viên...
+            </td>
+        </tr>
+    `;
 
-    loadStaff();
 
-});
+    try {
+
+        console.log(
+            ">>> Đang gọi API:",
+            API_URL
+        );
+
+
+        const response =
+            await fetch(API_URL);
+
+
+        console.log(
+            ">>> HTTP:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            ">>> API STAFF:",
+            result
+        );
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "API trả về lỗi"
+            );
+        }
+
+
+        if (!Array.isArray(result.data)) {
+
+            throw new Error(
+                "API không trả về danh sách nhân viên"
+            );
+        }
+
+
+        staffList = result.data;
+
+
+        console.log(
+            ">>> Số nhân viên:",
+            staffList.length
+        );
+
+
+        updateStatistics();
+
+        renderStaff();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            ">>> LỖI STAFF:",
+            error
+        );
+
+
+        staffList = [];
+
+
+        updateStatistics();
+
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="staff-message error-message"
+                >
+                    Không thể tải dữ liệu nhân viên.
+                    <br>
+                    ${error.message}
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+// =====================================================
+// STATISTICS
+// =====================================================
+
+function updateStatistics() {
+
+    const totalElement =
+        document.getElementById("totalStaff");
+
+
+    const activeElement =
+        document.getElementById("activeStaff");
+
+
+    const lockedElement =
+        document.getElementById("lockedStaff");
+
+
+    const countText =
+        document.getElementById("staffCountText");
+
+
+    const total =
+        staffList.length;
+
+
+    let active = 0;
+
+    let locked = 0;
+
+
+    staffList.forEach(function (staff) {
+
+        const status =
+            getStatus(staff);
+
+
+        if (status === "ACTIVE") {
+            active++;
+        }
+
+
+        if (status === "LOCKED") {
+            locked++;
+        }
+
+    });
+
+
+    if (totalElement) {
+        totalElement.textContent = total;
+    }
+
+
+    if (activeElement) {
+        activeElement.textContent = active;
+    }
+
+
+    if (lockedElement) {
+        lockedElement.textContent = locked;
+    }
+
+
+    if (countText) {
+
+        countText.textContent =
+            `${total} nhân viên`;
+    }
+}
+
+
+// =====================================================
+// RENDER
+// =====================================================
+
+function renderStaff() {
+
+    const tbody =
+        document.getElementById("staffTableBody");
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+
+    const statusFilter =
+        document.getElementById("statusFilter");
+
+
+    const keyword =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const selectedStatus =
+        statusFilter
+            ? statusFilter.value.toUpperCase()
+            : "ALL";
+
+
+    const filteredStaff =
+        staffList.filter(function (staff) {
+
+            const name =
+                String(staff.HoTen || "")
+                    .toLowerCase();
+
+
+            const email =
+                String(staff.Email || "")
+                    .toLowerCase();
+
+
+            const phone =
+                String(staff.SoDienThoai || "")
+                    .toLowerCase();
+
+
+            const maNV =
+                String(staff.MaNV || "")
+                    .toLowerCase();
+
+
+            const username =
+                String(staff.TenDangNhap || "")
+                    .toLowerCase();
+
+
+            const status =
+                getStatus(staff);
+
+
+            const matchesSearch =
+                keyword === "" ||
+                name.includes(keyword) ||
+                email.includes(keyword) ||
+                phone.includes(keyword) ||
+                maNV.includes(keyword) ||
+                username.includes(keyword);
+
+
+            const matchesStatus =
+                selectedStatus === "ALL" ||
+                status === selectedStatus;
+
+
+            return (
+                matchesSearch &&
+                matchesStatus
+            );
+
+        });
+
+
+    if (filteredStaff.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="staff-message"
+                >
+                    Không tìm thấy nhân viên phù hợp.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        filteredStaff.map(function (staff) {
+
+            const maNV =
+                staff.MaNV || "-";
+
+
+            const name =
+                staff.HoTen || "-";
+
+
+            const email =
+                staff.Email || "-";
+
+
+            const phone =
+                staff.SoDienThoai || "-";
+
+
+            const role =
+                staff.ChucVu ||
+                staff.VaiTro ||
+                "-";
+
+
+            const status =
+                getStatus(staff);
+
+
+            const username =
+                staff.TenDangNhap || "";
+
+
+            const ngayVaoLam =
+                formatDate(
+                    staff.NgayVaoLam
+                );
+
+
+            const initials =
+                getInitials(name);
+
+
+            return `
+                <tr>
+
+                    <td>
+                        <span class="staff-id">
+                            ${maNV}
+                        </span>
+                    </td>
+
+
+                    <td>
+
+                        <div class="staff-info">
+
+                            <div class="staff-avatar">
+                                ${initials}
+                            </div>
+
+                            <div>
+
+                                <div class="staff-name">
+                                    ${name}
+                                </div>
+
+                                <div class="staff-username">
+                                    ${username}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+                        ${email}
+                    </td>
+
+
+                    <td>
+                        ${phone}
+                    </td>
+
+
+                    <td>
+                        ${role}
+                    </td>
+
+
+                    <td>
+                        ${getStatusHTML(status)}
+                    </td>
+
+
+                    <td>
+                        ${ngayVaoLam}
+                    </td>
+
+
+                    <td>
+
+                        <div class="action-buttons">
+
+                            ${
+                                status === "LOCKED"
+                                ? `
+                                    <button
+                                        class="action-btn unlock-btn"
+                                        type="button"
+                                        onclick="unlockStaff('${staff.MaTaiKhoan || ""}')"
+                                    >
+                                        Mở khóa
+                                    </button>
+                                `
+                                : `
+                                    <button
+                                        class="action-btn lock-btn"
+                                        type="button"
+                                        onclick="lockStaff('${staff.MaTaiKhoan || ""}')"
+                                    >
+                                        Khóa
+                                    </button>
+                                `
+                            }
+
+                        </div>
+
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+}
+
+
+// =====================================================
+// SEARCH
+// =====================================================
+
+function setupSearch() {
+
+    const input =
+        document.getElementById("searchInput");
+
+
+    if (!input) {
+        return;
+    }
+
+
+    input.addEventListener(
+        "input",
+        renderStaff
+    );
+}
+
+
+// =====================================================
+// FILTER
+// =====================================================
+
+function setupFilter() {
+
+    const filter =
+        document.getElementById("statusFilter");
+
+
+    if (!filter) {
+        return;
+    }
+
+
+    filter.addEventListener(
+        "change",
+        renderStaff
+    );
+}
+
+
+// =====================================================
+// ADD STAFF
+// =====================================================
+
+function setupAddStaff() {
+
+    const button =
+        document.getElementById("addStaffBtn");
+
+
+    if (!button) {
+        return;
+    }
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            alert(
+                "Chức năng thêm nhân viên sẽ được triển khai sau."
+            );
+
+        }
+    );
+}
+
+
+// =====================================================
+// LOCK
+// =====================================================
+
+function lockStaff(maTaiKhoan) {
+
+    if (!maTaiKhoan) {
+
+        alert(
+            "Không xác định được mã tài khoản."
+        );
+
+        return;
+    }
+
+
+    alert(
+        "Chức năng khóa tài khoản chưa kết nối API."
+    );
+}
+
+
+// =====================================================
+// UNLOCK
+// =====================================================
+
+function unlockStaff(maTaiKhoan) {
+
+    if (!maTaiKhoan) {
+
+        alert(
+            "Không xác định được mã tài khoản."
+        );
+
+        return;
+    }
+
+
+    alert(
+        "Chức năng mở khóa tài khoản chưa kết nối API."
+    );
+}
+
+
+// =====================================================
+// LOGOUT
+// =====================================================
+
+function logout() {
+
+    window.location.href =
+        "/login.html";
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        setupSearch();
+
+        setupFilter();
+
+        setupAddStaff();
+
+
+        const logoutButton =
+            document.getElementById("logoutBtn");
+
+
+        if (logoutButton) {
+
+            logoutButton.addEventListener(
+                "click",
+                logout
+            );
+        }
+
+
+        loadStaff();
+
+    }
+);

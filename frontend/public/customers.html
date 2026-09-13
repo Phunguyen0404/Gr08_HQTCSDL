@@ -2,10 +2,14 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Customer - Hotel Management</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Danh sách hóa đơn</title>
+
 
     <style>
 
@@ -15,299 +19,445 @@
             padding: 0;
         }
 
+
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: #f4f8fb;
+
+            background: #f4f7fb;
+
             color: #1f2937;
+
             min-height: 100vh;
         }
+
 
         /* ================================
            HEADER
         ================================= */
 
         .header {
+
             height: 70px;
 
-            background: #0f4c81;
-            color: white;
+            background: #ffffff;
+
+            border-bottom: 1px solid #e5e7eb;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             padding: 0 35px;
 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .header-title {
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .header-buttons {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .back-btn,
-        .invoice-btn {
-            color: white;
-
-            text-decoration: none;
-
-            padding: 10px 18px;
-
-            border-radius: 8px;
-
-            transition: 0.2s;
-
-            font-weight: 600;
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .invoice-btn {
-            background: #198754;
-        }
-
-        .invoice-btn:hover {
-            background: #157347;
-        }
-
-        /* ================================
-           MAIN
-        ================================= */
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-
-            margin: 35px auto;
-        }
-
-        .page-title {
-            font-size: 28px;
-
-            font-weight: bold;
-
-            color: #0f4c81;
-
-            margin-bottom: 8px;
-        }
-
-        .page-description {
-            color: #6b7280;
-
-            margin-bottom: 25px;
-        }
-
-        /* ================================
-           CUSTOMER INFO
-        ================================= */
-
-        .customer-box {
-            background: white;
-
-            border-radius: 12px;
-
-            padding: 22px 25px;
-
-            margin-bottom: 25px;
-
             box-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.08);
-
-            border-left: 5px solid #0f4c81;
+                0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        .customer-title {
-            font-size: 18px;
 
-            font-weight: bold;
+        .logo {
 
-            margin-bottom: 10px;
-
-            color: #0f4c81;
-        }
-
-        .customer-code {
-            color: #555;
-        }
-
-        /* ================================
-           BOOKING SECTION
-        ================================= */
-
-        .section-title {
             font-size: 22px;
 
             font-weight: bold;
 
-            margin-bottom: 18px;
-
-            color: #1f2937;
+            color: #2563eb;
         }
 
-        .booking-list {
-            display: flex;
 
-            flex-direction: column;
+        .customer-area {
 
-            gap: 20px;
-        }
-
-        /* ================================
-           BOOKING CARD
-        ================================= */
-
-        .booking-card {
-            background: white;
-
-            border-radius: 12px;
-
-            padding: 24px;
-
-            box-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.08);
-
-            border: 1px solid #e5e7eb;
-        }
-
-        .booking-header {
             display: flex;
 
             align-items: center;
 
-            justify-content: space-between;
-
-            gap: 20px;
-
-            padding-bottom: 18px;
-
-            margin-bottom: 18px;
-
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .booking-code {
-            font-size: 18px;
-
-            font-weight: bold;
-
-            color: #0f4c81;
-        }
-
-        /* ================================
-           STATUS
-        ================================= */
-
-        .status {
-            padding: 7px 14px;
-
-            border-radius: 20px;
-
-            background: #dcfce7;
-
-            color: #166534;
-
-            font-size: 13px;
-
-            font-weight: bold;
-        }
-
-        /* ================================
-           BOOKING INFO
-        ================================= */
-
-        .booking-info {
-            display: grid;
-
-            grid-template-columns: repeat(2, 1fr);
-
-            gap: 15px 30px;
-        }
-
-        .info-item {
-            padding: 12px 15px;
-
-            background: #f8fafc;
-
-            border-radius: 8px;
+            gap: 12px;
 
             color: #374151;
 
-            line-height: 1.5;
+            font-weight: 500;
         }
 
-        .info-item strong {
-            color: #0f4c81;
+
+        .avatar {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 50%;
+
+            background: #2563eb;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: bold;
         }
+
+
+        /* ================================
+           CONTAINER
+        ================================= */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1100px;
+
+            margin: 35px auto;
+        }
+
+
+        /* ================================
+           PAGE HEADER
+        ================================= */
+
+        .page-header {
+
+            background: white;
+
+            border-radius: 12px;
+
+            padding: 25px 30px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+
+        .page-header h1 {
+
+            font-size: 28px;
+
+            color: #1e3a8a;
+
+            margin-bottom: 10px;
+        }
+
+
+        .page-description {
+
+            color: #6b7280;
+
+            font-size: 15px;
+        }
+
+
+        /* ================================
+           BACK BUTTON
+        ================================= */
+
+        .back-btn {
+
+            display: inline-block;
+
+            margin-top: 18px;
+
+            padding: 10px 16px;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .back-btn:hover {
+
+            background: #1d4ed8;
+        }
+
 
         /* ================================
            LOADING
         ================================= */
 
         .loading {
+
             background: white;
 
-            padding: 35px;
-
             border-radius: 12px;
+
+            padding: 35px;
 
             text-align: center;
 
             color: #6b7280;
 
             box-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.08);
+                0 3px 12px rgba(0, 0, 0, 0.06);
         }
+
+
+        /* ================================
+           INVOICE CARD
+        ================================= */
+
+        .invoice-card {
+
+            background: white;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 3px 12px rgba(0, 0, 0, 0.06);
+
+            border-left: 5px solid #2563eb;
+        }
+
+
+        /* ================================
+           INVOICE HEADER
+        ================================= */
+
+        .invoice-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 20px;
+
+            padding-bottom: 18px;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+
+        .invoice-code {
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            color: #1e3a8a;
+
+            margin-bottom: 7px;
+        }
+
+
+        .booking-code {
+
+            font-size: 14px;
+
+            color: #6b7280;
+        }
+
+
+        /* ================================
+           STATUS
+        ================================= */
+
+        .invoice-status {
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        .status-paid {
+
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+
+        .status-issued {
+
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        .status-draft {
+
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+
+        .status-cancelled {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+
+        /* ================================
+           INVOICE INFO
+        ================================= */
+
+        .invoice-info {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 14px;
+
+            padding-top: 20px;
+        }
+
+
+        .info-item {
+
+            padding: 13px 15px;
+
+            background: #f8fafc;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            color: #4b5563;
+        }
+
+
+        .info-item strong {
+
+            display: block;
+
+            color: #374151;
+
+            margin-bottom: 5px;
+        }
+
+
+        /* ================================
+           TOTAL
+        ================================= */
+
+        .info-item.total {
+
+            background: #eff6ff;
+
+            color: #1d4ed8;
+
+            font-size: 16px;
+        }
+
+
+        .info-item.total strong {
+
+            color: #1e40af;
+        }
+
+
+        /* ================================
+           PAID
+        ================================= */
+
+        .info-item.paid {
+
+            background: #f0fdf4;
+
+            color: #15803d;
+
+            font-size: 16px;
+        }
+
+
+        .info-item.paid strong {
+
+            color: #166534;
+        }
+
+
+        /* ================================
+           REMAINING
+        ================================= */
+
+        .info-item.remaining {
+
+            background: #fff7ed;
+
+            color: #c2410c;
+
+            font-size: 16px;
+        }
+
+
+        .info-item.remaining strong {
+
+            color: #9a3412;
+        }
+
 
         /* ================================
            EMPTY
         ================================= */
 
         .empty {
+
             background: white;
 
-            padding: 40px;
-
             border-radius: 12px;
+
+            padding: 40px;
 
             text-align: center;
 
             color: #6b7280;
 
             box-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.08);
+                0 3px 12px rgba(0, 0, 0, 0.06);
         }
+
 
         /* ================================
            ERROR
         ================================= */
 
         .error {
+
             background: #fef2f2;
 
             border: 1px solid #fecaca;
 
             color: #b91c1c;
 
-            padding: 25px;
-
             border-radius: 12px;
+
+            padding: 25px;
 
             line-height: 1.6;
         }
+
 
         /* ================================
            RESPONSIVE
@@ -316,37 +466,34 @@
         @media (max-width: 700px) {
 
             .header {
+
                 padding: 0 18px;
             }
 
-            .header-title {
-                font-size: 18px;
-            }
-
-            .header-buttons {
-                gap: 5px;
-            }
-
-            .back-btn,
-            .invoice-btn {
-                padding: 8px 10px;
-
-                font-size: 12px;
-            }
 
             .container {
+
                 width: 94%;
             }
 
-            .booking-header {
-                flex-direction: column;
 
-                align-items: flex-start;
-            }
+            .invoice-info {
 
-            .booking-info {
                 grid-template-columns: 1fr;
             }
+
+
+            .invoice-header {
+
+                flex-direction: column;
+            }
+
+
+            .page-header h1 {
+
+                font-size: 24px;
+            }
+
         }
 
     </style>
@@ -356,180 +503,120 @@
 
 <body>
 
-    <!-- =========================================
+
+    <!-- ================================
          HEADER
-    ========================================== -->
+    ================================= -->
 
     <header class="header">
 
-        <div class="header-title">
-            HOTEL MANAGEMENT
+        <div class="logo">
+
+            🏨 HOTEL MANAGEMENT
+
         </div>
 
 
-        <div class="header-buttons">
+        <div class="customer-area">
 
-            <!-- HÓA ĐƠN -->
+            <span>
 
-            <a
-                id="invoiceBtn"
-                href="#"
-                class="invoice-btn"
-            >
-                🧾 Hóa đơn
-            </a>
+                Hóa đơn
+
+            </span>
 
 
-            <!-- DASHBOARD -->
+            <div class="avatar">
 
-            <a
-                href="http://localhost:3000/dashboard.html"
-                class="back-btn"
-            >
-                ← Dashboard
-            </a>
+                HD
+
+            </div>
 
         </div>
 
     </header>
 
 
-    <!-- =========================================
-         MAIN CONTENT
-    ========================================== -->
+
+    <!-- ================================
+         MAIN
+    ================================= -->
 
     <main class="container">
 
 
-        <h1 class="page-title">
-            Customer
-        </h1>
+        <section class="page-header">
+
+            <h1>
+
+                Danh sách hóa đơn
+
+            </h1>
 
 
-        <p class="page-description">
-            Lịch sử đặt phòng của khách hàng
-        </p>
+            <div class="page-description">
 
-
-        <!-- =====================================
-             CUSTOMER INFORMATION
-        ====================================== -->
-
-        <section class="customer-box">
-
-            <div class="customer-title">
-                Thông tin khách hàng
-            </div>
-
-
-            <div class="customer-code">
-
-                Mã khách hàng:
-
-                <strong id="customerCode">
-                    KH001
-                </strong>
+                Danh sách toàn bộ hóa đơn trong hệ thống
 
             </div>
+
+
+            <a
+                id="backBtn"
+                class="back-btn"
+                href="customers.html"
+            >
+
+                ← Quay lại Customer
+
+            </a>
 
         </section>
 
 
-        <!-- =====================================
-             BOOKING HISTORY
-        ====================================== -->
 
-        <h2 class="section-title">
-            Lịch sử đặt phòng
-        </h2>
-
+        <!-- ================================
+             LOADING
+        ================================= -->
 
         <div
-            id="bookingList"
-            class="booking-list"
+            id="loading"
+            class="loading"
         >
 
-            <div class="loading">
-                Đang tải lịch sử đặt phòng...
-            </div>
+            Đang tải dữ liệu hóa đơn...
 
         </div>
+
+
+
+        <!-- ================================
+             INVOICE LIST
+        ================================= -->
+
+        <section
+            id="invoiceList"
+        ></section>
+
 
     </main>
 
 
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================== -->
 
     <script>
 
-        // =====================================================
-        // CUSTOMER HIỆN TẠI
-        // =====================================================
-
-        const maKH = 'KH001';
-
 
         // =====================================================
-        // API LỊCH SỬ ĐẶT PHÒNG
+        // API LẤY TOÀN BỘ HÓA ĐƠN
         // =====================================================
 
         const API_URL =
-            'http://localhost:3000/api/customer/'
-            + maKH
-            + '/bookings';
+            'http://localhost:3000/api/invoices';
 
-
-        // =====================================================
-        // NÚT HÓA ĐƠN
-        // =====================================================
-
-        const invoiceBtn =
-            document.getElementById(
-                'invoiceBtn'
-            );
-
-
-        /*
-         * Truyền mã khách hàng sang invoices.html
-         *
-         * Ví dụ:
-         *
-         * customers.html
-         *       ↓
-         * maKH = KH001
-         *       ↓
-         * invoices.html?maKH=KH001
-         */
-
-        invoiceBtn.href =
-            'http://localhost:3000/invoices.html'
-            + '?maKH='
-            + encodeURIComponent(maKH);
 
 
         // =====================================================
-        // HIỂN THỊ MÃ KHÁCH HÀNG
-        // =====================================================
-
-        document.getElementById(
-            'customerCode'
-        ).textContent = maKH;
-
-
-        // =====================================================
-        // BOOKING LIST
-        // =====================================================
-
-        const bookingList =
-            document.getElementById(
-                'bookingList'
-            );
-
-
-        // =====================================================
-        // ĐỊNH DẠNG NGÀY GIỜ
+        // FORMAT NGÀY
         // =====================================================
 
         function formatDate(dateString) {
@@ -571,8 +658,9 @@
         }
 
 
+
         // =====================================================
-        // ĐỊNH DẠNG TIỀN
+        // FORMAT TIỀN
         // =====================================================
 
         function formatMoney(value) {
@@ -581,9 +669,7 @@
                 Number(value);
 
 
-            if (
-                isNaN(number)
-            ) {
+            if (isNaN(number)) {
 
                 return '0 VNĐ';
 
@@ -592,37 +678,103 @@
 
             return number.toLocaleString(
                 'vi-VN'
-            )
-            + ' VNĐ';
+            ) + ' VNĐ';
 
         }
 
 
+
         // =====================================================
-        // HIỂN THỊ BOOKING
+        // LẤY CLASS STATUS
         // =====================================================
 
-        function displayBookings(bookings) {
+        function getStatusClass(status) {
 
-            if (!bookingList) {
+            const value =
+                String(status || '')
+                    .toUpperCase();
+
+
+            if (value === 'PAID') {
+
+                return 'status-paid';
+
+            }
+
+
+            if (value === 'ISSUED') {
+
+                return 'status-issued';
+
+            }
+
+
+            if (value === 'DRAFT') {
+
+                return 'status-draft';
+
+            }
+
+
+            if (value === 'CANCELLED') {
+
+                return 'status-cancelled';
+
+            }
+
+
+            return 'status-issued';
+
+        }
+
+
+
+        // =====================================================
+        // HIỂN THỊ HÓA ĐƠN
+        // =====================================================
+
+        function displayInvoices(invoices) {
+
+            const invoiceList =
+                document.getElementById(
+                    'invoiceList'
+                );
+
+
+            const loading =
+                document.getElementById(
+                    'loading'
+                );
+
+
+            if (!invoiceList) {
 
                 return;
 
             }
 
 
-            // Không có booking
+            if (loading) {
+
+                loading.style.display =
+                    'none';
+
+            }
+
+
+
+            // Không có hóa đơn
 
             if (
-                !Array.isArray(bookings)
-                || bookings.length === 0
+                !Array.isArray(invoices)
+                || invoices.length === 0
             ) {
 
-                bookingList.innerHTML = `
+                invoiceList.innerHTML = `
 
                     <div class="empty">
 
-                        Bạn chưa có lịch sử đặt phòng.
+                        Chưa có hóa đơn nào.
 
                     </div>
 
@@ -633,143 +785,262 @@
             }
 
 
-            // Có booking
 
-            bookingList.innerHTML =
-                bookings.map(
-                    function (booking) {
+            // Có hóa đơn
+
+            invoiceList.innerHTML =
+                invoices.map(
+                    function (invoice) {
+
+
+                        const tongTien =
+                            Number(
+                                invoice.TongTien || 0
+                            );
+
+
+                        const daThanhToan =
+                            Number(
+                                invoice.DaThanhToan || 0
+                            );
+
+
+                        const conLai =
+                            Math.max(
+                                tongTien
+                                - daThanhToan,
+                                0
+                            );
+
+
+                        const trangThai =
+                            String(
+                                invoice.TrangThai || ''
+                            ).toUpperCase();
+
+
+
+                        // WALK-IN
+
+                        const maBooking =
+                            invoice.MaBookingCode
+                            || 'WALK-IN';
+
+
 
                         return `
 
-                            <div class="booking-card">
+                            <div class="invoice-card">
 
-                                <div class="booking-header">
 
-                                    <div class="booking-code">
+                                <!-- HEADER -->
 
-                                        Mã đặt phòng:
-                                        ${booking.MaBookingCode || 'Không có'}
+                                <div
+                                    class="invoice-header"
+                                >
+
+                                    <div>
+
+                                        <div
+                                            class="invoice-code"
+                                        >
+
+                                            Mã hóa đơn:
+                                            ${invoice.MaHoaDon || 'Không có'}
+
+                                        </div>
+
+
+                                        <div
+                                            class="booking-code"
+                                        >
+
+                                            Mã đặt phòng:
+                                            ${maBooking}
+
+                                        </div>
 
                                     </div>
 
 
-                                    <div class="status">
+                                    <div
+                                        class="
+                                            invoice-status
+                                            ${getStatusClass(trangThai)}
+                                        "
+                                    >
 
-                                        ${booking.TrangThai || 'Không có'}
+                                        ${trangThai || 'Không có'}
 
                                     </div>
 
                                 </div>
 
 
-                                <div class="booking-info">
+
+                                <!-- INFO -->
+
+                                <div
+                                    class="invoice-info"
+                                >
 
 
-                                    <div class="info-item">
+                                    <!-- NGÀY LẬP -->
 
-                                        <strong>
-                                            Phòng:
-                                        </strong>
-
-                                        ${booking.SoPhong || 'Không có'}
-
-                                    </div>
-
-
-                                    <div class="info-item">
+                                    <div
+                                        class="info-item"
+                                    >
 
                                         <strong>
-                                            Loại phòng:
-                                        </strong>
 
-                                        ${booking.TenLoaiPhong || 'Không có'}
+                                            Ngày lập:
 
-                                    </div>
-
-
-                                    <div class="info-item">
-
-                                        <strong>
-                                            Ngày đặt:
                                         </strong>
 
                                         ${formatDate(
-                                            booking.NgayDat
+                                            invoice.NgayLap
                                         )}
 
                                     </div>
 
 
-                                    <div class="info-item">
+
+                                    <!-- TIỀN PHÒNG -->
+
+                                    <div
+                                        class="info-item"
+                                    >
 
                                         <strong>
-                                            Ngày nhận:
-                                        </strong>
 
-                                        ${formatDate(
-                                            booking.NgayNhanDuKien
-                                        )}
+                                            Tiền phòng:
 
-                                    </div>
-
-
-                                    <div class="info-item">
-
-                                        <strong>
-                                            Ngày trả:
-                                        </strong>
-
-                                        ${formatDate(
-                                            booking.NgayTraDuKien
-                                        )}
-
-                                    </div>
-
-
-                                    <div class="info-item">
-
-                                        <strong>
-                                            Số người:
-                                        </strong>
-
-                                        ${booking.SoNguoiDuKien ?? 0}
-
-                                    </div>
-
-
-                                    <div class="info-item">
-
-                                        <strong>
-                                            Tiền cọc:
                                         </strong>
 
                                         ${formatMoney(
-                                            booking.TienCocDuKien
+                                            invoice.TongTienPhong
                                         )}
 
                                     </div>
 
 
-                                    <div class="info-item">
+
+                                    <!-- THUẾ -->
+
+                                    <div
+                                        class="info-item"
+                                    >
 
                                         <strong>
-                                            Đơn giá:
+
+                                            Thuế:
+
                                         </strong>
 
                                         ${formatMoney(
-                                            booking.DonGiaDat
+                                            invoice.Thue
                                         )}
 
                                     </div>
 
 
-                                    <div class="info-item">
+
+                                    <!-- GIẢM GIÁ -->
+
+                                    <div
+                                        class="info-item"
+                                    >
 
                                         <strong>
+
+                                            Giảm giá:
+
+                                        </strong>
+
+                                        ${formatMoney(
+                                            invoice.GiamGia
+                                        )}
+
+                                    </div>
+
+
+
+                                    <!-- TỔNG TIỀN -->
+
+                                    <div
+                                        class="info-item total"
+                                    >
+
+                                        <strong>
+
+                                            Tổng tiền:
+
+                                        </strong>
+
+                                        ${formatMoney(
+                                            tongTien
+                                        )}
+
+                                    </div>
+
+
+
+                                    <!-- ĐÃ THANH TOÁN -->
+
+                                    <div
+                                        class="info-item paid"
+                                    >
+
+                                        <strong>
+
+                                            Đã thanh toán:
+
+                                        </strong>
+
+                                        ${formatMoney(
+                                            daThanhToan
+                                        )}
+
+                                    </div>
+
+
+
+                                    <!-- CÒN LẠI -->
+
+                                    <div
+                                        class="info-item remaining"
+                                    >
+
+                                        <strong>
+
+                                            Còn lại:
+
+                                        </strong>
+
+                                        ${formatMoney(
+                                            conLai
+                                        )}
+
+                                    </div>
+
+
+
+                                    <!-- GHI CHÚ -->
+
+                                    <div
+                                        class="info-item"
+                                    >
+
+                                        <strong>
+
                                             Ghi chú:
+
                                         </strong>
 
-                                        ${booking.GhiChu || 'Không có'}
+                                        ${
+                                            invoice.GhiChuHoaDon
+                                            || 'Không có'
+                                        }
 
                                     </div>
 
@@ -786,63 +1057,72 @@
         }
 
 
+
         // =====================================================
         // HIỂN THỊ LỖI
         // =====================================================
 
         function displayError(message) {
 
-            if (!bookingList) {
+            const invoiceList =
+                document.getElementById(
+                    'invoiceList'
+                );
 
-                return;
+
+            const loading =
+                document.getElementById(
+                    'loading'
+                );
+
+
+            if (loading) {
+
+                loading.style.display =
+                    'none';
 
             }
 
 
-            bookingList.innerHTML = `
+            if (invoiceList) {
 
-                <div class="error">
+                invoiceList.innerHTML = `
 
-                    <strong>
-                        Không thể tải lịch sử đặt phòng.
-                    </strong>
+                    <div class="error">
 
-                    <br><br>
+                        <strong>
 
-                    ${message}
+                            Không thể tải dữ liệu hóa đơn.
 
-                </div>
+                        </strong>
 
-            `;
+                        <br><br>
+
+                        ${message}
+
+                    </div>
+
+                `;
+
+            }
 
         }
+
 
 
         // =====================================================
         // GỌI API
         // =====================================================
 
-        async function loadBookingHistory() {
-
-            if (!bookingList) {
-
-                return;
-
-            }
-
-
-            bookingList.innerHTML = `
-
-                <div class="loading">
-
-                    Đang tải lịch sử đặt phòng...
-
-                </div>
-
-            `;
-
+        async function loadInvoices() {
 
             try {
+
+                console.log(
+                    'Đang gọi API:',
+                    API_URL
+                );
+
 
                 const response =
                     await fetch(
@@ -864,6 +1144,12 @@
                     await response.json();
 
 
+                console.log(
+                    'Dữ liệu hóa đơn:',
+                    data
+                );
+
+
                 if (!data.success) {
 
                     throw new Error(
@@ -874,28 +1160,28 @@
                 }
 
 
-                displayBookings(
-                    data.bookings
+                displayInvoices(
+                    data.invoices
                 );
 
             }
-
-
             catch (error) {
 
                 console.error(
-                    'Lỗi tải lịch sử đặt phòng:',
+                    'Lỗi tải hóa đơn:',
                     error
                 );
 
 
                 displayError(
-                    'Không thể kết nối đến server.'
+                    'Không thể kết nối đến server. '
+                    + error.message
                 );
 
             }
 
         }
+
 
 
         // =====================================================
@@ -906,12 +1192,14 @@
             'DOMContentLoaded',
             function () {
 
-                loadBookingHistory();
+                loadInvoices();
 
             }
         );
 
+
     </script>
+
 
 </body>
 

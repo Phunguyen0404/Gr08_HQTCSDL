@@ -1,74 +1,240 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Dashboard - Hotel Management</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="../css/dashboard.css">
+    <title>Dashboard - Hotel Management</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/dashboard.css"
+    >
+
 </head>
+
 
 <body>
 
-    <!-- ================= SIDEBAR ================= -->
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
     <aside class="sidebar">
 
-        <div class="logo">
-            <div class="logo-icon">H</div>
 
-            <div>
-                <h2>HOTEL</h2>
-                <span>Management</span>
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                H
             </div>
+
+            <div class="logo-name">
+
+                <h2>
+                    HOTEL
+                </h2>
+
+                <span>
+                    Management
+                </span>
+
+            </div>
+
         </div>
 
 
+        <!-- =================================================
+             MENU
+             ================================================= -->
+
         <nav class="menu">
 
+
             <!-- DASHBOARD -->
-            <a href="dashboard.html" class="menu-item active">
-                <span>▣</span>
-                <span>Dashboard</span>
+
+            <a
+                href="dashboard.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
             </a>
 
 
-            <!-- STAFF -->
-            <a href="staff.html" class="menu-item">
-                <span>👥</span>
-                <span>Tài khoản nhân viên</span>
+            <!-- ĐẶT PHÒNG -->
+
+            <a
+                href="bookings.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🛏
+                </span>
+
+                <span>
+                    Đặt phòng
+                </span>
+
             </a>
 
 
-            <!-- CUSTOMER -->
-            <a href="http://localhost:3000/customers.html" class="menu-item">
-                <span>👤</span>
-                <span>Customer</span>
+            <!-- PHÒNG -->
+
+            <a
+                href="#rooms"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🏨
+                </span>
+
+                <span>
+                    Phòng
+                </span>
+
             </a>
-            <!--INVOICES-->
-            <a href="http://localhost:3000/invoices.html" class="menu-item">
-                <span>🧾</span>
-                <span>Hóa đơn</span>
+
+
+            <!-- KHÁCH HÀNG -->
+
+            <a
+                href="customers.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    👤
+                </span>
+
+                <span>
+                    Khách hàng
+                </span>
+
             </a>
 
 
-            <!-- DOANH THU -->
-            <a href="#revenue" class="menu-item">
-                <span>💰</span>
-                <span>Doanh thu</span>
+            <!-- HÓA ĐƠN -->
+
+            <a
+                href="invoices.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🧾
+                </span>
+
+                <span>
+                    Hóa đơn
+                </span>
+
             </a>
 
 
-            <!-- TỶ LỆ LẤP ĐẦY -->
-            <a href="#occupancy" class="menu-item">
-                <span>🏨</span>
-                <span>Tỷ lệ lấp đầy</span>
+            <!-- THU CHI -->
+
+            <div class="menu-group">
+
+                <div class="menu-item menu-parent">
+
+                    <span class="menu-icon">
+                        💰
+                    </span>
+
+                    <span>
+                        Thu chi
+                    </span>
+
+                    <span class="menu-arrow">
+                        ▾
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- NHÂN VIÊN -->
+
+            <a
+                href="staff.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    👥
+                </span>
+
+                <span>
+                    Nhân viên
+                </span>
+
+            </a>
+
+
+            <!-- BÁO CÁO -->
+
+            <a
+                href="#report"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    📊
+                </span>
+
+                <span>
+                    Báo cáo
+                </span>
+
+            </a>
+
+
+            <!-- CÀI ĐẶT -->
+
+            <a
+                href="#settings"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Cài đặt
+                </span>
+
             </a>
 
         </nav>
 
 
+        <!-- =====================================================
+             ADMIN + LOGOUT
+             ===================================================== -->
+
         <div class="sidebar-bottom">
+
 
             <div class="admin-mini">
 
@@ -76,16 +242,31 @@
                     AD
                 </div>
 
-                <div>
-                    <strong>Admin</strong>
-                    <small>Quản trị viên</small>
+                <div class="admin-info">
+
+                    <strong>
+                        Admin
+                    </strong>
+
+                    <small>
+                        Quản trị viên
+                    </small>
+
                 </div>
 
             </div>
 
 
             <button class="logout-btn">
-                Đăng xuất
+
+                <span>
+                    🚪
+                </span>
+
+                <span>
+                    Đăng xuất
+                </span>
+
             </button>
 
         </div>
@@ -93,20 +274,28 @@
     </aside>
 
 
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
 
-    <!-- ================= MAIN ================= -->
     <main class="main">
 
 
-        <!-- ================= HEADER ================= -->
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
         <header class="header">
+
 
             <div class="header-title">
 
-                <h1>Dashboard</h1>
+                <h1>
+                    Dashboard
+                </h1>
 
                 <p>
-                    Quản trị hệ thống và báo cáo thống kê
+                    Tổng quan hoạt động khách sạn
                 </p>
 
             </div>
@@ -114,9 +303,14 @@
 
             <div class="header-right">
 
+
+                <!-- SEARCH -->
+
                 <div class="search-box">
 
-                    <span>⌕</span>
+                    <span>
+                        ⌕
+                    </span>
 
                     <input
                         type="text"
@@ -125,6 +319,8 @@
 
                 </div>
 
+
+                <!-- NOTIFICATION -->
 
                 <button class="notification">
 
@@ -135,15 +331,19 @@
                 </button>
 
 
+                <!-- PROFILE -->
+
                 <div class="profile">
 
                     <div class="avatar">
                         AD
                     </div>
 
-                    <div>
+                    <div class="profile-info">
 
-                        <strong>Admin</strong>
+                        <strong>
+                            Admin
+                        </strong>
 
                         <small>
                             Administrator
@@ -158,113 +358,147 @@
         </header>
 
 
+        <!-- =================================================
+             OVERVIEW
+             ================================================= -->
 
-        <!-- ================= STATISTICS ================= -->
-        <section class="statistics">
+        <section class="overview">
 
 
-            <!-- DOANH THU HÔM NAY -->
-            <div class="stat-card">
+            <div class="section-heading">
 
-                <div class="stat-icon revenue-icon">
-                    💰
-                </div>
+                <h2>
+                    Tổng quan
+                </h2>
 
-                <div class="stat-content">
-
-                    <span>
-                        Doanh thu hôm nay
-                    </span>
-
-                    <h2>0đ </h2>
-                    <p class = "increase"
-                       Đang tải dữ liệu...
+                <p>
+                    Thông tin hoạt động của khách sạn
                 </p>
 
-                </div>
-
             </div>
 
 
+            <!-- =================================================
+                 STATISTICS
+                 ================================================= -->
 
-            <!-- DOANH THU THÁNG -->
-            <div class="stat-card">
-
-                <div class="stat-icon month-icon">
-                    📊
-                </div>
-
-                <div class="stat-content">
-
-                    <span>
-                        Doanh thu tháng
-                    </span>
-
-                    <h2>
-                        185.500.000 ₫
-                    </h2>
-
-                    <p class="increase">
-                        ↑ 8.2%
-                        <span>so với tháng trước</span>
-                    </p>
-
-                </div>
-
-            </div>
+            <div class="statistics">
 
 
+                <!-- DOANH THU HÔM NAY -->
 
-            <!-- TỶ LỆ LẤP ĐẦY -->
-            <div class="stat-card">
+                <div
+                    class="stat-card"
+                    id="revenueToday"
+                >
 
-                <div class="stat-icon occupancy-icon">
-                    🏨
-                </div>
+                    <div class="stat-icon revenue-icon">
+                        💰
+                    </div>
 
-                <div class="stat-content">
+                    <div class="stat-content">
 
-                    <span>
-                        Tỷ lệ lấp đầy
-                    </span>
-
-                    <h2>
-                        78%
-                    </h2>
-
-                    <p class="increase">
-                        ↑ 5.4%
-                        <span>so với tuần trước</span>
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- TÀI KHOẢN NHÂN VIÊN -->
-            <div class="stat-card">
-
-                <div class="stat-icon staff-icon">
-                    👥
-                </div>
-
-                <div class="stat-content">
-
-                    <span>
-                        Tài khoản nhân viên
-                    </span>
-
-                    <h2>
-                        18
-                    </h2>
-
-                    <p>
-                        <span class="active-text">
-                            16 đang hoạt động
+                        <span>
+                            Doanh thu hôm nay
                         </span>
-                    </p>
+
+                        <h2 id="revenueTodayValue">
+                            0 ₫
+                        </h2>
+
+                        <p class="increase">
+                            Doanh thu trong ngày
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DOANH THU THÁNG -->
+
+                <div
+                    class="stat-card"
+                    id="revenueMonth"
+                >
+
+                    <div class="stat-icon month-icon">
+                        📊
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Doanh thu tháng
+                        </span>
+
+                        <h2 id="revenueMonthValue">
+                            0 ₫
+                        </h2>
+
+                        <p class="increase">
+                            Doanh thu tháng này
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TỶ LỆ LẤP ĐẦY -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon occupancy-icon">
+                        🏨
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Tỷ lệ lấp đầy
+                        </span>
+
+                        <h2 id="occupancyRate">
+                            0%
+                        </h2>
+
+                        <p>
+                            Phòng đang sử dụng
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NHÂN VIÊN -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon staff-icon">
+                        👥
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            Nhân viên
+                        </span>
+
+                        <h2 id="staffCount">
+                            0
+                        </h2>
+
+                        <p>
+
+                            <span class="active-text">
+                                0 đang hoạt động
+                            </span>
+
+                        </p>
+
+                    </div>
 
                 </div>
 
@@ -273,18 +507,25 @@
         </section>
 
 
+        <!-- =================================================
+             REVENUE + OCCUPANCY
+             ================================================= -->
 
-        <!-- ================= REVENUE + OCCUPANCY ================= -->
-        <section
-            class="content-grid"
-            id="revenue"
-        >
+        <section class="content-grid">
 
 
-            <!-- ================= REVENUE ================= -->
-            <div class="panel revenue-panel">
+            <!-- =================================================
+                 REVENUE
+                 ================================================= -->
+
+            <div
+                class="panel revenue-panel"
+                id="revenue"
+            >
+
 
                 <div class="panel-header">
+
 
                     <div>
 
@@ -318,22 +559,38 @@
                 </div>
 
 
+                <!-- CHART -->
 
-                <!-- BIỂU ĐỒ -->
                 <div class="chart">
+
 
                     <div class="chart-y">
 
-                        <span>20M</span>
-                        <span>15M</span>
-                        <span>10M</span>
-                        <span>5M</span>
-                        <span>0</span>
+                        <span>
+                            20M
+                        </span>
+
+                        <span>
+                            15M
+                        </span>
+
+                        <span>
+                            10M
+                        </span>
+
+                        <span>
+                            5M
+                        </span>
+
+                        <span>
+                            0
+                        </span>
 
                     </div>
 
 
                     <div class="chart-area">
+
 
                         <div class="grid-line"></div>
                         <div class="grid-line"></div>
@@ -352,10 +609,11 @@
                                     style="height:45%;"
                                 ></div>
 
-                                <span>T2</span>
+                                <span>
+                                    T2
+                                </span>
 
                             </div>
-
 
 
                             <div class="bar-wrapper">
@@ -365,10 +623,11 @@
                                     style="height:65%;"
                                 ></div>
 
-                                <span>T3</span>
+                                <span>
+                                    T3
+                                </span>
 
                             </div>
-
 
 
                             <div class="bar-wrapper">
@@ -378,10 +637,11 @@
                                     style="height:52%;"
                                 ></div>
 
-                                <span>T4</span>
+                                <span>
+                                    T4
+                                </span>
 
                             </div>
-
 
 
                             <div class="bar-wrapper">
@@ -391,10 +651,11 @@
                                     style="height:78%;"
                                 ></div>
 
-                                <span>T5</span>
+                                <span>
+                                    T5
+                                </span>
 
                             </div>
-
 
 
                             <div class="bar-wrapper">
@@ -404,10 +665,11 @@
                                     style="height:60%;"
                                 ></div>
 
-                                <span>T6</span>
+                                <span>
+                                    T6
+                                </span>
 
                             </div>
-
 
 
                             <div class="bar-wrapper">
@@ -417,10 +679,11 @@
                                     style="height:88%;"
                                 ></div>
 
-                                <span>T7</span>
+                                <span>
+                                    T7
+                                </span>
 
                             </div>
-
 
 
                             <div class="bar-wrapper">
@@ -430,7 +693,9 @@
                                     style="height:72%;"
                                 ></div>
 
-                                <span>CN</span>
+                                <span>
+                                    CN
+                                </span>
 
                             </div>
 
@@ -443,14 +708,18 @@
             </div>
 
 
+            <!-- =================================================
+                 OCCUPANCY
+                 ================================================= -->
 
-            <!-- ================= OCCUPANCY ================= -->
             <div
                 class="panel occupancy-panel"
                 id="occupancy"
             >
 
+
                 <div class="panel-header">
+
 
                     <div>
 
@@ -472,15 +741,18 @@
                 </div>
 
 
+                <!-- CIRCLE -->
 
                 <div class="occupancy-circle">
 
+
                     <div class="circle">
+
 
                         <div class="circle-inner">
 
-                            <strong>
-                                78%
+                            <strong id="circleOccupancy">
+                                0%
                             </strong>
 
                             <span>
@@ -494,6 +766,7 @@
                 </div>
 
 
+                <!-- ROOM STATUS -->
 
                 <div class="room-status">
 
@@ -506,12 +779,11 @@
                             Đang sử dụng
                         </span>
 
-                        <strong>
-                            39 phòng
+                        <strong id="occupiedRooms">
+                            0 phòng
                         </strong>
 
                     </div>
-
 
 
                     <div>
@@ -522,12 +794,11 @@
                             Phòng trống
                         </span>
 
-                        <strong>
-                            11 phòng
+                        <strong id="availableRooms">
+                            0 phòng
                         </strong>
 
                     </div>
-
 
 
                     <div>
@@ -538,12 +809,11 @@
                             Đang dọn
                         </span>
 
-                        <strong>
-                            3 phòng
+                        <strong id="cleaningRooms">
+                            0 phòng
                         </strong>
 
                     </div>
-
 
 
                     <div>
@@ -554,8 +824,8 @@
                             Bảo trì
                         </span>
 
-                        <strong>
-                            2 phòng
+                        <strong id="maintenanceRooms">
+                            0 phòng
                         </strong>
 
                     </div>
@@ -567,23 +837,27 @@
         </section>
 
 
+        <!-- =================================================
+             STAFF MANAGEMENT
+             ================================================= -->
 
-        <!-- ================= STAFF MANAGEMENT ================= -->
         <section
             class="panel staff-panel"
             id="staff"
         >
 
+
             <div class="panel-header">
+
 
                 <div>
 
                     <h2>
-                        Quản lý tài khoản nhân viên
+                        Quản lý nhân viên
                     </h2>
 
                     <p>
-                        Khóa hoặc mở khóa tài khoản nhân viên
+                        Quản lý tài khoản nhân viên trong hệ thống
                     </p>
 
                 </div>
@@ -596,10 +870,11 @@
             </div>
 
 
-
             <div class="table-wrapper">
 
+
                 <table>
+
 
                     <thead>
 
@@ -634,11 +909,9 @@
                     </thead>
 
 
+                    <tbody id="staffTableBody">
 
-                    <tbody>
 
-
-                        <!-- NHÂN VIÊN 1 -->
                         <tr>
 
                             <td>
@@ -652,11 +925,11 @@
                                     <div>
 
                                         <strong>
-                                            Nguyễn Văn An
+                                            Đang tải...
                                         </strong>
 
                                         <small>
-                                            NV001
+                                            ...
                                         </small>
 
                                     </div>
@@ -667,7 +940,7 @@
 
 
                             <td>
-                                nguyenvanan@gmail.com
+                                ...
                             </td>
 
 
@@ -683,218 +956,14 @@
                             <td>
 
                                 <span class="status active">
-                                    Đang hoạt động
+                                    Đang tải...
                                 </span>
 
                             </td>
 
 
                             <td>
-                                01/08/2026
-                            </td>
-
-
-                            <td>
-
-                                <button class="lock-btn">
-                                    Khóa
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-
-                        <!-- NHÂN VIÊN 2 -->
-                        <tr>
-
-                            <td>
-
-                                <div class="staff-info">
-
-                                    <div class="staff-avatar">
-                                        NV
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Trần Thị Mai
-                                        </strong>
-
-                                        <small>
-                                            NV002
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-                                tranthimai@gmail.com
-                            </td>
-
-
-                            <td>
-
-                                <span class="role staff">
-                                    Staff
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="status active">
-                                    Đang hoạt động
-                                </span>
-
-                            </td>
-
-
-                            <td>
-                                03/08/2026
-                            </td>
-
-
-                            <td>
-
-                                <button class="lock-btn">
-                                    Khóa
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-
-                        <!-- NHÂN VIÊN 3 -->
-                        <tr>
-
-                            <td>
-
-                                <div class="staff-info">
-
-                                    <div class="staff-avatar">
-                                        NV
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Lê Văn Bình
-                                        </strong>
-
-                                        <small>
-                                            NV003
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-                                levanbinh@gmail.com
-                            </td>
-
-
-                            <td>
-
-                                <span class="role staff">
-                                    Staff
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="status locked">
-                                    Đã khóa
-                                </span>
-
-                            </td>
-
-
-                            <td>
-                                05/08/2026
-                            </td>
-
-
-                            <td>
-
-                                <button class="unlock-btn">
-                                    Mở khóa
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-
-                        <!-- NHÂN VIÊN 4 -->
-                        <tr>
-
-                            <td>
-
-                                <div class="staff-info">
-
-                                    <div class="staff-avatar">
-                                        NV
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Phạm Thị Lan
-                                        </strong>
-
-                                        <small>
-                                            NV004
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-                                phamthilan@gmail.com
-                            </td>
-
-
-                            <td>
-
-                                <span class="role staff">
-                                    Staff
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="status active">
-                                    Đang hoạt động
-                                </span>
-
-                            </td>
-
-
-                            <td>
-                                06/08/2026
+                                ...
                             </td>
 
 
@@ -917,26 +986,32 @@
         </section>
 
 
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
 
-        <!-- ================= FOOTER ================= -->
         <footer>
 
-            <p>
+            <span>
                 Hotel Management System © 2026
-            </p>
+            </span>
 
-            <p>
+            <span>
                 Admin Dashboard
-            </p>
+            </span>
 
         </footer>
 
     </main>
 
 
+    <!-- =====================================================
+         JAVASCRIPT DASHBOARD
+         ===================================================== -->
 
-    <!-- ================= DASHBOARD API ================= -->
     <script src="../js/dashboard.js"></script>
 
+
 </body>
+
 </html>
