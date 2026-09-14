@@ -2,448 +2,1025 @@
 <html lang="vi">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Hóa đơn - Hotel Management</title>
 
-    <!-- Dùng chung CSS với Dashboard -->
-    <link
-        rel="stylesheet"
-        href="../css/dashboard.css"
-    >
-
     <style>
 
-        /* =====================================================
-           INVOICE CONTENT
-           Chỉ style phần bên phải
-           ===================================================== */
+        /* =========================================================
+           RESET
+        ========================================================= */
 
-        .invoice-content {
-            padding-top: 28px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f5f9fb;
+            color: #284457;
+            font-size: 14px;
         }
 
 
-        /* =====================================================
-           SUMMARY
-           ===================================================== */
+        /* =========================================================
+           APP
+        ========================================================= */
 
-        .invoice-statistics {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 28px;
+        .app {
+            display: flex;
+            min-height: 100vh;
         }
 
 
-        .invoice-stat-card {
+        /* =========================================================
+           SIDEBAR
+           Đồng bộ kích thước với Dashboard
+        ========================================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 250px;
+            min-width: 250px;
+
             background: #ffffff;
-            border-radius: 16px;
-            padding: 22px;
+            border-right: 1px solid #dce8ee;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 24px 16px;
+
+            z-index: 100;
+        }
+
+
+        /* LOGO */
+
+        .logo {
             display: flex;
             align-items: center;
-            gap: 16px;
-            border: 1px solid #e8eef3;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+
+            gap: 12px;
+
+            padding: 8px 10px 28px;
+
+            border-bottom: 1px solid #e3edf2;
         }
 
+        .logo-icon {
+            width: 44px;
+            height: 44px;
 
-        .invoice-stat-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            border-radius: 10px;
+
+            border: 2px solid #65bfdc;
+
+            background: #eef9fc;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            font-size: 25px;
+            color: #087ba7;
+
+            font-size: 23px;
+            font-weight: 700;
+
             flex-shrink: 0;
         }
 
+        .logo h2 {
+            font-size: 20px;
+            line-height: 1.1;
 
-        .invoice-icon {
-            background: #e7f5fb;
+            color: #153e56;
+
+            letter-spacing: 0.3px;
         }
 
-
-        .invoice-paid-icon {
-            background: #e9f8ef;
-        }
-
-
-        .invoice-unpaid-icon {
-            background: #fff4df;
-        }
-
-
-        .invoice-money-icon {
-            background: #edf0ff;
-        }
-
-
-        .invoice-stat-content span {
+        .logo span {
             display: block;
-            font-size: 13px;
-            color: #7b8794;
-            margin-bottom: 5px;
-        }
 
+            margin-top: 3px;
 
-        .invoice-stat-content h2 {
-            margin: 0;
-            font-size: 23px;
-            color: #1f2933;
-        }
-
-
-        /* =====================================================
-           INVOICE PANEL
-           ===================================================== */
-
-        .invoice-panel {
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px solid #e8eef3;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-        }
-
-
-        /* =====================================================
-           PANEL HEADER
-           ===================================================== */
-
-        .invoice-panel-header {
-            padding: 24px 26px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            border-bottom: 1px solid #edf1f4;
-        }
-
-
-        .invoice-panel-title h2 {
-            margin: 0 0 5px 0;
-            font-size: 20px;
-            color: #1f2933;
-        }
-
-
-        .invoice-panel-title p {
-            margin: 0;
-            color: #8a96a3;
-            font-size: 13px;
-        }
-
-
-        /* =====================================================
-           FILTER
-           ===================================================== */
-
-        .invoice-filter {
-            padding: 20px 26px;
-
-            display: flex;
-            align-items: center;
-            gap: 14px;
-
-            background: #fafcfd;
-            border-bottom: 1px solid #edf1f4;
-        }
-
-
-        .invoice-search {
-            flex: 1;
-
-            height: 42px;
-
-            background: #ffffff;
-
-            border: 1px solid #dce5eb;
-            border-radius: 9px;
-
-            display: flex;
-            align-items: center;
-
-            padding: 0 13px;
-        }
-
-
-        .invoice-search span {
-            font-size: 20px;
-            color: #8a96a3;
-            margin-right: 8px;
-        }
-
-
-        .invoice-search input {
-            width: 100%;
-            border: none;
-            outline: none;
-
-            font-size: 14px;
-            color: #334e68;
-
-            background: transparent;
-        }
-
-
-        .invoice-search input::placeholder {
-            color: #a0acb7;
-        }
-
-
-        .invoice-filter select {
-            height: 42px;
-
-            min-width: 150px;
-
-            padding: 0 12px;
-
-            border: 1px solid #dce5eb;
-            border-radius: 9px;
-
-            background: #ffffff;
-
-            color: #52606d;
-
-            outline: none;
-
-            font-size: 14px;
-        }
-
-
-        /* =====================================================
-           TABLE
-           ===================================================== */
-
-        .invoice-table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-
-        .invoice-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-
-        .invoice-table thead {
-            background: #f8fafc;
-        }
-
-
-        .invoice-table th {
-            text-align: left;
-
-            padding: 15px 22px;
+            color: #78909d;
 
             font-size: 12px;
-
-            color: #7b8794;
-
-            font-weight: 600;
-
-            white-space: nowrap;
         }
 
 
-        .invoice-table td {
-            padding: 17px 22px;
+        /* =========================================================
+           MENU
+        ========================================================= */
 
-            border-top: 1px solid #edf1f4;
+        .menu {
+            margin-top: 28px;
 
-            font-size: 13px;
+            display: flex;
+            flex-direction: column;
 
-            color: #52606d;
+            gap: 6px;
 
-            white-space: nowrap;
+            flex: 1;
+
+            overflow-y: auto;
         }
 
+        .menu::-webkit-scrollbar {
+            width: 7px;
+        }
 
-        .invoice-table tbody tr {
+        .menu::-webkit-scrollbar-thumb {
+            background: #9ba3a8;
+            border-radius: 10px;
+        }
+
+        .menu-item {
+            text-decoration: none;
+
+            min-height: 46px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            padding: 11px 14px;
+
+            border-radius: 9px;
+
+            color: #627b89;
+
+            font-size: 14px;
+
             transition: 0.2s;
         }
 
-
-        .invoice-table tbody tr:hover {
-            background: #f8fbfd;
+        .menu-item:hover {
+            background: #f0f8fb;
+            color: #0781b2;
         }
 
+        .menu-icon {
+            width: 22px;
 
-        /* =====================================================
-           INVOICE CODE
-           ===================================================== */
+            text-align: center;
 
-        .invoice-code {
-            font-weight: 700;
-            color: #087bb3;
+            font-size: 16px;
+
+            flex-shrink: 0;
         }
 
+        .menu-item.active {
+            background: #e5f5fa;
 
-        .customer-name {
+            color: #007faf;
+
             font-weight: 600;
-            color: #334e68;
+
+            border-left: 4px solid #0b91bd;
+
+            padding-left: 10px;
         }
 
 
-        .customer-phone {
-            display: block;
-            margin-top: 3px;
-            color: #9aa5af;
-            font-size: 12px;
+        /* =========================================================
+           SIDEBAR BOTTOM
+        ========================================================= */
+
+        .sidebar-bottom {
+            border-top: 1px solid #e3edf2;
+
+            padding-top: 17px;
+
+            margin-top: 8px;
         }
 
-
-        /* =====================================================
-           TOTAL
-           ===================================================== */
-
-        .invoice-total {
-            font-weight: 700;
-            color: #1f2933;
-        }
-
-
-        .invoice-money {
-            font-weight: 600;
-            color: #087bb3;
-        }
-
-
-        /* =====================================================
-           STATUS
-           ===================================================== */
-
-        .invoice-status {
-            display: inline-flex;
+        .admin-mini {
+            display: flex;
             align-items: center;
 
-            padding: 6px 11px;
+            gap: 10px;
 
-            border-radius: 20px;
-
-            font-size: 11px;
-
-            font-weight: 600;
+            padding: 0 8px 15px;
         }
 
+        .avatar {
+            width: 38px;
+            height: 38px;
 
-        .invoice-status.paid {
-            background: #e8f7ee;
-            color: #23844c;
-        }
+            border-radius: 50%;
 
+            background: #e8f6fa;
 
-        .invoice-status.issued {
-            background: #fff4df;
-            color: #b7791f;
-        }
+            border: 1px solid #a6dced;
 
+            color: #087ba6;
 
-        .invoice-status.draft {
-            background: #eef1f4;
-            color: #697786;
-        }
-
-
-        .invoice-status.cancelled {
-            background: #fdecec;
-            color: #c53030;
-        }
-
-
-        /* =====================================================
-           ACTION
-           ===================================================== */
-
-        .invoice-detail-btn {
-            border: none;
-
-            background: #e9f6fb;
-
-            color: #087bb3;
-
-            padding: 7px 12px;
-
-            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             font-size: 12px;
+            font-weight: 700;
+
+            flex-shrink: 0;
+        }
+
+        .admin-mini strong {
+            display: block;
+
+            color: #345466;
+
+            font-size: 13px;
+        }
+
+        .admin-mini small {
+            display: block;
+
+            margin-top: 2px;
+
+            color: #91a2ad;
+
+            font-size: 11px;
+        }
+
+        .logout-btn {
+            width: 100%;
+
+            height: 42px;
+
+            border: 1px solid #cfe0e8;
+
+            border-radius: 9px;
+
+            background: #ffffff;
+
+            color: #718793;
 
             cursor: pointer;
 
-            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        .logout-btn:hover {
+            background: #f5fafc;
         }
 
 
-        .invoice-detail-btn:hover {
-            background: #087bb3;
-            color: white;
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main {
+            margin-left: 250px;
+
+            width: calc(100% - 250px);
+
+            min-height: 100vh;
+
+            padding: 28px 32px;
+
+            overflow-x: hidden;
         }
 
 
-        /* =====================================================
-           EMPTY / LOADING
-           ===================================================== */
+        /* =========================================================
+           HEADER
+        ========================================================= */
 
-        .invoice-message {
+        .header {
+            min-height: 56px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 27px;
+        }
+
+        .header-title h1 {
+            color: #163e56;
+
+            font-size: 28px;
+
+            line-height: 1.2;
+
+            margin-bottom: 5px;
+        }
+
+        .header-title p {
+            color: #8398a5;
+
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        /* SEARCH TRÊN HEADER */
+
+        .search-box {
+            width: 190px;
+            height: 38px;
+
+            border: 1px solid #d7e4ea;
+
+            border-radius: 8px;
+
+            background: #ffffff;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 12px;
+
+            color: #89a0ad;
+        }
+
+        .search-box input {
+            width: 100%;
+
+            border: none;
+            outline: none;
+
+            margin-left: 8px;
+
+            font-size: 13px;
+
+            color: #506977;
+        }
+
+
+        /* NOTIFICATION */
+
+        .notification {
+            position: relative;
+
+            width: 38px;
+            height: 38px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #f2f7f9;
+
+            cursor: pointer;
+
+            font-size: 16px;
+        }
+
+        .notification-dot {
+            position: absolute;
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #d29a38;
+
+            top: 7px;
+            right: 7px;
+        }
+
+
+        /* PROFILE */
+
+        .profile {
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+        }
+
+        .profile strong {
+            display: block;
+
+            font-size: 13px;
+
+            color: #355466;
+        }
+
+        .profile small {
+            display: block;
+
+            margin-top: 2px;
+
+            font-size: 11px;
+
+            color: #91a3ae;
+        }
+
+
+        /* =========================================================
+           PAGE TITLE
+        ========================================================= */
+
+        .page-title {
+            margin-bottom: 23px;
+        }
+
+        .page-title h2 {
+            color: #153f58;
+
+            font-size: 27px;
+
+            line-height: 1.2;
+
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #8297a4;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           STATISTICS
+        ========================================================= */
+
+        .statistics {
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            min-width: 0;
+
+            background: #ffffff;
+
+            border: 1px solid #d7e4ea;
+
+            border-radius: 12px;
+
+            min-height: 108px;
+
+            padding: 20px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+
+            box-shadow:
+                0 4px 12px rgba(35, 70, 90, 0.035);
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+
+            flex-shrink: 0;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+        }
+
+        .total-icon {
+            background: #e9f7fb;
+            color: #1382ad;
+        }
+
+        .paid-icon {
+            background: #eaf8f1;
+            color: #32a36c;
+        }
+
+        .unpaid-icon {
+            background: #fff5dc;
+            color: #c48a28;
+        }
+
+        .money-icon {
+            background: #edf1fa;
+            color: #526da5;
+        }
+
+        .stat-content {
+            min-width: 0;
+        }
+
+        .stat-label {
+            display: block;
+
+            color: #899da8;
+
+            font-size: 12px;
+
+            margin-bottom: 5px;
+
+            white-space: nowrap;
+        }
+
+        .stat-number {
+            display: block;
+
+            color: #123f59;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           INVOICE SECTION
+        ========================================================= */
+
+        .invoice-section {
+            width: 100%;
+
+            background: #ffffff;
+
+            border: 1px solid #d7e4ea;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 4px 12px rgba(35, 70, 90, 0.035);
+        }
+
+
+        /* SECTION HEADER */
+
+        .section-header {
+            min-height: 76px;
+
+            padding: 20px 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid #e4edf1;
+        }
+
+        .section-header h2 {
+            color: #0e4e71;
+
+            font-size: 20px;
+
+            margin-bottom: 4px;
+        }
+
+        .section-header p {
+            color: #91a3ae;
+
+            font-size: 12px;
+        }
+
+        .invoice-count {
+            color: #8397a2;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           TOOLBAR
+        ========================================================= */
+
+        .invoice-toolbar {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 16px 22px;
+
+            background: #f8fbfc;
+
+            border-bottom: 1px solid #e4edf1;
+        }
+
+        .invoice-search-box {
+            position: relative;
+
+            flex: 1;
+
+            min-width: 0;
+        }
+
+        .invoice-search-box .search-icon {
+            position: absolute;
+
+            left: 13px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #7d97a5;
+
+            font-size: 18px;
+        }
+
+        .invoice-search-box input {
+            width: 100%;
+
+            height: 40px;
+
+            border: 1px solid #cbdde5;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background: #ffffff;
+
+            padding: 0 13px 0 40px;
+
+            font-size: 13px;
+
+            color: #506977;
+        }
+
+        .invoice-search-box input:focus {
+            border-color: #72bdd7;
+        }
+
+        .status-filter {
+            width: 190px;
+
+            height: 40px;
+
+            border: 1px solid #cbdde5;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background: #ffffff;
+
+            padding: 0 12px;
+
+            color: #607986;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .table-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+
+            overflow-y: hidden;
+        }
+
+        .table-wrapper::-webkit-scrollbar {
+            height: 9px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #a1a1a1;
+
+            border-radius: 10px;
+        }
+
+        .invoice-table {
+            width: 100%;
+
+            min-width: 1100px;
+
+            border-collapse: collapse;
+
+            table-layout: auto;
+        }
+
+        .invoice-table thead {
+            background: #f4f8fa;
+        }
+
+        .invoice-table th {
+            height: 52px;
+
+            padding: 13px 14px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #dbe6eb;
+
+            color: #718793;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .invoice-table td {
+            padding: 15px 14px;
+
+            border-bottom: 1px solid #e9eff2;
+
+            color: #637b88;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+
+            vertical-align: middle;
+        }
+
+        .invoice-table tbody tr {
+            height: 70px;
+        }
+
+        .invoice-table tbody tr:hover {
+            background: #fbfdfe;
+        }
+
+
+        /* =========================================================
+           INVOICE CODE
+        ========================================================= */
+
+        .invoice-code {
+            color: #07577e;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           CUSTOMER
+        ========================================================= */
+
+        .customer-info {
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+        }
+
+        .customer-avatar {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            background: #e7f6fa;
+
+            color: #087ca6;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            flex-shrink: 0;
+        }
+
+        .customer-name {
+            display: block;
+
+            color: #405f70;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        .customer-id {
+            display: block;
+
+            color: #9aaab3;
+
+            font-size: 10px;
+
+            margin-top: 2px;
+        }
+
+
+        /* =========================================================
+           OTHER TABLE DATA
+        ========================================================= */
+
+        .booking-code {
+            color: #5d7b8b;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        .date {
+            color: #718691;
+
+            font-size: 12px;
+        }
+
+        .amount {
+            color: #637c89;
+
+            font-size: 12px;
+        }
+
+        .discount {
+            color: #ae725c;
+
+            font-size: 12px;
+        }
+
+        .total {
+            color: #115273;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .note {
+            color: #7f929c;
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
+           STATUS
+        ========================================================= */
+
+        .status {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            flex-shrink: 0;
+        }
+
+        .status.paid {
+            background: #eaf8f1;
+
+            color: #287a58;
+        }
+
+        .status.paid .status-dot {
+            background: #35a76f;
+        }
+
+        .status.issued {
+            background: #fff5dc;
+
+            color: #996c1e;
+        }
+
+        .status.issued .status-dot {
+            background: #d4a03b;
+        }
+
+
+        /* =========================================================
+           EMPTY
+        ========================================================= */
+
+        .empty {
+            display: none;
+
             text-align: center;
 
             padding: 45px 20px;
 
-            color: #8a96a3;
+            color: #8ea1ab;
 
-            font-size: 14px;
+            font-size: 13px;
         }
 
 
-        /* =====================================================
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            padding: 18px 3px 5px;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: #98a9b2;
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
            RESPONSIVE
-           ===================================================== */
+        ========================================================= */
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1200px) {
 
-            .invoice-statistics {
-                grid-template-columns: repeat(2, 1fr);
+            .statistics {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
             }
 
+            .search-box {
+                display: none;
+            }
         }
 
 
-        @media (max-width: 750px) {
+        @media (max-width: 800px) {
 
-            .invoice-statistics {
+            .sidebar {
+                width: 220px;
+                min-width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+
+                width: calc(100% - 220px);
+
+                padding: 22px;
+            }
+
+            .statistics {
                 grid-template-columns: 1fr;
             }
 
-
-            .invoice-panel-header {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-
-            .invoice-filter {
+            .invoice-toolbar {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-
-            .invoice-filter select {
+            .status-filter {
                 width: 100%;
             }
-
         }
 
     </style>
@@ -453,11 +1030,12 @@
 
 <body>
 
+<div class="app">
 
-    <!-- =====================================================
+
+    <!-- =========================================================
          SIDEBAR
-         GIỐNG DASHBOARD
-         ===================================================== -->
+    ========================================================= -->
 
     <aside class="sidebar">
 
@@ -470,7 +1048,7 @@
                 H
             </div>
 
-            <div class="logo-name">
+            <div>
 
                 <h2>
                     HOTEL
@@ -485,14 +1063,10 @@
         </div>
 
 
-        <!-- =================================================
-             MENU
-             ================================================= -->
+        <!-- MENU -->
 
         <nav class="menu">
 
-
-            <!-- DASHBOARD -->
 
             <a
                 href="dashboard.html"
@@ -510,8 +1084,6 @@
             </a>
 
 
-            <!-- ĐẶT PHÒNG -->
-
             <a
                 href="bookings.html"
                 class="menu-item"
@@ -528,10 +1100,8 @@
             </a>
 
 
-            <!-- PHÒNG -->
-
             <a
-                href="#rooms"
+                href="#"
                 class="menu-item"
             >
 
@@ -545,8 +1115,6 @@
 
             </a>
 
-
-            <!-- KHÁCH HÀNG -->
 
             <a
                 href="customers.html"
@@ -564,15 +1132,13 @@
             </a>
 
 
-            <!-- HÓA ĐƠN -->
-
             <a
                 href="invoices.html"
                 class="menu-item active"
             >
 
                 <span class="menu-icon">
-                    🧾
+                    ▤
                 </span>
 
                 <span>
@@ -582,30 +1148,25 @@
             </a>
 
 
-            <!-- THU CHI -->
+            <a
+                href="#"
+                class="menu-item"
+            >
 
-            <div class="menu-group">
+                <span class="menu-icon">
+                    💰
+                </span>
 
-                <div class="menu-item menu-parent">
+                <span>
+                    Thu chi
+                </span>
 
-                    <span class="menu-icon">
-                        💰
-                    </span>
+                <span style="margin-left:auto;">
+                    ▾
+                </span>
 
-                    <span>
-                        Thu chi
-                    </span>
+            </a>
 
-                    <span class="menu-arrow">
-                        ▾
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- NHÂN VIÊN -->
 
             <a
                 href="staff.html"
@@ -623,10 +1184,8 @@
             </a>
 
 
-            <!-- BÁO CÁO -->
-
             <a
-                href="#report"
+                href="#"
                 class="menu-item"
             >
 
@@ -641,10 +1200,8 @@
             </a>
 
 
-            <!-- CÀI ĐẶT -->
-
             <a
-                href="#settings"
+                href="#"
                 class="menu-item"
             >
 
@@ -658,12 +1215,11 @@
 
             </a>
 
+
         </nav>
 
 
-        <!-- =====================================================
-             ADMIN + LOGOUT
-             ===================================================== -->
+        <!-- SIDEBAR BOTTOM -->
 
         <div class="sidebar-bottom">
 
@@ -674,7 +1230,7 @@
                     AD
                 </div>
 
-                <div class="admin-info">
+                <div>
 
                     <strong>
                         Admin
@@ -689,33 +1245,30 @@
             </div>
 
 
-            <button class="logout-btn">
-
-                <span>
-                    🚪
-                </span>
-
-                <span>
-                    Đăng xuất
-                </span>
-
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Đăng xuất
             </button>
+
 
         </div>
 
     </aside>
 
 
-    <!-- =====================================================
+
+    <!-- =========================================================
          MAIN
-         ===================================================== -->
+    ========================================================= -->
 
     <main class="main">
 
 
-        <!-- =================================================
+        <!-- =====================================================
              HEADER
-             ================================================= -->
+        ===================================================== -->
 
         <header class="header">
 
@@ -736,35 +1289,28 @@
             <div class="header-right">
 
 
-                <!-- SEARCH -->
-
                 <div class="search-box">
 
-                    <span>
-                        ⌕
-                    </span>
+                    ⌕
 
                     <input
                         type="text"
                         placeholder="Tìm kiếm..."
-                        id="headerSearch"
                     >
 
                 </div>
 
 
-                <!-- NOTIFICATION -->
-
                 <button class="notification">
 
                     🔔
 
-                    <span class="notification-dot"></span>
+                    <span
+                        class="notification-dot"
+                    ></span>
 
                 </button>
 
-
-                <!-- PROFILE -->
 
                 <div class="profile">
 
@@ -772,7 +1318,7 @@
                         AD
                     </div>
 
-                    <div class="profile-info">
+                    <div>
 
                         <strong>
                             Admin
@@ -786,187 +1332,218 @@
 
                 </div>
 
+
             </div>
+
 
         </header>
 
 
-        <!-- =================================================
-             INVOICE CONTENT
-             ================================================= -->
 
-        <section class="invoice-content">
+        <!-- =====================================================
+             CONTENT
+        ===================================================== -->
+
+        <div class="content">
 
 
-            <!-- =================================================
-                 TITLE
-                 ================================================= -->
+            <!-- PAGE TITLE -->
 
-            <div class="section-heading">
+            <div class="page-title">
 
                 <h2>
-                    Tổng quan hóa đơn
+                    Tổng quan
                 </h2>
 
                 <p>
-                    Thông tin các hóa đơn trong hệ thống
+                    Thông tin hóa đơn của khách sạn
                 </p>
 
             </div>
 
 
+
             <!-- =================================================
                  STATISTICS
-                 ================================================= -->
+            ================================================= -->
 
-            <div class="invoice-statistics">
+            <section class="statistics">
 
 
-                <!-- TỔNG HÓA ĐƠN -->
+                <!-- TOTAL -->
 
-                <div class="invoice-stat-card">
+                <div class="stat-card">
 
-                    <div class="invoice-stat-icon invoice-icon">
+                    <div class="stat-icon total-icon">
                         🧾
                     </div>
 
-                    <div class="invoice-stat-content">
+                    <div class="stat-content">
 
-                        <span>
+                        <span class="stat-label">
                             Tổng hóa đơn
                         </span>
 
-                        <h2 id="totalInvoices">
-                            0
-                        </h2>
+                        <strong
+                            class="stat-number"
+                            id="totalInvoices"
+                        >
+                            3
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                <!-- ĐÃ THANH TOÁN -->
 
-                <div class="invoice-stat-card">
+                <!-- PAID -->
 
-                    <div class="invoice-stat-icon invoice-paid-icon">
+                <div class="stat-card">
+
+                    <div class="stat-icon paid-icon">
                         ✓
                     </div>
 
-                    <div class="invoice-stat-content">
+                    <div class="stat-content">
 
-                        <span>
+                        <span class="stat-label">
                             Đã thanh toán
                         </span>
 
-                        <h2 id="paidInvoices">
-                            0
-                        </h2>
+                        <strong
+                            class="stat-number"
+                            id="paidInvoices"
+                        >
+                            2
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                <!-- CHƯA THANH TOÁN -->
 
-                <div class="invoice-stat-card">
+                <!-- UNPAID -->
 
-                    <div class="invoice-stat-icon invoice-unpaid-icon">
-                        ⏳
+                <div class="stat-card">
+
+                    <div class="stat-icon unpaid-icon">
+                        ⏱
                     </div>
 
-                    <div class="invoice-stat-content">
+                    <div class="stat-content">
 
-                        <span>
+                        <span class="stat-label">
                             Chưa thanh toán
                         </span>
 
-                        <h2 id="unpaidInvoices">
-                            0
-                        </h2>
+                        <strong
+                            class="stat-number"
+                            id="unpaidInvoices"
+                        >
+                            1
+                        </strong>
 
                     </div>
 
                 </div>
 
 
-                <!-- TỔNG DOANH THU -->
 
-                <div class="invoice-stat-card">
+                <!-- MONEY -->
 
-                    <div class="invoice-stat-icon invoice-money-icon">
-                        💰
+                <div class="stat-card">
+
+                    <div class="stat-icon money-icon">
+                        ₫
                     </div>
 
-                    <div class="invoice-stat-content">
+                    <div class="stat-content">
 
-                        <span>
-                            Tổng tiền hóa đơn
+                        <span class="stat-label">
+                            Tổng tiền
                         </span>
 
-                        <h2 id="totalAmount">
-                            0 ₫
-                        </h2>
+                        <strong
+                            class="stat-number"
+                            id="totalMoney"
+                        >
+                            7.720.000 đ
+                        </strong>
 
                     </div>
 
                 </div>
 
-            </div>
+
+            </section>
+
 
 
             <!-- =================================================
                  INVOICE LIST
-                 ================================================= -->
+            ================================================= -->
 
-            <div class="invoice-panel">
+            <section class="invoice-section">
 
 
-                <!-- PANEL HEADER -->
+                <!-- SECTION HEADER -->
 
-                <div class="invoice-panel-header">
+                <div class="section-header">
 
-                    <div class="invoice-panel-title">
+                    <div>
 
                         <h2>
                             Danh sách hóa đơn
                         </h2>
 
                         <p>
-                            Danh sách hóa đơn phát sinh từ các lượt lưu trú
+                            Danh sách toàn bộ hóa đơn của khách hàng
                         </p>
 
                     </div>
 
+
+                    <span
+                        class="invoice-count"
+                        id="invoiceCount"
+                    >
+                        3 hóa đơn
+                    </span>
+
                 </div>
 
 
+
                 <!-- =================================================
-                     FILTER
-                     ================================================= -->
+                     TOOLBAR
+                ================================================= -->
 
-                <div class="invoice-filter">
+                <div class="invoice-toolbar">
 
 
-                    <div class="invoice-search">
+                    <div class="invoice-search-box">
 
-                        <span>
+                        <span class="search-icon">
                             ⌕
                         </span>
 
                         <input
                             type="text"
                             id="invoiceSearch"
-                            placeholder="Tìm mã hóa đơn, khách hàng..."
+                            placeholder="Tìm mã hóa đơn, khách hàng, booking..."
                         >
 
                     </div>
 
 
-                    <select id="statusFilter">
+                    <select
+                        id="statusFilter"
+                        class="status-filter"
+                    >
 
-                        <option value="">
+                        <option value="ALL">
                             Tất cả trạng thái
                         </option>
 
@@ -978,26 +1555,22 @@
                             Chưa thanh toán
                         </option>
 
-                        <option value="DRAFT">
-                            Nháp
-                        </option>
-
-                        <option value="CANCELLED">
-                            Đã hủy
-                        </option>
-
                     </select>
+
 
                 </div>
 
 
+
                 <!-- =================================================
                      TABLE
-                     ================================================= -->
+                ================================================= -->
 
-                <div class="invoice-table-wrapper">
+                <div class="table-wrapper">
+
 
                     <table class="invoice-table">
+
 
                         <thead>
 
@@ -1040,7 +1613,7 @@
                                 </th>
 
                                 <th>
-                                    Thao tác
+                                    Ghi chú
                                 </th>
 
                             </tr>
@@ -1048,652 +1621,611 @@
                         </thead>
 
 
+
                         <tbody id="invoiceTableBody">
 
-                            <tr>
 
-                                <td
-                                    colspan="10"
-                                    class="invoice-message"
-                                >
+                            <!-- =================================================
+                                 HD001
+                            ================================================= -->
 
-                                    Đang tải dữ liệu hóa đơn...
+                            <tr
+                                data-status="PAID"
+                                data-search="
+                                    HD001
+                                    Nguyen Van An
+                                    KH001
+                                    BK20260820001
+                                    23/08/2026
+                                    Hoa don booking DP001
+                                "
+                            >
+
+
+                                <td>
+
+                                    <span class="invoice-code">
+                                        HD001
+                                    </span>
 
                                 </td>
 
+
+                                <td>
+
+                                    <div class="customer-info">
+
+
+                                        <div class="customer-avatar">
+                                            NA
+                                        </div>
+
+
+                                        <div>
+
+                                            <span class="customer-name">
+                                                Nguyen Van An
+                                            </span>
+
+                                            <span class="customer-id">
+                                                KH001
+                                            </span>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="booking-code">
+                                        BK20260820001
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="date">
+                                        23/08/2026 11:30
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="amount">
+                                        1.800.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="amount">
+                                        180.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="discount">
+                                        0 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="total">
+                                        1.980.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="status paid">
+
+                                        <span class="status-dot">
+                                        </span>
+
+                                        Đã thanh toán
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="note">
+                                        Hóa đơn booking DP001
+                                    </span>
+
+                                </td>
+
+
                             </tr>
+
+
+
+                            <!-- =================================================
+                                 HD002
+                            ================================================= -->
+
+                            <tr
+                                data-status="PAID"
+                                data-search="
+                                    HD002
+                                    Tran Thi Binh
+                                    KH002
+                                    BK20260821001
+                                    23/08/2026
+                                    Hoa don booking DP002
+                                "
+                            >
+
+
+                                <td>
+
+                                    <span class="invoice-code">
+                                        HD002
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="customer-info">
+
+
+                                        <div class="customer-avatar">
+                                            TB
+                                        </div>
+
+
+                                        <div>
+
+                                            <span class="customer-name">
+                                                Tran Thi Binh
+                                            </span>
+
+                                            <span class="customer-id">
+                                                KH002
+                                            </span>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="booking-code">
+                                        BK20260821001
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="date">
+                                        23/08/2026 11:15
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="amount">
+                                        4.200.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="amount">
+                                        420.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="discount">
+                                        200.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="total">
+                                        4.420.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="status paid">
+
+                                        <span class="status-dot">
+                                        </span>
+
+                                        Đã thanh toán
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="note">
+                                        Hóa đơn booking DP002
+                                    </span>
+
+                                </td>
+
+
+                            </tr>
+
+
+
+                            <!-- =================================================
+                                 HD003
+                            ================================================= -->
+
+                            <tr
+                                data-status="ISSUED"
+                                data-search="
+                                    HD003
+                                    Pham Duc Long
+                                    KH004
+                                    23/08/2026
+                                    Hoa don WALK-IN
+                                "
+                            >
+
+
+                                <td>
+
+                                    <span class="invoice-code">
+                                        HD003
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="customer-info">
+
+
+                                        <div class="customer-avatar">
+                                            PL
+                                        </div>
+
+
+                                        <div>
+
+                                            <span class="customer-name">
+                                                Pham Duc Long
+                                            </span>
+
+                                            <span class="customer-id">
+                                                KH004
+                                            </span>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="booking-code">
+                                        -
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="date">
+                                        23/08/2026 18:00
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="amount">
+                                        1.200.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="amount">
+                                        120.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="discount">
+                                        0 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="total">
+                                        1.320.000 đ
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="status issued">
+
+                                        <span class="status-dot">
+                                        </span>
+
+                                        Chưa thanh toán
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="note">
+                                        Hóa đơn WALK-IN
+                                    </span>
+
+                                </td>
+
+
+                            </tr>
+
 
                         </tbody>
 
+
                     </table>
+
+
+
+                    <!-- EMPTY -->
+
+                    <div
+                        class="empty"
+                        id="emptyMessage"
+                    >
+                        Không tìm thấy hóa đơn phù hợp.
+                    </div>
+
 
                 </div>
 
-            </div>
+
+            </section>
 
 
-        </section>
+
+            <!-- =================================================
+                 FOOTER
+            ================================================= -->
+
+            <footer>
+
+                <span>
+                    Hotel Management System © 2026
+                </span>
+
+                <span>
+                    Admin Dashboard
+                </span>
+
+            </footer>
 
 
-        <!-- =================================================
-             FOOTER
-             ================================================= -->
-
-        <footer>
-
-            <span>
-                Hotel Management System © 2026
-            </span>
-
-            <span>
-                Admin Dashboard
-            </span>
-
-        </footer>
-
+        </div>
 
     </main>
 
+</div>
 
-    <!-- =====================================================
-         JAVASCRIPT
-         ===================================================== -->
 
-    <script>
 
-        const API_URL = "http://localhost:3000/api/invoices";
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
-        let invoices = [];
+<script>
 
 
-        /* =====================================================
-           FORMAT MONEY
-           ===================================================== */
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
 
-        function formatMoney(value) {
+    const searchInput =
+        document.getElementById("invoiceSearch");
 
-            const number = Number(value) || 0;
+    const statusFilter =
+        document.getElementById("statusFilter");
 
-            return number.toLocaleString("vi-VN") + " ₫";
+    const tableBody =
+        document.getElementById("invoiceTableBody");
 
-        }
+    const invoiceCount =
+        document.getElementById("invoiceCount");
 
+    const emptyMessage =
+        document.getElementById("emptyMessage");
 
-        /* =====================================================
-           STATUS
-           ===================================================== */
 
-        function getStatusClass(status) {
 
-            switch (status) {
+    /* =========================================================
+       FILTER INVOICES
+    ========================================================= */
 
-                case "PAID":
-                    return "paid";
+    function filterInvoices() {
 
-                case "ISSUED":
-                    return "issued";
-
-                case "DRAFT":
-                    return "draft";
-
-                case "CANCELLED":
-                    return "cancelled";
-
-                default:
-                    return "draft";
-
-            }
-
-        }
-
-
-        function getStatusText(status) {
-
-            switch (status) {
-
-                case "PAID":
-                    return "Đã thanh toán";
-
-                case "ISSUED":
-                    return "Chưa thanh toán";
-
-                case "DRAFT":
-                    return "Nháp";
-
-                case "CANCELLED":
-                    return "Đã hủy";
-
-                default:
-                    return status || "Không xác định";
-
-            }
-
-        }
-
-
-        /* =====================================================
-           FORMAT DATE
-           ===================================================== */
-
-        function formatDate(date) {
-
-            if (!date) {
-                return "-";
-            }
-
-            const d = new Date(date);
-
-            if (isNaN(d.getTime())) {
-                return date;
-            }
-
-            return d.toLocaleDateString("vi-VN");
-
-        }
-
-
-        /* =====================================================
-           GET CUSTOMER NAME
-           ===================================================== */
-
-        function getCustomerName(invoice) {
-
-            return (
-                invoice.HoTen ||
-                invoice.TenKhachHang ||
-                invoice.TenKH ||
-                "-"
-            );
-
-        }
-
-
-        /* =====================================================
-           GET BOOKING CODE
-           ===================================================== */
-
-        function getBookingCode(invoice) {
-
-            return (
-                invoice.MaBookingCode ||
-                invoice.MaBooking ||
-                "-"
-            );
-
-        }
-
-
-        /* =====================================================
-           LOAD INVOICES
-           ===================================================== */
-
-        async function loadInvoices() {
-
-            const tbody =
-                document.getElementById("invoiceTableBody");
-
-            try {
-
-                const response =
-                    await fetch(API_URL);
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Không thể kết nối API hóa đơn"
-                    );
-
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                /*
-                 * Hỗ trợ cả:
-                 * { success: true, invoices: [...] }
-                 *
-                 * và:
-                 * [...]
-                 */
-
-                if (Array.isArray(data)) {
-
-                    invoices = data;
-
-                } else {
-
-                    invoices =
-                        data.invoices || [];
-
-                }
-
-
-                updateStatistics();
-
-                renderInvoices();
-
-
-            } catch (error) {
-
-                console.error(error);
-
-                tbody.innerHTML = `
-
-                    <tr>
-
-                        <td
-                            colspan="10"
-                            class="invoice-message"
-                        >
-
-                            Không thể tải dữ liệu hóa đơn.
-
-                            <br>
-
-                            Vui lòng kiểm tra server.
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           UPDATE STATISTICS
-           ===================================================== */
-
-        function updateStatistics() {
-
-            const total =
-                invoices.length;
-
-
-            const paid =
-                invoices.filter(
-                    invoice =>
-                        invoice.TrangThai === "PAID"
-                ).length;
-
-
-            const unpaid =
-                invoices.filter(
-                    invoice =>
-                        invoice.TrangThai === "ISSUED"
-                ).length;
-
-
-            const totalAmount =
-                invoices.reduce(
-                    (sum, invoice) =>
-                        sum +
-                        Number(
-                            invoice.TongTien || 0
-                        ),
-                    0
-                );
-
-
-            document.getElementById(
-                "totalInvoices"
-            ).textContent = total;
-
-
-            document.getElementById(
-                "paidInvoices"
-            ).textContent = paid;
-
-
-            document.getElementById(
-                "unpaidInvoices"
-            ).textContent = unpaid;
-
-
-            document.getElementById(
-                "totalAmount"
-            ).textContent =
-                formatMoney(totalAmount);
-
-        }
-
-
-        /* =====================================================
-           RENDER
-           ===================================================== */
-
-        function renderInvoices() {
-
-            const tbody =
-                document.getElementById(
-                    "invoiceTableBody"
-                );
-
-
-            const search =
-                document.getElementById(
-                    "invoiceSearch"
-                ).value
+        const keyword =
+            searchInput.value
                 .trim()
                 .toLowerCase();
 
-
-            const status =
-                document.getElementById(
-                    "statusFilter"
-                ).value;
+        const selectedStatus =
+            statusFilter.value;
 
 
-            const filtered =
-                invoices.filter(invoice => {
-
-                    const customer =
-                        getCustomerName(
-                            invoice
-                        ).toLowerCase();
+        const rows =
+            tableBody.querySelectorAll("tr");
 
 
-                    const code =
-                        String(
-                            invoice.MaHoaDon || ""
-                        ).toLowerCase();
+        let visibleCount = 0;
 
 
-                    const booking =
-                        getBookingCode(
-                            invoice
-                        ).toLowerCase();
+        rows.forEach(function(row) {
+
+            const searchText =
+                row.dataset.search
+                    .replace(/\s+/g, " ")
+                    .trim()
+                    .toLowerCase();
 
 
-                    const matchSearch =
-                        !search ||
-                        code.includes(search) ||
-                        customer.includes(search) ||
-                        booking.includes(search);
+            const rowStatus =
+                row.dataset.status;
 
 
-                    const matchStatus =
-                        !status ||
-                        invoice.TrangThai === status;
+            const matchKeyword =
+                searchText.includes(keyword);
 
 
-                    return (
-                        matchSearch &&
-                        matchStatus
-                    );
-
-                });
+            const matchStatus =
+                selectedStatus === "ALL" ||
+                rowStatus === selectedStatus;
 
 
-            if (filtered.length === 0) {
+            if (
+                matchKeyword &&
+                matchStatus
+            ) {
 
-                tbody.innerHTML = `
+                row.style.display = "";
 
-                    <tr>
+                visibleCount++;
 
-                        <td
-                            colspan="10"
-                            class="invoice-message"
-                        >
+            } else {
 
-                            Không có hóa đơn phù hợp.
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-                return;
+                row.style.display = "none";
 
             }
 
-
-            tbody.innerHTML =
-                filtered.map(invoice => `
-
-                    <tr>
-
-                        <!-- MÃ HÓA ĐƠN -->
-
-                        <td>
-
-                            <span class="invoice-code">
-
-                                ${invoice.MaHoaDon || "-"}
-
-                            </span>
-
-                        </td>
+        });
 
 
-                        <!-- KHÁCH HÀNG -->
+        /* Cập nhật số lượng */
 
-                        <td>
-
-                            <span class="customer-name">
-
-                                ${getCustomerName(invoice)}
-
-                            </span>
-
-                        </td>
+        invoiceCount.textContent =
+            visibleCount + " hóa đơn";
 
 
-                        <!-- BOOKING -->
+        /* Hiện thông báo nếu không có */
 
-                        <td>
+        if (visibleCount === 0) {
 
-                            ${getBookingCode(invoice)}
+            emptyMessage.style.display =
+                "block";
 
-                        </td>
+        } else {
 
-
-                        <!-- NGÀY -->
-
-                        <td>
-
-                            ${formatDate(
-                                invoice.NgayLap
-                            )}
-
-                        </td>
-
-
-                        <!-- TIỀN PHÒNG -->
-
-                        <td>
-
-                            ${formatMoney(
-                                invoice.TongTienPhong
-                            )}
-
-                        </td>
-
-
-                        <!-- THUẾ -->
-
-                        <td>
-
-                            ${formatMoney(
-                                invoice.Thue
-                            )}
-
-                        </td>
-
-
-                        <!-- GIẢM GIÁ -->
-
-                        <td>
-
-                            ${formatMoney(
-                                invoice.GiamGia
-                            )}
-
-                        </td>
-
-
-                        <!-- TỔNG -->
-
-                        <td>
-
-                            <span class="invoice-total">
-
-                                ${formatMoney(
-                                    invoice.TongTien
-                                )}
-
-                            </span>
-
-                        </td>
-
-
-                        <!-- STATUS -->
-
-                        <td>
-
-                            <span
-                                class="
-                                    invoice-status
-                                    ${getStatusClass(
-                                        invoice.TrangThai
-                                    )}
-                                "
-                            >
-
-                                ${getStatusText(
-                                    invoice.TrangThai
-                                )}
-
-                            </span>
-
-                        </td>
-
-
-                        <!-- ACTION -->
-
-                        <td>
-
-                            <button
-                                class="invoice-detail-btn"
-                                onclick="
-                                    viewInvoice(
-                                        '${invoice.MaHoaDon}'
-                                    )
-                                "
-                            >
-
-                                Xem chi tiết
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `).join("");
+            emptyMessage.style.display =
+                "none";
 
         }
 
-
-        /* =====================================================
-           VIEW DETAIL
-           ===================================================== */
-
-        function viewInvoice(maHoaDon) {
-
-            /*
-             * Tạm thời giữ luồng.
-             * Sau này có thể chuyển sang:
-             *
-             * invoice-detail.html?id=HD001
-             */
-
-            window.location.href =
-                "invoice-detail.html?id=" +
-                encodeURIComponent(
-                    maHoaDon
-                );
-
-        }
+    }
 
 
-        /* =====================================================
-           SEARCH
-           ===================================================== */
 
-        document
-            .getElementById("invoiceSearch")
-            .addEventListener(
-                "input",
-                renderInvoices
-            );
+    /* =========================================================
+       SEARCH
+    ========================================================= */
 
-
-        /* =====================================================
-           FILTER
-           ===================================================== */
-
-        document
-            .getElementById("statusFilter")
-            .addEventListener(
-                "change",
-                renderInvoices
-            );
+    searchInput.addEventListener(
+        "input",
+        filterInvoices
+    );
 
 
-        /* =====================================================
-           HEADER SEARCH
-           ===================================================== */
 
-        document
-            .getElementById("headerSearch")
-            .addEventListener(
-                "input",
-                function () {
+    /* =========================================================
+       STATUS FILTER
+    ========================================================= */
 
-                    document
-                        .getElementById(
-                            "invoiceSearch"
-                        )
-                        .value =
-                        this.value;
-
-                    renderInvoices();
-
-                }
-            );
+    statusFilter.addEventListener(
+        "change",
+        filterInvoices
+    );
 
 
-        /* =====================================================
-           LOGOUT
-           ===================================================== */
 
-        document
-            .querySelector(".logout-btn")
-            .addEventListener(
-                "click",
-                function () {
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
 
-                    window.location.href =
-                        "dashboard.html";
+    function logout() {
 
-                }
-            );
+        window.location.href =
+            "login.html";
+
+    }
 
 
-        /* =====================================================
-           START
-           ===================================================== */
-
-        loadInvoices();
-
-    </script>
+</script>
 
 
 </body>
