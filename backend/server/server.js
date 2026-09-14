@@ -8,6 +8,7 @@ const cors = require('cors');
 const pool = require('../config/db');
 const roomRoutes = require('../routes/roomRoutes');
 const bookingRoutes = require('../routes/bookingRoutes');
+const customerRoutes = require('../routes/customerRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ app.use('/js', express.static(path.join(__dirname, '../../frontend/js')));
 app.use('/assets', express.static(path.join(__dirname, '../../frontend/assets')));
 
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/customers', customerRoutes);
 app.use('/api', roomRoutes);
 
 app.get('/', (req, res) => {
