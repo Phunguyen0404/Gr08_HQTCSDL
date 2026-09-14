@@ -18,8 +18,10 @@ function formatDate(value) {
         return "-";
     }
 
+
     const date =
         new Date(value);
+
 
     if (
         isNaN(
@@ -28,6 +30,7 @@ function formatDate(value) {
     ) {
         return "-";
     }
+
 
     return date.toLocaleDateString(
         "vi-VN"
@@ -66,15 +69,8 @@ function getAccountStatus(staff) {
 function getName(staff) {
 
     return (
-
         staff.HoTen ||
-
-        staff.hoTen ||
-
-        staff.Ho_Ten ||
-
         "Không có tên"
-
     );
 
 }
@@ -86,21 +82,10 @@ function getName(staff) {
 
 function getEmail(staff) {
 
-    const email =
-
+    return (
         staff.Email ||
-
-        staff.EmailNV ||
-
-        staff.email ||
-
-        staff.emailNV ||
-
-        "";
-
-    return email
-        ? String(email).trim()
-        : "-";
+        "-"
+    );
 
 }
 
@@ -111,48 +96,10 @@ function getEmail(staff) {
 
 function getPhone(staff) {
 
-    const phone =
-
+    return (
         staff.SoDienThoai ||
-
-        staff.SoDienThoaiNV ||
-
-        staff.soDienThoai ||
-
-        staff.soDienThoaiNV ||
-
-        staff.SoDienThoaiNhanVien ||
-
-        "";
-
-    return phone
-        ? String(phone).trim()
-        : "-";
-
-}
-
-
-// ============================================================
-// GET ADDRESS
-// ============================================================
-
-function getAddress(staff) {
-
-    const address =
-
-        staff.DiaChi ||
-
-        staff.DiaChiNV ||
-
-        staff.diaChi ||
-
-        staff.diaChiNV ||
-
-        "";
-
-    return address
-        ? String(address).trim()
-        : "-";
+        "-"
+    );
 
 }
 
@@ -168,90 +115,6 @@ function getRole(staff) {
         staff.ChucVu ||
 
         staff.VaiTro ||
-
-        staff.chucVu ||
-
-        staff.vaiTro ||
-
-        "-"
-
-    );
-
-}
-
-
-// ============================================================
-// GET ACCOUNT CODE
-// ============================================================
-
-function getAccountCode(staff) {
-
-    return (
-
-        staff.MaTaiKhoan ||
-
-        staff.maTaiKhoan ||
-
-        "-"
-
-    );
-
-}
-
-
-// ============================================================
-// GET USERNAME
-// ============================================================
-
-function getUsername(staff) {
-
-    return (
-
-        staff.TenDangNhap ||
-
-        staff.tenDangNhap ||
-
-        "-"
-
-    );
-
-}
-
-
-// ============================================================
-// GET CCCD
-// ============================================================
-
-function getCCCD(staff) {
-
-    return (
-
-        staff.CCCD ||
-
-        staff.cccd ||
-
-        "-"
-
-    );
-
-}
-
-
-// ============================================================
-// GET GENDER
-// ============================================================
-
-function getGender(staff) {
-
-    return (
-
-        staff.GioiTinh ||
-
-        staff.GioiTinhNV ||
-
-        staff.gioiTinh ||
-
-        staff.gioiTinhNV ||
 
         "-"
 
@@ -272,11 +135,13 @@ function getInitials(name) {
 
     }
 
+
     const words =
         String(name)
             .trim()
             .split(/\s+/)
             .filter(Boolean);
+
 
     if (
         words.length === 1
@@ -287,6 +152,7 @@ function getInitials(name) {
             .toUpperCase();
 
     }
+
 
     return (
 
@@ -313,17 +179,20 @@ function getStatusText(status) {
 
     }
 
+
     if (status === "LOCKED") {
 
         return "Đã khóa";
 
     }
 
+
     if (status === "INACTIVE") {
 
         return "Không hoạt động";
 
     }
+
 
     return "-";
 
@@ -440,15 +309,7 @@ async function loadStaff() {
     try {
 
         console.log(
-            "========================================"
-        );
-
-        console.log(
-            ">>> ĐANG GỌI API STAFF"
-        );
-
-        console.log(
-            ">>> URL:",
+            ">>> ĐANG GỌI API STAFF:",
             API_URL
         );
 
@@ -479,7 +340,7 @@ async function loadStaff() {
 
 
         console.log(
-            ">>> API STAFF:",
+            ">>> DỮ LIỆU STAFF:",
             result
         );
 
@@ -519,43 +380,23 @@ async function loadStaff() {
         );
 
 
-        // ====================================================
-        // DEBUG DỮ LIỆU
-        // ====================================================
+        // Kiểm tra trực tiếp Email + SĐT
 
-        staffList.forEach(
-            function (staff, index) {
-
-                console.log(
-                    `>>> NHÂN VIÊN ${index + 1}:`,
-                    {
-                        MaNV:
-                            staff.MaNV,
-
-                        HoTen:
-                            staff.HoTen,
-
-                        Email:
-                            getEmail(staff),
-
-                        SoDienThoai:
-                            getPhone(staff),
-
-                        DiaChi:
-                            getAddress(staff),
-
-                        ChucVu:
-                            getRole(staff)
-
-                    }
-                );
-
-            }
+        console.log(
+            ">>> EMAIL:",
+            staffList.map(
+                staff =>
+                    staff.Email
+            )
         );
 
 
         console.log(
-            "========================================"
+            ">>> SĐT:",
+            staffList.map(
+                staff =>
+                    staff.SoDienThoai
+            )
         );
 
 
@@ -564,7 +405,6 @@ async function loadStaff() {
         renderStaff();
 
     }
-
 
     catch (error) {
 
@@ -576,26 +416,10 @@ async function loadStaff() {
 
         staffList = [];
 
-
         updateStatistics();
 
 
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="8"
-                    class="staff-message"
-                >
-
-                    Không thể lấy dữ liệu nhân viên.
-
-                </td>
-
-            </tr>
-
-        `;
+        tbody.innerHTML = "";
 
     }
 
@@ -765,7 +589,6 @@ function renderStaff() {
         staffList.filter(
             function (staff) {
 
-
                 const name =
                     getName(
                         staff
@@ -784,12 +607,6 @@ function renderStaff() {
                     ).toLowerCase();
 
 
-                const address =
-                    getAddress(
-                        staff
-                    ).toLowerCase();
-
-
                 const maNV =
                     String(
                         staff.MaNV ||
@@ -799,17 +616,15 @@ function renderStaff() {
 
                 const maTaiKhoan =
                     String(
-                        getAccountCode(
-                            staff
-                        )
+                        staff.MaTaiKhoan ||
+                        ""
                     ).toLowerCase();
 
 
                 const username =
                     String(
-                        getUsername(
-                            staff
-                        )
+                        staff.TenDangNhap ||
+                        ""
                     ).toLowerCase();
 
 
@@ -838,10 +653,6 @@ function renderStaff() {
                     ) ||
 
                     phone.includes(
-                        keyword
-                    ) ||
-
-                    address.includes(
                         keyword
                     ) ||
 
@@ -924,16 +735,14 @@ function renderStaff() {
             .map(
                 function (staff) {
 
-
                     const maNV =
                         staff.MaNV ||
                         "-";
 
 
                     const maTaiKhoan =
-                        getAccountCode(
-                            staff
-                        );
+                        staff.MaTaiKhoan ||
+                        "-";
 
 
                     const name =
@@ -1153,7 +962,6 @@ function renderStaff() {
                     "click",
                     function () {
 
-
                         const maNV =
                             this.dataset.id;
 
@@ -1163,15 +971,12 @@ function renderStaff() {
                                 function (item) {
 
                                     return (
-
                                         String(
                                             item.MaNV
                                         ) ===
-
                                         String(
                                             maNV
                                         )
-
                                     );
 
                                 }
@@ -1232,7 +1037,6 @@ function setupSearch() {
         headerSearch.addEventListener(
             "input",
             function () {
-
 
                 if (searchInput) {
 
@@ -1328,77 +1132,23 @@ function showStaffDetail(staff) {
         );
 
 
-    const name =
-        getName(
-            staff
-        );
-
-
-    const email =
-        getEmail(
-            staff
-        );
-
-
-    const phone =
-        getPhone(
-            staff
-        );
-
-
-    const address =
-        getAddress(
-            staff
-        );
-
-
-    const role =
-        getRole(
-            staff
-        );
-
-
-    const accountCode =
-        getAccountCode(
-            staff
-        );
-
-
-    const username =
-        getUsername(
-            staff
-        );
-
-
-    const cccd =
-        getCCCD(
-            staff
-        );
-
-
-    const gender =
-        getGender(
-            staff
-        );
-
-
     const message = `
 
 Mã nhân viên: ${staff.MaNV || "-"}
 
-Mã tài khoản: ${accountCode}
+Mã tài khoản: ${staff.MaTaiKhoan || "-"}
 
-Họ tên: ${name}
+Họ tên: ${staff.HoTen || "-"}
 
-CCCD: ${cccd}
+CCCD: ${staff.CCCD || "-"}
 
-Email: ${email}
+Email: ${staff.Email || "-"}
 
-Số điện thoại: ${phone}
+Số điện thoại: ${staff.SoDienThoai || "-"}
 
-Địa chỉ: ${address}
+Địa chỉ: ${staff.DiaChi || "-"}
 
-Chức vụ: ${role}
+Chức vụ: ${staff.ChucVu || "-"}
 
 Ngày sinh: ${formatDate(
         staff.NgaySinh
@@ -1408,20 +1158,19 @@ Ngày vào làm: ${formatDate(
         staff.NgayVaoLam
     )}
 
-Giới tính: ${gender}
+Giới tính: ${staff.GioiTinh || "-"}
 
 Trạng thái nhân viên: ${getStatusText(
         status
     )}
 
-Tên đăng nhập: ${username}
+Tên đăng nhập: ${staff.TenDangNhap || "-"}
 
 Vai trò tài khoản: ${staff.VaiTro || "-"}
 
 Trạng thái tài khoản: ${getStatusText(
         String(
             staff.trangThaiTaiKhoan ||
-            staff.TrangThaiTaiKhoan ||
             ""
         ).toUpperCase()
     )}
