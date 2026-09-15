@@ -3,24 +3,48 @@ const state = {
     selectedRoom: null,
     checkIn: null,
     checkOut: null,
-    guests: 2,
-    customerId: ''
+    guests: 1,
+    deposit: 0,
+    customer: null,
+    lookupResults: []
 };
+
+const staffIdInput = document.getElementById('staffIdInput');
+const noteInput = document.getElementById('noteInput');
+
+const lookupCccdInput = document.getElementById('lookupCccdInput');
+const lookupPhoneInput = document.getElementById('lookupPhoneInput');
+const lookupBtn = document.getElementById('lookupBtn');
+const lookupResultsEl = document.getElementById('lookupResults');
+
+const regHoTen = document.getElementById('regHoTen');
+const regCccd = document.getElementById('regCccd');
+const regPhone = document.getElementById('regPhone');
+const regEmail = document.getElementById('regEmail');
+const regNgaySinh = document.getElementById('regNgaySinh');
+const regGioiTinh = document.getElementById('regGioiTinh');
+const regDiaChi = document.getElementById('regDiaChi');
+const registerBtn = document.getElementById('registerBtn');
+
+const customerCard = document.getElementById('customerCard');
+const customerCardName = document.getElementById('customerCardName');
+const customerCardMeta = document.getElementById('customerCardMeta');
+const clearCustomerBtn = document.getElementById('clearCustomerBtn');
 
 const checkInInput = document.getElementById('checkInInput');
 const checkOutInput = document.getElementById('checkOutInput');
 const guestsInput = document.getElementById('guestsInput');
-const customerIdInput = document.getElementById('customerIdInput');
+const depositInput = document.getElementById('depositInput');
 const searchBtn = document.getElementById('searchBtn');
 const formMessage = document.getElementById('formMessage');
 const roomGrid = document.getElementById('roomGrid');
+
 const summarySection = document.getElementById('summarySection');
 const summaryRoomName = document.getElementById('summaryRoomName');
 const summaryDates = document.getElementById('summaryDates');
 const summaryPrice = document.getElementById('summaryPrice');
 const summaryTotal = document.getElementById('summaryTotal');
 const confirmBtn = document.getElementById('confirmBtn');
-const bookingList = document.getElementById('bookingList');
 
 function formatCurrency(value) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -49,6 +73,107 @@ async function apiRequest(url, options) {
     return body.data;
 }
 
+// === Tabs khách hàng ===
+document.querySelectorAll('.customer-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.customer-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.customer-tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + 'Panel').classList.add('active');
+    });
+});
+
+// === Tìm khách hàng đã có ===
+function renderLookupResults() {
+    if (!state.lookupResults.length) {
+        lookupResultsEl.innerHTML = '<p class="empty-state">Không tìm thấy khách hàng phù hợp. Hãy thử tab "Khách mới".</p>';
+        return;
+    }
+    lookupResultsEl.innerHTML = state.lookupResults.map(c => `
+    <div class="lookup-result-row">
+      <div>
+        <strong>${c.HoTen}</strong><br>
+        <small>CCCD ${c.CCCD} · SĐT ${c.SoDienThoai}</small>
+      </div>
+      <button type="button" class="pick-btn" data-makh="${c.MaKH}">Chọn khách này</button>
+    </div>
+  `).join('');
+}
+
+async function handleLookup() {
+    const cccd = lookupCccdInput.value.trim();
+    const phone = lookupPhoneInput.value.trim();
+    if (!cccd && !phone) {
+        showMessage('Vui lòng nhập số CCCD hoặc số điện thoại để tìm kiếm.', 'error');
+        return;
+    }
+    lookupBtn.disabled = true;
+    try {
+        const query = new URLSearchParams();
+        if (cccd) query.set('cccd', cccd);
+        if (phone) query.set('phone', phone);
+        state.lookupResults = await apiRequest(`/api/customers/search?${query}`);
+        renderLookupResults();
+    } catch (err) {
+        showMessage(err.message, 'error');
+    } finally {
+        lookupBtn.disabled = false;
+    }
+}
+
+lookupResultsEl.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-makh]');
+    if (!button) return;
+    const customer = state.lookupResults.find(c => c.MaKH === button.dataset.makh);
+    if (customer) setCustomer(customer);
+});
+
+// === Đăng ký khách vãng lai mới ===
+async function handleRegister() {
+    const payload = {
+        hoTen: regHoTen.value.trim(),
+        cccd: regCccd.value.trim(),
+        soDienThoai: regPhone.value.trim(),
+        email: regEmail.value.trim() || undefined,
+        ngaySinh: regNgaySinh.value || undefined,
+        gioiTinh: regGioiTinh.value || undefined,
+        diaChi: regDiaChi.value.trim() || undefined
+    };
+
+    if (!payload.hoTen || !payload.cccd || !payload.soDienThoai) {
+        showMessage('Vui lòng nhập đủ Họ tên, CCCD và Số điện thoại.', 'error');
+        return;
+    }
+
+    registerBtn.disabled = true;
+    try {
+        const customer = await apiRequest('/api/customers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        setCustomer(customer);
+        showMessage(`Đăng ký khách vãng lai thành công · Mã KH ${customer.MaKH}`, 'success');
+    } catch (err) {
+        showMessage(err.message, 'error');
+    } finally {
+        registerBtn.disabled = false;
+    }
+}
+
+function setCustomer(customer) {
+    state.customer = customer;
+    customerCardName.textContent = customer.HoTen;
+    customerCardMeta.textContent = `Mã KH ${customer.MaKH} · CCCD ${customer.CCCD} · SĐT ${customer.SoDienThoai}`;
+    customerCard.style.display = 'flex';
+}
+
+clearCustomerBtn.addEventListener('click', () => {
+    state.customer = null;
+    customerCard.style.display = 'none';
+});
+
+// === Tìm phòng trống ===
 function renderRooms() {
     if (!state.availableRooms.length) {
         roomGrid.innerHTML = '<p class="empty-state">Không có phòng trống phù hợp trong khoảng ngày này.</p>';
@@ -82,7 +207,6 @@ function renderSummary() {
         summarySection.style.display = 'none';
         return;
     }
-
     const nights = nightsBetween(state.checkIn, state.checkOut);
     const total = nights * Number(state.selectedRoom.GiaCoBan);
 
@@ -93,46 +217,11 @@ function renderSummary() {
     summarySection.style.display = 'block';
 }
 
-function getStatusClass(status) {
-    return 'status-' + status.toLowerCase();
-}
-
-function renderBookings(bookings) {
-    if (!bookings.length) {
-        bookingList.innerHTML = '<p class="empty-state">Chưa có đơn đặt phòng nào.</p>';
-        return;
-    }
-
-    bookingList.innerHTML = bookings.map(b => `
-    <div class="booking-row" data-booking="${b.bookingId}">
-      <div class="info">
-        <h4>${b.bookingCode} · Phòng ${b.rooms || '—'}</h4>
-        <p>${formatDate(b.checkIn)} – ${formatDate(b.checkOut)} · ${b.guests} khách</p>
-      </div>
-      <span class="status-pill ${getStatusClass(b.status)}">${b.status}</span>
-      <button type="button" class="cancel-btn" data-action="cancel" data-booking="${b.bookingId}"
-        ${['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(b.status) ? 'disabled' : ''}>
-        Hủy đặt phòng
-      </button>
-    </div>
-  `).join('');
-}
-
-async function loadMyBookings() {
-    if (!state.customerId) return;
-    try {
-        const bookings = await apiRequest(`/api/bookings?customerId=${encodeURIComponent(state.customerId)}`);
-        renderBookings(bookings);
-    } catch (err) {
-        showMessage(err.message, 'error');
-    }
-}
-
 async function handleSearch() {
     state.checkIn = checkInInput.value;
     state.checkOut = checkOutInput.value;
     state.guests = Number(guestsInput.value) || 1;
-    state.customerId = customerIdInput.value.trim();
+    state.deposit = Number(depositInput.value) || 0;
 
     if (!state.checkIn || !state.checkOut) {
         showMessage('Vui lòng chọn ngày nhận và trả phòng.', 'error');
@@ -159,27 +248,24 @@ async function handleSearch() {
     } catch (err) {
         showMessage(err.message, 'error');
     }
-
-    loadMyBookings();
 }
 
-function handleRoomGridClick(event) {
+roomGrid.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-action="choose"]');
     if (!button) return;
-
     const room = state.availableRooms.find(r => r.MaPhong === button.dataset.room);
     if (!room) return;
-
     state.selectedRoom = room;
     renderRooms();
     renderSummary();
     summarySection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
+});
 
+// === Xác nhận đặt phòng hộ ===
 async function handleConfirm() {
     if (!state.selectedRoom) return;
-    if (!state.customerId) {
-        showMessage('Vui lòng nhập mã khách hàng trước khi đặt phòng.', 'error');
+    if (!state.customer) {
+        showMessage('Vui lòng chọn hoặc đăng ký khách hàng trước khi đặt phòng.', 'error');
         return;
     }
 
@@ -189,15 +275,18 @@ async function handleConfirm() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                customerId: state.customerId,
+                customerId: state.customer.MaKH,
+                staffId: staffIdInput.value.trim() || undefined,
                 checkIn: state.checkIn,
                 checkOut: state.checkOut,
                 guests: state.guests,
+                deposit: state.deposit || undefined,
+                note: noteInput.value.trim() || undefined,
                 rooms: [{ MaPhong: state.selectedRoom.MaPhong, DonGia: state.selectedRoom.GiaCoBan }]
             })
         });
 
-        showMessage(`Đặt phòng thành công · Mã đơn ${result.bookingCode}`, 'success');
+        showMessage(`Đặt phòng hộ thành công · Mã đơn ${result.bookingCode} cho khách ${state.customer.HoTen}`, 'success');
         state.selectedRoom = null;
         renderSummary();
         await handleSearch();
@@ -208,33 +297,10 @@ async function handleConfirm() {
     }
 }
 
-async function handleBookingListClick(event) {
-    const button = event.target.closest('button[data-action="cancel"]');
-    if (!button) return;
-
-    const bookingId = button.dataset.booking;
-    const confirmCancel = window.confirm(`Bạn có chắc muốn hủy đơn ${bookingId}?`);
-    if (!confirmCancel) return;
-
-    button.disabled = true;
-    try {
-        await apiRequest(`/api/bookings/${bookingId}/cancel`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ customerId: state.customerId })
-        });
-        showMessage('Đã hủy đơn đặt phòng.', 'success');
-        loadMyBookings();
-    } catch (err) {
-        showMessage(err.message, 'error');
-        button.disabled = false;
-    }
-}
-
+lookupBtn.addEventListener('click', handleLookup);
+registerBtn.addEventListener('click', handleRegister);
 searchBtn.addEventListener('click', handleSearch);
 confirmBtn.addEventListener('click', handleConfirm);
-roomGrid.addEventListener('click', handleRoomGridClick);
-bookingList.addEventListener('click', handleBookingListClick);
 
 (function setDefaultDates() {
     const today = new Date();

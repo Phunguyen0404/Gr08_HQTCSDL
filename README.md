@@ -139,6 +139,12 @@ git merge origin/dev
 
 * Sau khi sửa xong hết các file conflict, chạy lệnh:
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> feature/booking
 git add .
 git commit -m "fix: resolve conflict with dev"
 

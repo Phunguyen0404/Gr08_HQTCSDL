@@ -1,5 +1,4 @@
 const path = require('path');
-
 require('dotenv').config({
     path: path.resolve(__dirname, '../../.env')
 });
@@ -8,12 +7,22 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('../config/db');
 const roomRoutes = require('../routes/roomRoutes');
+const bookingRoutes = require('../routes/bookingRoutes');
+const customerRoutes = require('../routes/customerRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../../frontend/public')));
+app.use('/css', express.static(path.join(__dirname, '../../frontend/css')));
+app.use('/js', express.static(path.join(__dirname, '../../frontend/js')));
+app.use('/assets', express.static(path.join(__dirname, '../../frontend/assets')));
+
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api', roomRoutes);
 
 app.get('/', (req, res) => {
     res.json({
@@ -148,8 +157,6 @@ app.get('/api/staff', async (req, res) => {
         });
     }
 });
-
-app.use('/api', roomRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server dang chay tai http://localhost:${PORT}`);

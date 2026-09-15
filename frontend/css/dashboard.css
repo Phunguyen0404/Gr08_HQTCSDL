@@ -320,7 +320,7 @@ body {
     min-width: 0;
 }
 
-.stat-content > span {
+.stat-content>span {
     display: block;
     font-size: 12px;
     color: #718096;
@@ -509,7 +509,7 @@ body {
     background: #24766f;
 }
 
-.bar-wrapper > span {
+.bar-wrapper>span {
     font-size: 10px;
     color: #718096;
 }
@@ -528,12 +528,10 @@ body {
     width: 155px;
     height: 155px;
     border-radius: 50%;
-    background: conic-gradient(
-        #2f8f83 0deg,
-        #2f8f83 280deg,
-        #e8eeee 280deg,
-        #e8eeee 360deg
-    );
+    background: conic-gradient(#2f8f83 0deg,
+            #2f8f83 280deg,
+            #e8eeee 280deg,
+            #e8eeee 360deg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -565,7 +563,7 @@ body {
     padding: 0 24px 20px;
 }
 
-.room-status > div {
+.room-status>div {
     display: flex;
     align-items: center;
     padding: 8px 0;
