@@ -1,11 +1,12 @@
-/* ========================================
-HOTEL MANAGEMENT - STAFF MANAGEMENT
-======================================== */
+/* =========================================================
+   STAFF PAGE - LIGHT BLUE THEME
+========================================================= */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+<<<<<<< HEAD
 }
 
 html {
@@ -17,19 +18,36 @@ body {
     background: #f5f7fb;
     color: #1e293b;
     min-height: 100vh;
+=======
 }
 
-/* ========================================
-SIDEBAR
-======================================== */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f9fc;
+    color: #26364a;
+>>>>>>> feature/admin
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar {
     position: fixed;
     left: 0;
     top: 0;
+<<<<<<< HEAD
     bottom: 0;
+=======
+    width: 250px;
+    height: 100vh;
+>>>>>>> feature/admin
 
+    background: #ffffff;
+    border-right: 1px solid #d5eaf3;
 
+<<<<<<< HEAD
     width: 250px;
 
     background: #0f3d3e;
@@ -42,12 +60,19 @@ SIDEBAR
 
     z-index: 100;
 
+=======
+    display: flex;
+    flex-direction: column;
+>>>>>>> feature/admin
 
+    z-index: 100;
 }
 
-/* Logo */
+
+/* LOGO */
 
 .logo {
+<<<<<<< HEAD
     display: flex;
     align-items: center;
     gap: 12px;
@@ -55,10 +80,19 @@ SIDEBAR
     padding: 0 12px 28px;
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+=======
+    height: 82px;
 
+    display: flex;
+    align-items: center;
+>>>>>>> feature/admin
 
+    padding: 0 24px;
+
+    border-bottom: 1px solid #d5eaf3;
 }
 
+<<<<<<< HEAD
 .logo span {
     font-size: 30px;
 }
@@ -66,12 +100,45 @@ SIDEBAR
 .logo strong {
     font-size: 16px;
     line-height: 1.2;
+=======
+.logo-icon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    background: #b9e4f2;
+    color: #167da3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    margin-right: 12px;
+}
+
+.logo-text h2 {
+    font-size: 17px;
+    color: #176f91;
+>>>>>>> feature/admin
     letter-spacing: 0.5px;
 }
 
-/* Menu */
+.logo-text span {
+    font-size: 11px;
+    color: #7294a3;
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
 
 .menu {
+<<<<<<< HEAD
     display: flex;
     flex-direction: column;
 
@@ -86,8 +153,21 @@ SIDEBAR
 .menu-item {
     display: flex;
     align-items: center;
+=======
+    padding: 20px 14px;
+    flex: 1;
+}
 
+.menu-item,
+.menu-title {
+    width: 100%;
+    min-height: 45px;
+>>>>>>> feature/admin
 
+    display: flex;
+    align-items: center;
+
+<<<<<<< HEAD
     gap: 12px;
 
     padding: 13px 14px;
@@ -111,11 +191,25 @@ SIDEBAR
     text-align: center;
 
     font-size: 17px;
+=======
+    padding: 0 14px;
+    margin-bottom: 6px;
 
+    border-radius: 9px;
 
+    text-decoration: none;
+
+    color: #526b78;
+>>>>>>> feature/admin
+
+    font-size: 14px;
+
+    transition: background 0.2s ease,
+                color 0.2s ease;
 }
 
 .menu-item:hover {
+<<<<<<< HEAD
     background: rgba(255, 255, 255, 0.08);
     color: white;
 }
@@ -123,12 +217,47 @@ SIDEBAR
 .menu-item.active {
     background: #1d5b5d;
     color: white;
+=======
+    background: #eef8fc;
+    color: #167da3;
+}
+
+.menu-item.active {
+    background: #dff3f4;
+    color: #167da3;
+>>>>>>> feature/admin
     font-weight: 600;
 }
 
-/* Sidebar bottom */
+.menu-icon {
+    width: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 7px;
+
+    font-size: 17px;
+}
+
+.menu-title {
+    cursor: pointer;
+}
+
+.menu-arrow {
+    margin-left: auto;
+    font-size: 12px;
+    color: #7895a1;
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM
+========================================================= */
 
 .sidebar-bottom {
+<<<<<<< HEAD
     margin-top: auto;
 
 
@@ -137,9 +266,14 @@ SIDEBAR
 
     gap: 6px;
 
+=======
+    padding: 16px;
+>>>>>>> feature/admin
 
+    border-top: 1px solid #e5edf1;
 }
 
+<<<<<<< HEAD
 /* ========================================
 MAIN CONTENT
 ======================================== */
@@ -152,24 +286,45 @@ MAIN CONTENT
 
     padding: 28px 32px;
 
+=======
+.user-mini {
+    display: flex;
+    align-items: center;
+>>>>>>> feature/admin
 
+    margin-bottom: 14px;
 }
 
-/* ========================================
-HEADER
-======================================== */
+.user-avatar {
+    width: 38px;
+    height: 38px;
 
+<<<<<<< HEAD
 .top-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+=======
+    border-radius: 50%;
+>>>>>>> feature/admin
 
+    background: #b9e4f2;
+    color: #167da3;
 
+<<<<<<< HEAD
     margin-bottom: 28px;
+=======
+    display: flex;
+    align-items: center;
+    justify-content: center;
+>>>>>>> feature/admin
 
+    font-weight: 600;
 
+    margin-right: 10px;
 }
 
+<<<<<<< HEAD
 .top-header>div:first-child {
     min-width: 0;
 }
@@ -1107,4 +1262,910 @@ RESPONSIVE
         align-self: flex-end;
     }
 
+=======
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info strong {
+    font-size: 13px;
+    color: #314b59;
+}
+
+.user-info span {
+    font-size: 11px;
+    color: #79939e;
+}
+
+.logout-btn {
+    width: 100%;
+
+    border: none;
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+
+    padding: 9px 10px;
+
+    border-radius: 8px;
+
+    color: #607883;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    transition: background 0.2s ease,
+                color 0.2s ease;
+}
+
+.logout-btn span:first-child {
+    margin-right: 8px;
+}
+
+.logout-btn:hover {
+    background: #d9f0f7;
+    color: #167da3;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main {
+    margin-left: 250px;
+    min-height: 100vh;
+
+    background: #f5f9fc;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.top-header {
+    height: 82px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e1edf2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+}
+
+.header-left h1 {
+    font-size: 21px;
+    font-weight: 700;
+
+    color: #263f4c;
+}
+
+.header-left p {
+    margin-top: 5px;
+
+    font-size: 12px;
+    color: #8197a1;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+
+/* HEADER SEARCH */
+
+.header-search {
+    width: 190px;
+    height: 36px;
+
+    border: 1px solid #dcebf0;
+    border-radius: 8px;
+
+    background: #f8fcfd;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 10px;
+}
+
+.header-search span {
+    color: #7fa0ad;
+    margin-right: 7px;
+}
+
+.header-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #3b5662;
+
+    font-size: 12px;
+}
+
+.header-search input::placeholder {
+    color: #9aadb5;
+}
+
+
+/* NOTIFICATION */
+
+.notification-btn {
+    width: 36px;
+    height: 36px;
+
+    border: 1px solid #dcebf0;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    font-size: 16px;
+}
+
+.notification-btn:hover {
+    background: #edf8fb;
+}
+
+
+/* ADMIN PROFILE */
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.admin-avatar {
+    width: 37px;
+    height: 37px;
+
+    border-radius: 50%;
+
+    background: #b9e4f2;
+    color: #167da3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 600;
+
+    margin-right: 9px;
+}
+
+.admin-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-info strong {
+    font-size: 12px;
+    color: #304a56;
+}
+
+.admin-info span {
+    margin-top: 2px;
+
+    font-size: 10px;
+    color: #8399a3;
+}
+
+.profile-arrow {
+    margin-left: 8px;
+
+    color: #8199a3;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+    padding: 24px 32px 30px;
+}
+
+
+/* BREADCRUMB */
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 12px;
+
+    margin-bottom: 18px;
+
+    color: #8197a1;
+}
+
+.breadcrumb a {
+    color: #3d91b0;
+
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+
+/* PAGE TITLE */
+
+.page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+.page-title-row h2 {
+    font-size: 20px;
+
+    color: #294451;
+}
+
+.page-title-row p {
+    margin-top: 5px;
+
+    font-size: 12px;
+
+    color: #8499a3;
+}
+
+
+/* ADD BUTTON */
+
+.add-btn {
+    height: 39px;
+
+    padding: 0 17px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #8fd3e8;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    transition: background 0.2s ease,
+                transform 0.2s ease;
+}
+
+.add-btn:hover {
+    background: #70c4df;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    background: #ffffff;
+
+    border: 1px solid #e1edf2;
+    border-radius: 12px;
+
+    padding: 19px;
+
+    display: flex;
+    align-items: center;
+
+    box-shadow: 0 2px 8px rgba(72, 126, 145, 0.04);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 13px;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.stat-icon.blue {
+    background: #d9f2fa;
+    color: #3296b8;
+}
+
+.stat-icon.green {
+    background: #def5eb;
+    color: #35a474;
+}
+
+.stat-icon.red {
+    background: #fde8e8;
+    color: #d85b5b;
+}
+
+.stat-icon.orange {
+    background: #fff0d9;
+    color: #d28a35;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-content span {
+    font-size: 11px;
+
+    color: #8298a2;
+
+    margin-bottom: 5px;
+}
+
+.stat-content strong {
+    font-size: 21px;
+
+    color: #294451;
+}
+
+
+/* =========================================================
+   STAFF CARD
+========================================================= */
+
+.staff-card {
+    background: #ffffff;
+
+    border: 1px solid #e1edf2;
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 8px rgba(72, 126, 145, 0.04);
+
+    overflow: hidden;
+}
+
+.staff-card-header {
+    padding: 19px 22px;
+
+    border-bottom: 1px solid #edf3f5;
+}
+
+.staff-card-header h3 {
+    font-size: 15px;
+
+    color: #304b57;
+}
+
+.staff-card-header p {
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    color: #899da6;
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar {
+    padding: 14px 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #edf3f5;
+}
+
+.search-box {
+    width: 300px;
+    height: 35px;
+
+    border: 1px solid #dcebf0;
+
+    border-radius: 8px;
+
+    background: #f9fcfd;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 10px;
+}
+
+.search-box span {
+    color: #82a1ad;
+
+    margin-right: 7px;
+}
+
+.search-box input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 12px;
+
+    color: #405b67;
+}
+
+.search-box input::placeholder {
+    color: #9aadb5;
+}
+
+.status-filter {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 12px;
+
+    color: #748b95;
+}
+
+.status-filter select {
+    height: 35px;
+
+    padding: 0 10px;
+
+    border: 1px solid #dcebf0;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #526b76;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.staff-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 12px;
+}
+
+.staff-table thead {
+    background: #f3fafc;
+}
+
+.staff-table th {
+    padding: 12px 14px;
+
+    text-align: left;
+
+    color: #68818c;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    border-bottom: 1px solid #dfeef3;
+
+    white-space: nowrap;
+}
+
+.staff-table td {
+    padding: 13px 14px;
+
+    border-bottom: 1px solid #edf3f5;
+
+    color: #4d6570;
+
+    vertical-align: middle;
+}
+
+.staff-table tbody tr:hover {
+    background: #f7fcfd;
+}
+
+
+/* COLUMN */
+
+.col-code {
+    width: 75px;
+}
+
+.col-name {
+    min-width: 155px;
+}
+
+.col-email {
+    min-width: 180px;
+}
+
+.col-phone {
+    width: 130px;
+}
+
+.col-position {
+    width: 110px;
+}
+
+.col-status {
+    width: 125px;
+}
+
+.col-date {
+    width: 120px;
+}
+
+.col-action {
+    width: 90px;
+}
+
+
+/* EMPLOYEE NAME */
+
+.employee-name {
+    display: flex;
+    align-items: center;
+}
+
+.employee-avatar {
+    width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #d9f2fa;
+
+    color: #2e8cac;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    margin-right: 9px;
+}
+
+.employee-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-info strong {
+    color: #334e5a;
+
+    font-size: 12px;
+}
+
+.employee-info span {
+    margin-top: 3px;
+
+    color: #91a4ac;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #def5eb;
+    color: #299266;
+}
+
+.status-badge.locked {
+    background: #fde8e8;
+    color: #d25555;
+}
+
+.status-badge.inactive {
+    background: #fff0d9;
+    color: #c27b28;
+}
+
+
+/* =========================================================
+   ACTION BUTTON
+========================================================= */
+
+.action-btn {
+    width: 30px;
+    height: 30px;
+
+    border: 1px solid #dcebf0;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: #5e8492;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: #dff3f9;
+    border-color: #b9dfeb;
+    color: #2383a4;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-staff {
+    padding: 55px 20px;
+
+    text-align: center;
+}
+
+.empty-icon {
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 12px;
+
+    border-radius: 50%;
+
+    background: #e3f4f9;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+}
+
+.empty-staff h3 {
+    font-size: 15px;
+
+    color: #48616d;
+
+    margin-bottom: 5px;
+}
+
+.empty-staff p {
+    font-size: 11px;
+
+    color: #91a3ab;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-cell {
+    padding: 35px !important;
+
+    text-align: center;
+
+    color: #d25555 !important;
+
+    background: #fffafa;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    padding: 18px 32px;
+
+    text-align: center;
+
+    color: #91a3ab;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .header-search {
+        width: 150px;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main {
+        margin-left: 210px;
+    }
+
+    .top-header {
+        padding: 0 20px;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .admin-info {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .sidebar {
+        width: 65px;
+    }
+
+    .logo {
+        padding: 0;
+        justify-content: center;
+    }
+
+    .logo-text {
+        display: none;
+    }
+
+    .logo-icon {
+        margin-right: 0;
+    }
+
+    .menu {
+        padding: 15px 8px;
+    }
+
+    .menu-item,
+    .menu-title {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .menu-item span:last-child,
+    .menu-title span:nth-child(2),
+    .menu-arrow {
+        display: none;
+    }
+
+    .menu-icon {
+        margin-right: 0;
+    }
+
+    .sidebar-bottom {
+        padding: 10px;
+    }
+
+    .user-mini {
+        justify-content: center;
+    }
+
+    .user-info,
+    .logout-btn span:last-child {
+        display: none;
+    }
+
+    .logout-btn {
+        justify-content: center;
+    }
+
+    .main {
+        margin-left: 65px;
+    }
+
+    .header-left p {
+        display: none;
+    }
+
+    .header-right {
+        gap: 8px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-title-row {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+>>>>>>> feature/admin
 }

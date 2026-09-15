@@ -2,6 +2,7 @@
 <html lang="vi">
 
 <head>
+<<<<<<< HEAD
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đặt phòng</title>
@@ -166,6 +167,1841 @@
   </main>
 
   <script src="../js/bookings.js"></script>
+=======
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Đặt phòng - Hotel Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f8fb;
+            color: #243746;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+           ===================================================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e3ebf0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            border-bottom: 1px solid #edf2f5;
+        }
+
+        .logo-icon {
+            font-size: 30px;
+            margin-right: 12px;
+        }
+
+        .logo-text h2 {
+            color: #1682b4;
+            font-size: 20px;
+            letter-spacing: 1px;
+        }
+
+        .logo-text span {
+            color: #84939d;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+
+        /* ADMIN */
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid #edf2f5;
+        }
+
+        .admin-avatar,
+        .profile-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e5f4fb;
+            color: #1682b4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin-avatar {
+            margin-right: 12px;
+        }
+
+        .admin-info strong,
+        .profile strong {
+            display: block;
+            font-size: 14px;
+            color: #293d4a;
+        }
+
+        .admin-info span,
+        .profile span {
+            display: block;
+            margin-top: 4px;
+            font-size: 11px;
+            color: #8998a2;
+        }
+
+
+        /* =====================================================
+           MENU
+           ===================================================== */
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 15px 12px;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            height: 45px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #62727d;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #f0f8fc;
+            color: #087bb3;
+        }
+
+        .menu-item.active {
+            background: #e7f5fb;
+            color: #087bb3;
+            font-weight: 600;
+        }
+
+        .menu-icon {
+            width: 30px;
+            font-size: 17px;
+        }
+
+        .arrow {
+            margin-left: auto;
+        }
+
+
+        /* SUBMENU */
+
+        .submenu {
+            margin-left: 42px;
+            margin-bottom: 8px;
+        }
+
+        .submenu-item {
+            display: block;
+            padding: 9px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #7d8c96;
+            font-size: 13px;
+        }
+
+        .submenu-item:hover,
+        .submenu-item.active {
+            background: #f3fafc;
+            color: #087bb3;
+        }
+
+        .submenu-item.active {
+            font-weight: 600;
+        }
+
+
+        /* LOGOUT */
+
+        .logout {
+            border-top: 1px solid #edf2f5;
+            padding: 15px 20px;
+        }
+
+        .logout a {
+            text-decoration: none;
+            color: #7d8c96;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           MAIN
+           ===================================================== */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+
+        .top-header {
+            height: 90px;
+            background: white;
+            border-bottom: 1px solid #e3ebf0;
+            padding: 0 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .top-header h1 {
+            font-size: 24px;
+            color: #263b49;
+            margin-bottom: 6px;
+        }
+
+        .top-header p {
+            color: #84939d;
+            font-size: 13px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .notification {
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #e45b5b;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            margin-right: 10px;
+        }
+
+
+        /* =====================================================
+           CONTENT
+           ===================================================== */
+
+        .content {
+            padding: 30px 35px;
+        }
+
+
+        /* =====================================================
+           TOOLBAR
+           ===================================================== */
+
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            flex: 1;
+            height: 45px;
+            background: white;
+            border: 1px solid #dce7ee;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+        }
+
+        .search-icon {
+            font-size: 22px;
+            color: #8c9da7;
+            margin-right: 8px;
+        }
+
+        .search-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .filter-box select {
+            height: 45px;
+            min-width: 190px;
+            border: 1px solid #dce7ee;
+            border-radius: 8px;
+            padding: 0 12px;
+            background: white;
+            color: #536671;
+            outline: none;
+        }
+
+        .add-booking-btn {
+            height: 45px;
+            border: none;
+            border-radius: 8px;
+            background: #1685b8;
+            color: white;
+            padding: 0 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .add-booking-btn:hover {
+            background: #0d719f;
+        }
+
+
+        /* =====================================================
+           SUMMARY
+           ===================================================== */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e3ebf0;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 105px;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            margin-right: 15px;
+        }
+
+        .blue {
+            background: #e6f4fb;
+            color: #1682b4;
+        }
+
+        .green {
+            background: #e7f7ef;
+            color: #27a269;
+        }
+
+        .orange {
+            background: #fff3df;
+            color: #df9823;
+        }
+
+        .red {
+            background: #fdeaea;
+            color: #dc5a5a;
+        }
+
+        .summary-info span {
+            display: block;
+            color: #7d8d97;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .summary-info strong {
+            font-size: 25px;
+            color: #263b49;
+        }
+
+
+        /* =====================================================
+           BOOKING CARD
+           ===================================================== */
+
+        .booking-card {
+            background: white;
+            border: 1px solid #e3ebf0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            height: 82px;
+            padding: 20px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e7edf1;
+        }
+
+        .card-header h2 {
+            font-size: 17px;
+            color: #293e4b;
+            margin-bottom: 5px;
+        }
+
+        .card-header p {
+            font-size: 12px;
+            color: #8b9aa3;
+        }
+
+        .card-header > span {
+            color: #8998a2;
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           TABLE
+           ===================================================== */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        thead {
+            background: #f8fafb;
+        }
+
+        th {
+            height: 50px;
+            padding: 0 15px;
+            text-align: left;
+            color: #71828c;
+            font-size: 11px;
+            border-bottom: 1px solid #e5edf1;
+        }
+
+        td {
+            padding: 17px 15px;
+            font-size: 12px;
+            color: #52636e;
+            border-bottom: 1px solid #edf1f3;
+        }
+
+        tbody tr:hover {
+            background: #fbfdfe;
+        }
+
+        .booking-code {
+            color: #1681b2;
+            font-weight: 600;
+        }
+
+        .customer-name {
+            color: #344a57;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .status.pending {
+            background: #fff4df;
+            color: #d99621;
+        }
+
+        .status.confirmed {
+            background: #e6f5fb;
+            color: #117cab;
+        }
+
+        .status.checked-in {
+            background: #eee9ff;
+            color: #7559bb;
+        }
+
+        .status.completed {
+            background: #e6f7ed;
+            color: #24935c;
+        }
+
+        .status.cancelled {
+            background: #fde9e9;
+            color: #d45656;
+        }
+
+        .status.no-show {
+            background: #f0f1f2;
+            color: #707c83;
+        }
+
+
+        /* DETAIL */
+
+        .detail-btn {
+            border: none;
+            background: #e8f5fb;
+            color: #087bb3;
+            padding: 6px 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .detail-btn:hover {
+            background: #d8edf7;
+        }
+
+
+        /* =====================================================
+           EMPTY
+           ===================================================== */
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8b9aa3;
+        }
+
+        .empty-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #edf6fa;
+            color: #65a5c2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 22px;
+        }
+
+        .empty-state h3 {
+            font-size: 15px;
+            color: #516570;
+            margin-bottom: 7px;
+        }
+
+        .empty-state p {
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        footer {
+            height: 55px;
+            background: white;
+            border-top: 1px solid #e3ebf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            color: #96a3aa;
+            font-size: 11px;
+            margin-top: 20px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🏨
+            </div>
+
+            <div class="logo-text">
+
+                <h2>
+                    HOTEL
+                </h2>
+
+                <span>
+                    MANAGEMENT
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADMIN -->
+
+        <div class="admin-info">
+
+            <div class="admin-avatar">
+                A
+            </div>
+
+            <div>
+
+                <strong>
+                    Admin
+                </strong>
+
+                <span>
+                    Quản trị viên
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <nav class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="dashboard.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- ĐẶT PHÒNG -->
+
+            <div class="menu-group">
+
+                <a
+                    href="bookings.html"
+                    class="menu-item active"
+                >
+
+                    <span class="menu-icon">
+                        ▣
+                    </span>
+
+                    <span>
+                        Đặt phòng
+                    </span>
+
+                    <span class="arrow">
+                        ⌄
+                    </span>
+
+                </a>
+
+
+                <!-- SUBMENU -->
+
+                <div class="submenu">
+
+                    <!-- ĐẶT PHÒNG MỚI -->
+
+                    <a
+                        href="#"
+                        class="submenu-item"
+                        id="newBookingLink"
+                    >
+                        Đặt phòng mới
+                    </a>
+
+
+                    <!-- LỊCH SỬ -->
+
+                    <a
+                        href="bookings.html"
+                        class="submenu-item active"
+                    >
+                        Lịch sử đặt phòng
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- PHÒNG -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▤
+                </span>
+
+                <span>
+                    Phòng
+                </span>
+
+            </a>
+
+
+            <!-- KHÁCH HÀNG -->
+
+            <a
+                href="customers.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ♙
+                </span>
+
+                <span>
+                    Khách hàng
+                </span>
+
+            </a>
+
+
+            <!-- HÓA ĐƠN -->
+
+            <a
+                href="invoices.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🧾
+                </span>
+
+                <span>
+                    Hóa đơn
+                </span>
+
+            </a>
+
+
+            <!-- THU CHI -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ₫
+                </span>
+
+                <span>
+                    Thu chi
+                </span>
+
+            </a>
+
+
+            <!-- NHÂN VIÊN -->
+
+            <a
+                href="staff.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ♙
+                </span>
+
+                <span>
+                    Nhân viên
+                </span>
+
+            </a>
+
+
+            <!-- BÁO CÁO -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▥
+                </span>
+
+                <span>
+                    Báo cáo
+                </span>
+
+            </a>
+
+
+            <!-- CÀI ĐẶT -->
+
+            <a
+                href="#"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Cài đặt
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- LOGOUT -->
+
+        <div class="logout">
+
+            <a href="#">
+                ⇥ &nbsp; Đăng xuất
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="top-header">
+
+            <div>
+
+                <h1>
+                    Lịch sử đặt phòng
+                </h1>
+
+                <p>
+                    Quản lý và theo dõi lịch sử đặt phòng
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <button class="notification">
+
+                    🔔
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <div class="profile">
+
+                    <div class="profile-avatar">
+                        A
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <span>
+                            Quản trị viên
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             CONTENT
+             ===================================================== -->
+
+        <section class="content">
+
+
+            <!-- TOOLBAR -->
+
+            <div class="toolbar">
+
+
+                <!-- SEARCH -->
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        ⌕
+                    </span>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Tìm mã đặt phòng, tên khách..."
+                    >
+
+                </div>
+
+
+                <!-- FILTER -->
+
+                <div class="filter-box">
+
+                    <select id="statusFilter">
+
+                        <option value="ALL">
+                            Tất cả trạng thái
+                        </option>
+
+                        <option value="PENDING">
+                            Chờ xác nhận
+                        </option>
+
+                        <option value="CONFIRMED">
+                            Đã xác nhận
+                        </option>
+
+                        <option value="CHECKED_IN">
+                            Đã nhận phòng
+                        </option>
+
+                        <option value="COMPLETED">
+                            Hoàn tất
+                        </option>
+
+                        <option value="CANCELLED">
+                            Đã hủy
+                        </option>
+
+                        <option value="NO_SHOW">
+                            Không đến
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ADD BOOKING -->
+
+                <button
+                    class="add-booking-btn"
+                    id="addBookingBtn"
+                >
+                    + Đặt phòng mới
+                </button>
+
+            </div>
+
+
+            <!-- =====================================================
+                 SUMMARY
+                 ===================================================== -->
+
+            <div class="summary">
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon blue">
+                        ▣
+                    </div>
+
+                    <div class="summary-info">
+
+                        <span>
+                            Tổng đặt phòng
+                        </span>
+
+                        <strong id="totalBookings">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon green">
+                        ✓
+                    </div>
+
+                    <div class="summary-info">
+
+                        <span>
+                            Đã xác nhận
+                        </span>
+
+                        <strong id="confirmedBookings">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon orange">
+                        ◷
+                    </div>
+
+                    <div class="summary-info">
+
+                        <span>
+                            Chờ xác nhận
+                        </span>
+
+                        <strong id="pendingBookings">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon red">
+                        ×
+                    </div>
+
+                    <div class="summary-info">
+
+                        <span>
+                            Đã hủy
+                        </span>
+
+                        <strong id="cancelledBookings">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 BOOKING TABLE
+                 ===================================================== -->
+
+            <div class="booking-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Danh sách đặt phòng
+                        </h2>
+
+                        <p>
+                            Các booking trong hệ thống
+                        </p>
+
+                    </div>
+
+
+                    <span id="bookingCount">
+                        0 đặt phòng
+                    </span>
+
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Mã đặt phòng
+                                </th>
+
+                                <th>
+                                    Khách hàng
+                                </th>
+
+                                <th>
+                                    Ngày đặt
+                                </th>
+
+                                <th>
+                                    Ngày nhận
+                                </th>
+
+                                <th>
+                                    Ngày trả
+                                </th>
+
+                                <th>
+                                    Số người
+                                </th>
+
+                                <th>
+                                    Tiền cọc
+                                </th>
+
+                                <th>
+                                    Trạng thái
+                                </th>
+
+                                <th>
+                                    Thao tác
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="bookingTableBody"></tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- EMPTY -->
+
+                <div
+                    id="emptyState"
+                    class="empty-state"
+                    style="display:none;"
+                >
+
+                    <div class="empty-icon">
+                        ▣
+                    </div>
+
+                    <h3>
+                        Không tìm thấy đặt phòng
+                    </h3>
+
+                    <p>
+                        Không có booking nào phù hợp với điều kiện tìm kiếm.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <span>
+                © 2026 Hotel Management System
+            </span>
+
+            <span>
+                Quản trị hệ thống
+            </span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script>
+
+        /* =====================================================
+           API
+           ===================================================== */
+
+        const API_URL =
+            "http://localhost:3000/api/bookings";
+
+        let allBookings = [];
+
+
+        /* =====================================================
+           FORMAT DATE
+           ===================================================== */
+
+        function formatDate(dateString) {
+
+            if (!dateString) {
+                return "-";
+            }
+
+            const date = new Date(dateString);
+
+            if (isNaN(date.getTime())) {
+                return "-";
+            }
+
+            return String(date.getDate()).padStart(2, "0")
+                + "/"
+                + String(date.getMonth() + 1).padStart(2, "0")
+                + "/"
+                + date.getFullYear();
+
+        }
+
+
+        /* =====================================================
+           FORMAT MONEY
+           ===================================================== */
+
+        function formatMoney(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+                return "0 ₫";
+            }
+
+            return Number(value).toLocaleString("vi-VN")
+                + " ₫";
+
+        }
+
+
+        /* =====================================================
+           STATUS TEXT
+           ===================================================== */
+
+        function getStatusText(status) {
+
+            const map = {
+
+                PENDING: "Chờ xác nhận",
+
+                CONFIRMED: "Đã xác nhận",
+
+                CHECKED_IN: "Đã nhận phòng",
+
+                COMPLETED: "Hoàn tất",
+
+                CANCELLED: "Đã hủy",
+
+                NO_SHOW: "Không đến"
+
+            };
+
+            return map[status] || status || "-";
+
+        }
+
+
+        /* =====================================================
+           STATUS CLASS
+           ===================================================== */
+
+        function getStatusClass(status) {
+
+            const map = {
+
+                PENDING: "pending",
+
+                CONFIRMED: "confirmed",
+
+                CHECKED_IN: "checked-in",
+
+                COMPLETED: "completed",
+
+                CANCELLED: "cancelled",
+
+                NO_SHOW: "no-show"
+
+            };
+
+            return map[status] || "";
+
+        }
+
+
+        /* =====================================================
+           UPDATE SUMMARY
+           ===================================================== */
+
+        function updateSummary() {
+
+            document.getElementById(
+                "totalBookings"
+            ).textContent =
+                allBookings.length;
+
+
+            document.getElementById(
+                "confirmedBookings"
+            ).textContent =
+                allBookings.filter(
+                    booking =>
+                        booking.TrangThai === "CONFIRMED"
+                ).length;
+
+
+            document.getElementById(
+                "pendingBookings"
+            ).textContent =
+                allBookings.filter(
+                    booking =>
+                        booking.TrangThai === "PENDING"
+                ).length;
+
+
+            document.getElementById(
+                "cancelledBookings"
+            ).textContent =
+                allBookings.filter(
+                    booking =>
+                        booking.TrangThai === "CANCELLED"
+                ).length;
+
+        }
+
+
+        /* =====================================================
+           RENDER BOOKINGS
+           ===================================================== */
+
+        function renderBookings(bookings) {
+
+            const body =
+                document.getElementById(
+                    "bookingTableBody"
+                );
+
+            const empty =
+                document.getElementById(
+                    "emptyState"
+                );
+
+            const count =
+                document.getElementById(
+                    "bookingCount"
+                );
+
+
+            body.innerHTML = "";
+
+
+            count.textContent =
+                bookings.length + " đặt phòng";
+
+
+            if (bookings.length === 0) {
+
+                empty.style.display = "block";
+
+                return;
+            }
+
+
+            empty.style.display = "none";
+
+
+            bookings.forEach(booking => {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td>
+
+                        <span class="booking-code">
+
+                            ${booking.MaBookingCode || "-"}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="customer-name">
+
+                            ${booking.HoTen || "-"}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatDate(
+                            booking.NgayDat
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatDate(
+                            booking.NgayNhanDuKien
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatDate(
+                            booking.NgayTraDuKien
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${booking.SoNguoiDuKien || 0}
+
+                    </td>
+
+
+                    <td>
+
+                        ${formatMoney(
+                            booking.TienCocDuKien
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status ${getStatusClass(
+                                booking.TrangThai
+                            )}"
+                        >
+
+                            ${getStatusText(
+                                booking.TrangThai
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+                            class="detail-btn"
+                            onclick="showDetail('${booking.MaDatPhong}')"
+                        >
+
+                            Chi tiết
+
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                body.appendChild(row);
+
+            });
+
+        }
+
+
+        /* =====================================================
+           FILTER
+           ===================================================== */
+
+        function filterBookings() {
+
+            const keyword =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+
+            const status =
+                document
+                    .getElementById("statusFilter")
+                    .value;
+
+
+            const result =
+                allBookings.filter(booking => {
+
+                    const code =
+                        String(
+                            booking.MaBookingCode || ""
+                        ).toLowerCase();
+
+
+                    const name =
+                        String(
+                            booking.HoTen || ""
+                        ).toLowerCase();
+
+
+                    const matchText =
+                        code.includes(keyword) ||
+                        name.includes(keyword);
+
+
+                    const matchStatus =
+                        status === "ALL" ||
+                        booking.TrangThai === status;
+
+
+                    return matchText && matchStatus;
+
+                });
+
+
+            renderBookings(result);
+
+        }
+
+
+        /* =====================================================
+           DETAIL
+           ===================================================== */
+
+        function showDetail(id) {
+
+            const booking =
+                allBookings.find(
+                    item =>
+                        String(item.MaDatPhong) === String(id)
+                );
+
+
+            if (!booking) {
+                return;
+            }
+
+
+            alert(
+
+                "THÔNG TIN ĐẶT PHÒNG\n\n"
+
+                + "Mã đặt phòng: "
+                + (
+                    booking.MaBookingCode ||
+                    "-"
+                )
+
+                + "\nKhách hàng: "
+                + (
+                    booking.HoTen ||
+                    "-"
+                )
+
+                + "\nPhòng: "
+                + (
+                    booking.SoPhong ||
+                    "Chưa phân phòng"
+                )
+
+                + "\nNgày nhận: "
+                + formatDate(
+                    booking.NgayNhanDuKien
+                )
+
+                + "\nNgày trả: "
+                + formatDate(
+                    booking.NgayTraDuKien
+                )
+
+                + "\nSố người: "
+                + (
+                    booking.SoNguoiDuKien ||
+                    0
+                )
+
+                + "\nTiền cọc: "
+                + formatMoney(
+                    booking.TienCocDuKien
+                )
+
+                + "\nTrạng thái: "
+                + getStatusText(
+                    booking.TrangThai
+                )
+
+            );
+
+        }
+
+
+        /* =====================================================
+           LOAD BOOKINGS
+           ===================================================== */
+
+        async function loadBookings() {
+
+            try {
+
+                const response =
+                    await fetch(API_URL);
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Không thể kết nối API bookings"
+                    );
+
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                allBookings =
+                    result.bookings || [];
+
+
+                updateSummary();
+
+
+                renderBookings(
+                    allBookings
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Lỗi tải booking:",
+                    error
+                );
+
+
+                allBookings = [];
+
+
+                updateSummary();
+
+
+                renderBookings([]);
+
+            }
+
+        }
+
+
+        /* =====================================================
+           SEARCH
+           ===================================================== */
+
+        document
+            .getElementById("searchInput")
+            .addEventListener(
+                "input",
+                filterBookings
+            );
+
+
+        /* =====================================================
+           FILTER
+           ===================================================== */
+
+        document
+            .getElementById("statusFilter")
+            .addEventListener(
+                "change",
+                filterBookings
+            );
+
+
+        /* =====================================================
+           NEW BOOKING BUTTON
+           ===================================================== */
+
+        document
+            .getElementById("addBookingBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    alert(
+                        "Chức năng Đặt phòng mới."
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           NEW BOOKING SUBMENU
+           ===================================================== */
+
+        document
+            .getElementById("newBookingLink")
+            .addEventListener(
+                "click",
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Chức năng Đặt phòng mới."
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           START
+           ===================================================== */
+
+        loadBookings();
+
+    </script>
+
+
+>>>>>>> feature/admin
 </body>
 
 </html>
