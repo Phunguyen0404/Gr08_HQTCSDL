@@ -633,6 +633,22 @@
 
 <body>
 
+<<<<<<< HEAD
+=======
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 20c1.5-1.3 3-1.3 4.5 0s3 1.3 4.5 0 3-1.3 4.5 0 3 1.3 4.5 0"/><path d="M12 4v9"/><path d="M8 7l4-3 4 3"/></svg>
+    Hẹ Hẹ Hẹ
+  </div>
+  <nav>
+    <a href="#rooms">Phòng</a>
+    <a href="#">Tiện ích</a>
+    <a href="#">Về chúng tôi</a>
+    <a href="#">Liên hệ</a>
+  </nav>
+  <a class="header-cta" href="index.html" id="logoutBtn">Đăng xuất</a>
+</header>
+>>>>>>> feature/auth
 
     <!-- =====================================================
          SIDEBAR
@@ -1785,6 +1801,14 @@
     </script>
 
 
+    <script src="../js/authGuard.js"></script>
+    <script>
+        authGuard.requireAuth(['ADMIN', 'CUSTOMER']);
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            authGuard.logout();
+        });
+    </script>
 </body>
 
 </html>

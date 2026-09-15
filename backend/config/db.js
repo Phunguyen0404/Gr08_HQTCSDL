@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const mysql = require('mysql2/promise');
 
 console.log('>>> DB.JS DANG DUOC LOAD <<<');
@@ -6,8 +7,14 @@ console.log('DB_USER:', process.env.DB_USER);
 console.log('DB_NAME:', process.env.DB_NAME);
 console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? 'DA CO' : 'DANG TRONG');
 
+=======
+require('dotenv').config();
+
+const mysql = require('mysql2/promise')
+>>>>>>> feature/auth
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'hotel_management',
@@ -15,6 +22,7 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
+<<<<<<< HEAD
 
 const store = {
     roomTypes: [
@@ -53,3 +61,6 @@ pool.getConnection()
 
 module.exports = pool;
 module.exports.store = store;
+=======
+module.exports = pool;
+>>>>>>> feature/auth

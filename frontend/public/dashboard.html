@@ -198,6 +198,7 @@
 
         </nav>
 
+<<<<<<< HEAD
 
         <!-- =====================================================
              ADMIN + LOGOUT
@@ -210,6 +211,15 @@
 
                 <div class="avatar">
                     AD
+=======
+        <div class="sidebar-bottom">
+            <div class="admin-mini">
+                <div class="avatar" data-auth-initials>AD</div>
+
+                <div>
+                    <strong data-auth-username>Admin</strong>
+                    <small data-auth-role>Quản trị viên</small>
+>>>>>>> feature/auth
                 </div>
 
                 <div class="admin-info">
@@ -226,6 +236,7 @@
 
             </div>
 
+<<<<<<< HEAD
 
             <button class="logout-btn">
 
@@ -237,6 +248,10 @@
                     Đăng xuất
                 </span>
 
+=======
+            <button class="logout-btn" id="logoutBtn">
+                Đăng xuất
+>>>>>>> feature/auth
             </button>
 
         </div>
@@ -297,6 +312,7 @@
 
                 </button>
 
+<<<<<<< HEAD
 
                 <!-- PROFILE -->
 
@@ -304,6 +320,14 @@
 
                     <div class="avatar">
                         AD
+=======
+                <div class="profile">
+                    <div class="avatar" data-auth-initials>AD</div>
+
+                    <div>
+                        <strong data-auth-username>Admin</strong>
+                        <small data-auth-role>Administrator</small>
+>>>>>>> feature/auth
                     </div>
 
                     <div class="profile-info">
@@ -935,6 +959,7 @@
 
     </main>
 
+<<<<<<< HEAD
 
     <!-- =====================================================
          JAVASCRIPT DASHBOARD
@@ -943,6 +968,14 @@
     <script src="../js/dashboard.js"></script>
 
 
+=======
+    <!-- authGuard: ADMIN only -->
+    <script src="../js/authGuard.js"></script>
+    <script>
+        authGuard.requireAuth(['ADMIN']);
+        document.getElementById('logoutBtn').addEventListener('click', () => authGuard.logout());
+    </script>
+>>>>>>> feature/auth
 </body>
 
 </html>

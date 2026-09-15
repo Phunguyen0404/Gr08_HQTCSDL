@@ -83,6 +83,7 @@ Get/api/admin/ reports/occupancy
 ## 🛠️ Công nghệ sử dụng
 
 
+<<<<<<< HEAD
 ---
 
 
@@ -184,3 +185,109 @@ Cuối cùng, lên GitHub/GitLab tạo **Pull Request (PR)** từ `feature/ten-n
 2. **Không commit trực tiếp:** Không đẩy code thẳng lên nhánh `DEV`. Mọi thay đổi đều phải thông qua Pull Request.
 
 ---
+=======
+## Chạy MySQL bằng Docker
+
+1. Tạo file môi trường:
+
+```bash
+cp .env.example .env
+```
+
+2. Khởi động database:
+
+```bash
+docker compose up -d
+```
+
+3. Chạy backend:
+
+```bash
+npm install
+npm run dev
+```
+
+MySQL sẽ chạy trong Docker ở `127.0.0.1:3307`, và lần khởi tạo đầu tiên sẽ tự import [`database/schema.sql`](/Users/sinhtran/HQTCSDL2026/Gr08_HQTCSDL/database/schema.sql) cùng [`database/seed.sql`](/Users/sinhtran/HQTCSDL2026/Gr08_HQTCSDL/database/seed.sql).
+
+## 📁 Cấu trúc thư mục
+
+```
+hotel-management/
+│
+├── database/                    # Script liên quan CSDL, tách riêng khỏi backend
+│   ├── schema.sql                # Tạo bảng, khóa chính, khóa ngoại, ràng buộc
+│   └── seed.sql                  # Dữ liệu mẫu để test
+│
+├── backend/                     # Server-side (Node.js/Express)
+│   ├── config/
+│   │   └── db.js                  # Khởi tạo kết nối MySQL (pool connection)
+│   │
+│   ├── controllers/              # Nhận request, gọi Service xử lý, trả response
+│   │   ├── authController.js
+│   │   ├── roomController.js
+│   │   ├── bookingController.js
+│   │   ├── customerController.js
+│   │   └── invoiceController.js
+│   │
+│   ├── services/                 # Business logic: transaction, tính toán, ràng buộc nghiệp vụ
+│   │   ├── bookingService.js     # Kiểm tra trùng lịch, transaction, lock tránh race condition
+│   │   └── invoiceService.js      # Tính tiền, tạo hóa đơn
+│   │
+│   ├── models/                   # Hàm truy vấn CSDL cho từng bảng
+│   │   ├── User.js
+│   │   ├── Room.js
+│   │   ├── Booking.js
+│   │   ├── Customer.js
+│   │   └── Invoice.js
+│   │
+│   ├── routes/                   # Định nghĩa endpoint API, map URL → Controller
+│   │   ├── authRoutes.js
+│   │   ├── roomRoutes.js
+│   │   ├── bookingRoutes.js
+│   │   ├── customerRoutes.js
+│   │   └── invoiceRoutes.js
+│   │
+│   ├── middleware/
+│   │   ├── authMiddleware.js       # Kiểm tra JWT, xác thực, phân quyền
+│   │   ├── errorHandler.js         # Bắt lỗi tập trung, format response lỗi thống nhất
+│   │   └── validators/
+│   │       ├── bookingValidator.js
+│   │       └── authValidator.js
+│   │
+│   ├── utils/
+│   │   └── helpers.js              # Format ngày giờ, tạo mã đặt phòng random...
+│   │
+│   ├── .env                      # Biến môi trường thật (KHÔNG commit lên Git)
+│   ├── .env.example              # Mẫu biến môi trường để setup nhanh
+│   ├── server.js                 # Khởi chạy Express app, gắn route, middleware
+│   └── package.json
+│
+├── frontend/                    # Client-side (HTML/CSS/JS thuần)
+│   ├── public/
+│   │   ├── index.html             # Trang đăng nhập / trang chủ
+│   │   ├── dashboard.html         # Trang tổng quan quản trị
+│   │   ├── rooms.html             # Quản lý phòng
+│   │   ├── bookings.html          # Quản lý đặt phòng
+│   │   ├── customers.html         # Quản lý khách hàng
+│   │   └── invoices.html          # Hóa đơn
+│   │
+│   ├── css/
+│   │   ├── style.css               # Style dùng chung
+│   │   └── dashboard.css           # Style riêng trang quản trị
+│   │
+│   ├── js/
+│   │   ├── api.js                  # Hàm gọi API dùng chung (wrap fetch/axios)
+│   │   ├── auth.js                 # Đăng nhập, lưu token, kiểm tra phiên
+│   │   ├── rooms.js
+│   │   ├── bookings.js
+│   │   ├── customers.js
+│   │   └── invoices.js
+│   │
+│   └── assets/
+│       └── images/
+│
+├── .gitignore
+├── README.md
+└── CONVENTIONS.md               # Quy ước nhóm (naming, git flow, API format...)
+```
+>>>>>>> feature/auth

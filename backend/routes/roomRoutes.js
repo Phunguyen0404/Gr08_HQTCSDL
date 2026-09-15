@@ -1,4 +1,5 @@
 const express = require('express');
+<<<<<<< HEAD
 const roomController = require('../controllers/roomController');
 
 const router = express.Router();
@@ -17,5 +18,21 @@ router.put('/rooms/:id', roomController.updateRoom);
 router.delete('/rooms/:id', roomController.deleteRoom);
 router.get('/rooms/available', roomController.getAvailableRoomsRoute);
 router.get('/rooms/check-availability', roomController.checkRoomAvailability);
+=======
+const authMiddleware = require('../middleware/authMiddleware');
+const authorizeRoles = require('../middleware/roleMiddleware');
+// const roomController = require('../controllers/roomController');
+
+const router = express.Router();
+
+// Tất cả các route phòng yêu cầu đăng nhập và role ADMIN
+router.use(authMiddleware, authorizeRoles('ADMIN'));
+
+// TODO: Thêm các endpoint phòng khi roomController sẵn sàng
+// router.get('/', roomController.getAll);
+// router.post('/', roomController.create);
+// router.put('/:id', roomController.update);
+// router.delete('/:id', roomController.remove);
+>>>>>>> feature/auth
 
 module.exports = router;
