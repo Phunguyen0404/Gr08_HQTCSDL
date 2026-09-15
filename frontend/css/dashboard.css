@@ -734,12 +734,8 @@ body {
     min-width: 0;
 }
 
-<<<<<<< HEAD
 .stat-content>span {
-=======
-.stat-content > span {
 
->>>>>>> feature/admin
     display: block;
 
     color: #78909b;
@@ -1032,17 +1028,11 @@ body {
     background: #087da5;
 }
 
-<<<<<<< HEAD
 .bar-wrapper>span {
-    font-size: 10px;
-    color: #718096;
-=======
-.bar-wrapper > span {
 
     color: #78929d;
 
     font-size: 9px;
->>>>>>> feature/admin
 }
 
 
@@ -1066,22 +1056,13 @@ body {
     height: 145px;
 
     border-radius: 50%;
-<<<<<<< HEAD
-    background: conic-gradient(#2f8f83 0deg,
-            #2f8f83 280deg,
-            #e8eeee 280deg,
-            #e8eeee 360deg);
-=======
 
     background:
-        conic-gradient(
-            #2695b8 0deg,
+        conic-gradient(#2695b8 0deg,
             #2695b8 280deg,
             #e3eef2 280deg,
-            #e3eef2 360deg
-        );
+            #e3eef2 360deg);
 
->>>>>>> feature/admin
     display: flex;
 
     align-items: center;
@@ -1134,12 +1115,8 @@ body {
     padding: 0 22px 18px;
 }
 
-<<<<<<< HEAD
 .room-status>div {
-=======
-.room-status > div {
 
->>>>>>> feature/admin
     display: flex;
 
     align-items: center;

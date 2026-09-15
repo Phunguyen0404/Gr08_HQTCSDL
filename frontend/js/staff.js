@@ -159,7 +159,7 @@ function getInitials(name) {
         words[0][0] +
 
         words[
-            words.length - 1
+        words.length - 1
         ][0]
 
     ).toUpperCase();
@@ -320,13 +320,6 @@ async function loadStaff() {
             );
 
 
-<<<<<<< HEAD
-            if (emptyMessage) {
-                emptyMessage.textContent =
-                    "Không thể kết nối đến hệ thống.";
-                emptyMessage.style.display = "block";
-            }
-=======
         console.log(
             ">>> HTTP STATUS:",
             response.status
@@ -338,7 +331,6 @@ async function loadStaff() {
             throw new Error(
                 `HTTP ${response.status}`
             );
->>>>>>> feature/admin
 
         }
 
@@ -416,35 +408,10 @@ async function loadStaff() {
 
     catch (error) {
 
-<<<<<<< HEAD
-    // =========================================================
-    // 2. HIỂN THỊ DANH SÁCH NHÂN VIÊN
-    // =========================================================
-
-    function renderStaff(data) {
-
-        tableBody.innerHTML = "";
-
-        if (data.length === 0) {
-
-            if (emptyMessage) {
-                emptyMessage.textContent =
-                    "Không có nhân viên nào.";
-                emptyMessage.style.display = "block";
-            }
-
-            return;
-        }
-
-        if (emptyMessage) {
-            emptyMessage.style.display = "none";
-        }
-=======
         console.error(
             ">>> LỖI LOAD STAFF:",
             error
         );
->>>>>>> feature/admin
 
 
         staffList = [];
@@ -529,21 +496,9 @@ function updateStatistics() {
 
             else {
 
-<<<<<<< HEAD
-            if (emptyMessage) {
-                emptyMessage.textContent =
-                    "Không tìm thấy nhân viên phù hợp.";
-                emptyMessage.style.display = "block";
-            }
-
-        } else if (emptyMessage) {
-
-            emptyMessage.style.display = "none";
-=======
                 inactive++;
 
             }
->>>>>>> feature/admin
 
         }
     );
@@ -721,10 +676,10 @@ function renderStaff() {
                 const matchesStatus =
 
                     selectedStatus ===
-                        "ALL" ||
+                    "ALL" ||
 
                     status ===
-                        selectedStatus;
+                    selectedStatus;
 
 
                 return (
@@ -845,8 +800,8 @@ function renderStaff() {
                                 >
 
                                     ${escapeHTML(
-                                        maNV
-                                    )}
+                        maNV
+                    )}
 
                                 </span>
 
@@ -866,8 +821,8 @@ function renderStaff() {
                                     >
 
                                         ${escapeHTML(
-                                            initials
-                                        )}
+                        initials
+                    )}
 
                                     </div>
 
@@ -879,8 +834,8 @@ function renderStaff() {
                                         >
 
                                             ${escapeHTML(
-                                                name
-                                            )}
+                        name
+                    )}
 
                                         </div>
 
@@ -890,8 +845,8 @@ function renderStaff() {
                                         >
 
                                             ${escapeHTML(
-                                                maTaiKhoan
-                                            )}
+                        maTaiKhoan
+                    )}
 
                                         </div>
 
@@ -907,8 +862,8 @@ function renderStaff() {
                             <td>
 
                                 ${escapeHTML(
-                                    email
-                                )}
+                        email
+                    )}
 
                             </td>
 
@@ -918,8 +873,8 @@ function renderStaff() {
                             <td>
 
                                 ${escapeHTML(
-                                    phone
-                                )}
+                        phone
+                    )}
 
                             </td>
 
@@ -929,8 +884,8 @@ function renderStaff() {
                             <td>
 
                                 ${escapeHTML(
-                                    role
-                                )}
+                        role
+                    )}
 
                             </td>
 
@@ -940,8 +895,8 @@ function renderStaff() {
                             <td>
 
                                 ${getStatusHTML(
-                                    status
-                                )}
+                        status
+                    )}
 
                             </td>
 
@@ -951,8 +906,8 @@ function renderStaff() {
                             <td>
 
                                 ${escapeHTML(
-                                    ngayVaoLam
-                                )}
+                        ngayVaoLam
+                    )}
 
                             </td>
 
@@ -969,8 +924,8 @@ function renderStaff() {
                                         type="button"
                                         class="action-btn detail-btn"
                                         data-id="${escapeHTML(
-                                            maNV
-                                        )}"
+                        maNV
+                    )}"
                                         title="Xem chi tiết"
                                     >
 
