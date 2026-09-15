@@ -5,8 +5,8 @@ const authorizeRoles = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
-// Quản lý khách hàng chỉ dành cho ADMIN và STAFF
-router.use(authMiddleware, authorizeRoles('ADMIN', 'STAFF'));
+// Quản lý khách hàng chỉ dành cho ADMIN
+router.use(authMiddleware, authorizeRoles('ADMIN'));
 
 // TODO: Thêm các endpoint khách hàng khi customerController sẵn sàng
 // router.get('/', customerController.getAll);

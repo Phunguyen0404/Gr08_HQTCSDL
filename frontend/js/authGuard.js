@@ -1,7 +1,7 @@
 /**
  * authGuard.js
- * Bảo vệ trang frontend theo role (ADMIN / STAFF / CUSTOMER).
- * Sử dụng: gọi requireAuth(['ADMIN', 'STAFF']) ở đầu mỗi trang cần bảo vệ.
+ * Bảo vệ trang frontend theo role (ADMIN / CUSTOMER).
+ * Sử dụng: gọi requireAuth(['ADMIN']) ở đầu mỗi trang cần bảo vệ.
  */
 
 (() => {
@@ -79,7 +79,6 @@
     function redirectByRole(role) {
         const map = {
             ADMIN: '../public/dashboard.html',
-            STAFF: '../public/rooms.html',
             CUSTOMER: '../public/bookings.html'
         };
         window.location.replace(map[role] || '../public/index.html');
@@ -116,7 +115,7 @@
      * Tìm các element có data-auth-* attribute.
      */
     function applyUserInfo(user) {
-        const roleLabel = { ADMIN: 'Quản trị viên', STAFF: 'Nhân viên', CUSTOMER: 'Khách hàng' };
+        const roleLabel = { ADMIN: 'Quản trị viên', CUSTOMER: 'Khách hàng' };
         const initials = (user.username || 'U').slice(0, 2).toUpperCase();
 
         document.querySelectorAll('[data-auth-username]').forEach(el => {

@@ -5,8 +5,8 @@ const authorizeRoles = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
-// Tất cả các role đã đăng nhập đều có thể xem/tạo đặt phòng
-router.use(authMiddleware, authorizeRoles('ADMIN', 'STAFF', 'CUSTOMER'));
+// Các role đã đăng nhập đều có thể xem/tạo đặt phòng (ADMIN, CUSTOMER)
+router.use(authMiddleware, authorizeRoles('ADMIN', 'CUSTOMER'));
 
 // TODO: Thêm các endpoint đặt phòng khi bookingController sẵn sàng
 // router.get('/', bookingController.getAll);

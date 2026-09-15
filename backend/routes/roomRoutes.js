@@ -5,8 +5,8 @@ const authorizeRoles = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
-// Tất cả các route phòng yêu cầu đăng nhập và role ADMIN hoặc STAFF
-router.use(authMiddleware, authorizeRoles('ADMIN', 'STAFF'));
+// Tất cả các route phòng yêu cầu đăng nhập và role ADMIN
+router.use(authMiddleware, authorizeRoles('ADMIN'));
 
 // TODO: Thêm các endpoint phòng khi roomController sẵn sàng
 // router.get('/', roomController.getAll);

@@ -3,7 +3,6 @@
  * Xử lý đăng nhập và đăng ký tài khoản.
  * Sau khi đăng nhập thành công, redirect theo role:
  *   ADMIN    → dashboard.html
- *   STAFF    → rooms.html
  *   CUSTOMER → bookings.html
  */
 
@@ -36,7 +35,6 @@
     function redirectByRole(role) {
         const map = {
             ADMIN: 'dashboard.html',
-            STAFF: 'rooms.html',
             CUSTOMER: 'bookings.html'
         };
         window.location.replace(map[role] || 'dashboard.html');

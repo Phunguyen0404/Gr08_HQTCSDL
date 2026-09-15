@@ -66,7 +66,7 @@
 
     <script src="../js/authGuard.js"></script>
     <script>
-        authGuard.requireAuth(['ADMIN', 'STAFF']);
+        authGuard.requireAuth(['ADMIN']);
         document.getElementById('logoutBtn').addEventListener('click', () => authGuard.logout());
     </script>
     <script src="../js/invoices.js" defer></script>

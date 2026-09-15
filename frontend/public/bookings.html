@@ -175,7 +175,7 @@
 
     <script src="../js/authGuard.js"></script>
     <script>
-        authGuard.requireAuth(['ADMIN', 'STAFF', 'CUSTOMER']);
+        authGuard.requireAuth(['ADMIN', 'CUSTOMER']);
         document.getElementById('logoutBtn').addEventListener('click', (e) => {
             e.preventDefault();
             authGuard.logout();

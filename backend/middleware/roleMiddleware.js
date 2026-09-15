@@ -1,4 +1,4 @@
-const VALID_ROLES = new Set(['CUSTOMER', 'STAFF', 'ADMIN']);
+const VALID_ROLES = new Set(['CUSTOMER', 'ADMIN']);
 
 function authorizeRoles(...allowedRoles) {
   const rolesAreValid =

@@ -5,8 +5,8 @@ const authorizeRoles = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
-// Quản lý hóa đơn chỉ dành cho ADMIN và STAFF
-router.use(authMiddleware, authorizeRoles('ADMIN', 'STAFF'));
+// Quản lý hóa đơn chỉ dành cho ADMIN
+router.use(authMiddleware, authorizeRoles('ADMIN'));
 
 // TODO: Thêm các endpoint hóa đơn khi invoiceController sẵn sàng
 // router.get('/', invoiceController.getAll);

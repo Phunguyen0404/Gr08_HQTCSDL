@@ -33,14 +33,14 @@ VALUES
     'TK002',
     'staff001',
     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
-    'STAFF',
+    'ADMIN',
     'ACTIVE'
 ),
 (
     'TK003',
     'staff002',
     '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
-    'STAFF',
+    'ADMIN',
     'ACTIVE'
 ),
 (

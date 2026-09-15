@@ -17,10 +17,10 @@ app.use(express.json());
 
 // ─── API Endpoints ────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);          // Public: /api/auth/login, /api/auth/register
-app.use('/api/rooms', roomRoutes);          // Protected: ADMIN, STAFF
-app.use('/api/bookings', bookingRoutes);    // Protected: ADMIN, STAFF, CUSTOMER
-app.use('/api/customers', customerRoutes);  // Protected: ADMIN, STAFF
-app.use('/api/invoices', invoiceRoutes);    // Protected: ADMIN, STAFF
+app.use('/api/rooms', roomRoutes);          // Protected: ADMIN
+app.use('/api/bookings', bookingRoutes);    // Protected: ADMIN, CUSTOMER
+app.use('/api/customers', customerRoutes);  // Protected: ADMIN
+app.use('/api/invoices', invoiceRoutes);    // Protected: ADMIN
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
