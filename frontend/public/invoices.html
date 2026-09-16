@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-<<<<<<< HEAD
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1169,21 +1167,6 @@
             </a>
 
 
-            <a
-                href="staff.html"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    👥
-                </span>
-
-                <span>
-                    Nhân viên
-                </span>
-
-            </a>
-
 
             <a
                 href="#"
@@ -2232,77 +2215,4 @@
 </body>
 
 </html>
-=======
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý hóa đơn - Hotel Management</title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-    <div class="app-shell">
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="brand">
-                <span class="brand-mark">H</span>
-                <div>
-                    <strong>Hotel</strong>
-                    <small>Management</small>
-                </div>
-            </div>
 
-            <nav class="nav-menu">
-                <a href="dashboard.html">Tổng quan</a>
-                <a href="rooms.html">Phòng</a>
-                <a href="bookings.html">Đặt phòng</a>
-                <a href="customers.html">Khách hàng</a>
-                <a href="invoices.html" class="active">Hóa đơn</a>
-            </nav>
-
-            <div style="margin-top:auto; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12)">
-                <button id="logoutBtn"
-                    style="width:100%; background:rgba(220,38,38,0.15); color:#fca5a5;
-                           border:none; border-radius:8px; padding:10px 12px;
-                           cursor:pointer; font-weight:600; font-size:14px">
-                    Đăng xuất
-                </button>
-            </div>
-        </aside>
-
-        <!-- MAIN -->
-        <main class="main-content">
-            <header class="topbar">
-                <div>
-                    <p class="eyebrow">Quản lý khách sạn</p>
-                    <h1>Quản lý hóa đơn</h1>
-                </div>
-
-                <div class="user-badge">
-                    <span class="avatar" data-auth-initials>AD</span>
-                    <div>
-                        <strong data-auth-username>Admin</strong>
-                        <small data-auth-role>Quản trị viên</small>
-                    </div>
-                </div>
-            </header>
-
-            <section class="panel">
-                <div class="panel-header">
-                    <h2>Danh sách hóa đơn</h2>
-                </div>
-                <p style="color:var(--muted); text-align:center; padding:40px 0">
-                    🚧 Tính năng đang được phát triển...
-                </p>
-            </section>
-        </main>
-    </div>
-
-    <script src="../js/authGuard.js"></script>
-    <script>
-        authGuard.requireAuth(['ADMIN']);
-        document.getElementById('logoutBtn').addEventListener('click', () => authGuard.logout());
-    </script>
-    <script src="../js/invoices.js" defer></script>
-</body>
-</html>
->>>>>>> feature/auth

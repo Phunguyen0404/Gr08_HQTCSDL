@@ -152,19 +152,6 @@
             </div>
 
 
-            <!-- NHÂN VIÊN -->
-
-            <a href="staff.html" class="menu-item">
-
-                <span class="menu-icon">
-                    👥
-                </span>
-
-                <span>
-                    Nhân viên
-                </span>
-
-            </a>
 
 
             <!-- BÁO CÁO -->
@@ -198,62 +185,22 @@
 
         </nav>
 
-<<<<<<< HEAD
-
         <!-- =====================================================
              ADMIN + LOGOUT
              ===================================================== -->
-
-        <div class="sidebar-bottom">
-
-
-            <div class="admin-mini">
-
-                <div class="avatar">
-                    AD
-=======
         <div class="sidebar-bottom">
             <div class="admin-mini">
                 <div class="avatar" data-auth-initials>AD</div>
-
-                <div>
+                <div class="admin-info">
                     <strong data-auth-username>Admin</strong>
                     <small data-auth-role>Quản trị viên</small>
->>>>>>> feature/auth
                 </div>
-
-                <div class="admin-info">
-
-                    <strong>
-                        Admin
-                    </strong>
-
-                    <small>
-                        Quản trị viên
-                    </small>
-
-                </div>
-
             </div>
 
-<<<<<<< HEAD
-
-            <button class="logout-btn">
-
-                <span>
-                    🚪
-                </span>
-
-                <span>
-                    Đăng xuất
-                </span>
-
-=======
             <button class="logout-btn" id="logoutBtn">
-                Đăng xuất
->>>>>>> feature/auth
+                <span>🚪</span>
+                <span>Đăng xuất</span>
             </button>
-
         </div>
 
     </aside>
@@ -312,36 +259,13 @@
 
                 </button>
 
-<<<<<<< HEAD
-
                 <!-- PROFILE -->
-
-                <div class="profile">
-
-                    <div class="avatar">
-                        AD
-=======
                 <div class="profile">
                     <div class="avatar" data-auth-initials>AD</div>
-
-                    <div>
+                    <div class="profile-info">
                         <strong data-auth-username>Admin</strong>
                         <small data-auth-role>Administrator</small>
->>>>>>> feature/auth
                     </div>
-
-                    <div class="profile-info">
-
-                        <strong>
-                            Admin
-                        </strong>
-
-                        <small>
-                            Administrator
-                        </small>
-
-                    </div>
-
                 </div>
 
             </div>
@@ -457,35 +381,6 @@
                 </div>
 
 
-                <!-- NHÂN VIÊN -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon staff-icon">
-                        👥
-                    </div>
-
-                    <div class="stat-content">
-
-                        <span>
-                            Nhân viên
-                        </span>
-
-                        <h2 id="staffCount">
-                            0
-                        </h2>
-
-                        <p>
-
-                            <span class="active-text">
-                                0 đang hoạt động
-                            </span>
-
-                        </p>
-
-                    </div>
-
-                </div>
 
             </div>
 
@@ -795,150 +690,6 @@
         </section>
 
 
-        <!-- =================================================
-             STAFF MANAGEMENT
-             ================================================= -->
-
-        <section class="panel staff-panel" id="staff">
-
-
-            <div class="panel-header">
-
-
-                <div>
-
-                    <h2>
-                        Quản lý nhân viên
-                    </h2>
-
-                    <p>
-                        Quản lý tài khoản nhân viên trong hệ thống
-                    </p>
-
-                </div>
-
-
-                <button class="add-btn">
-                    + Thêm nhân viên
-                </button>
-
-            </div>
-
-
-            <div class="table-wrapper">
-
-
-                <table>
-
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Nhân viên
-                            </th>
-
-                            <th>
-                                Email
-                            </th>
-
-                            <th>
-                                Vai trò
-                            </th>
-
-                            <th>
-                                Trạng thái
-                            </th>
-
-                            <th>
-                                Ngày tạo
-                            </th>
-
-                            <th>
-                                Thao tác
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="staffTableBody">
-
-
-                        <tr>
-
-                            <td>
-
-                                <div class="staff-info">
-
-                                    <div class="staff-avatar">
-                                        NV
-                                    </div>
-
-                                    <div>
-
-                                        <strong>
-                                            Đang tải...
-                                        </strong>
-
-                                        <small>
-                                            ...
-                                        </small>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td>
-                                ...
-                            </td>
-
-
-                            <td>
-
-                                <span class="role staff">
-                                    Staff
-                                </span>
-
-                            </td>
-
-
-                            <td>
-
-                                <span class="status active">
-                                    Đang tải...
-                                </span>
-
-                            </td>
-
-
-                            <td>
-                                ...
-                            </td>
-
-
-                            <td>
-
-                                <button class="lock-btn">
-                                    Khóa
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
 
 
         <!-- =================================================
@@ -959,23 +710,17 @@
 
     </main>
 
-<<<<<<< HEAD
-
-    <!-- =====================================================
-         JAVASCRIPT DASHBOARD
-         ===================================================== -->
-
-    <script src="../js/dashboard.js"></script>
-
-
-=======
     <!-- authGuard: ADMIN only -->
     <script src="../js/authGuard.js"></script>
     <script>
         authGuard.requireAuth(['ADMIN']);
         document.getElementById('logoutBtn').addEventListener('click', () => authGuard.logout());
     </script>
->>>>>>> feature/auth
+
+    <!-- =====================================================
+         JAVASCRIPT DASHBOARD
+         ===================================================== -->
+    <script src="../js/dashboard.js"></script>
 </body>
 
 </html>

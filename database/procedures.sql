@@ -39,6 +39,8 @@ USE hotel_management;
 --  10. EXIT HANDLER FOR SQLEXCEPTION tu dong ROLLBACK neu co loi
 -- ============================================================
 
+DROP PROCEDURE IF EXISTS SP_TAO_DAT_PHONG;
+
 DELIMITER $$
 
 CREATE PROCEDURE SP_TAO_DAT_PHONG (

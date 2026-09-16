@@ -73,15 +73,15 @@
     // ─── Redirect helpers ────────────────────────────────────────────────────────
 
     function redirectToLogin() {
-        window.location.replace('../public/index.html');
+        window.location.replace('/index.html');
     }
 
     function redirectByRole(role) {
         const map = {
-            ADMIN: '../public/dashboard.html',
-            CUSTOMER: '../public/bookings.html'
+            ADMIN: '/dashboard.html',
+            CUSTOMER: '/bookings.html'
         };
-        window.location.replace(map[role] || '../public/index.html');
+        window.location.replace(map[role] || '/index.html');
     }
 
     // ─── Public API ──────────────────────────────────────────────────────────────

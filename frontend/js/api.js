@@ -1,15 +1,20 @@
-<<<<<<< HEAD
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = '/api';
 
 // === REST Helpers ===
 async function fetchAPI(endpoint, options = {}) {
     try {
+        const headers = {
+            'Content-Type': 'application/json',
+            ...options.headers
+        };
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        if (token && !headers['Authorization']) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                ...options.headers
-            },
-            ...options
+            ...options,
+            headers
         });
 
         const data = await response.json();
@@ -43,7 +48,8 @@ window.RoomAPI = {
     getAvailable: (checkIn, checkOut) => fetchAPI(`/rooms/available?checkIn=${checkIn}&checkOut=${checkOut}`),
     checkAvailability: (roomId, checkIn, checkOut) => fetchAPI(`/rooms/check-availability?roomId=${roomId}&checkIn=${checkIn}&checkOut=${checkOut}`)
 };
-=======
+
+// === Auth & Generic API ===
 (() => {
     const API_BASE_PATH = '/api';
 
@@ -55,7 +61,7 @@ window.RoomAPI = {
             headers.set('Content-Type', 'application/json');
         }
 
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
         if (token && !headers.has('Authorization')) {
             headers.set('Authorization', `Bearer ${token}`);
         }
@@ -103,4 +109,3 @@ window.RoomAPI = {
         },
     };
 })();
->>>>>>> feature/auth

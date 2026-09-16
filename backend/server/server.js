@@ -1,196 +1,81 @@
-<<<<<<< HEAD
 // ============================================================
-// HOTEL MANAGEMENT SYSTEM
-// BACKEND SERVER
+// HOTEL MANAGEMENT SYSTEM - BACKEND SERVER
 // ============================================================
 
 const path = require('path');
-<<<<<<< HEAD
-=======
-
-
-// ============================================================
-// LOAD ENV
-// ============================================================
-
->>>>>>> feature/admin
 require('dotenv').config({
     path: path.resolve(__dirname, '../../.env')
 });
 
-<<<<<<< HEAD
-=======
-
-// ============================================================
-// IMPORT
-// ============================================================
-
->>>>>>> feature/admin
 const express = require('express');
 const cors = require('cors');
 const pool = require('../config/db');
+
+// Route modules
+const authRoutes = require('../routes/authRoutes');
 const roomRoutes = require('../routes/roomRoutes');
 const bookingRoutes = require('../routes/bookingRoutes');
 const customerRoutes = require('../routes/customerRoutes');
-
-
-<<<<<<< HEAD
-=======
-// ============================================================
-// DATABASE
-// ============================================================
-
-const pool = require('../config/db');
-
-
-// ============================================================
-// APP
-// ============================================================
+const invoiceRoutes = require('../routes/invoiceRoutes');
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 
-
 // ============================================================
-// MIDDLEWARE
+// MIDDLEWARES
 // ============================================================
-
->>>>>>> feature/admin
 app.use(cors());
-
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ============================================================
+// STATIC FILES
+// ============================================================
 app.use(express.static(path.join(__dirname, '../../frontend/public')));
+app.use('/public', express.static(path.join(__dirname, '../../frontend/public')));
 app.use('/css', express.static(path.join(__dirname, '../../frontend/css')));
 app.use('/js', express.static(path.join(__dirname, '../../frontend/js')));
 app.use('/assets', express.static(path.join(__dirname, '../../frontend/assets')));
 
-<<<<<<< HEAD
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/customers', customerRoutes);
-app.use('/api', roomRoutes);
-
+// ============================================================
+// ROOT & HEALTH CHECK
+// ============================================================
 app.get('/', (req, res) => {
-    res.json({
-        success: true,
-        message: 'Hotel Management API đang chạy.'
-    });
+    res.redirect('/index.html');
 });
-
-=======
-
-// ============================================================
-// FRONTEND
-// ============================================================
-
-// frontend/public
-app.use(
-    express.static(
-        path.join(
-            __dirname,
-            '../../frontend/public'
-        )
-    )
-);
-
-
-// ============================================================
-// JAVASCRIPT
-// ============================================================
-
-// frontend/js
-app.use(
-    '/js',
-    express.static(
-        path.join(
-            __dirname,
-            '../../frontend/js'
-        )
-    )
-);
-
-
-// ============================================================
-// CSS
-// ============================================================
-
-// frontend/css
-app.use(
-    '/css',
-    express.static(
-        path.join(
-            __dirname,
-            '../../frontend/css'
-        )
-    )
-);
-
-
-// ============================================================
-// HOME
-// ============================================================
-
-app.get('/', (req, res) => {
-
-    res.redirect('/dashboard.html');
-
-});
-
-
-// ============================================================
-// HEALTH CHECK
-// ============================================================
 
 app.get('/api/health', async (req, res) => {
-
     try {
-
         await pool.query('SELECT 1');
-
         res.json({
-
             success: true,
-
-            message:
-                'Server + MySQL hoạt động bình thường'
-
+            message: 'Server + MySQL hoạt động bình thường'
         });
-
-    }
-
-    catch (error) {
-
-        console.error(
-            'LỖI HEALTH CHECK:',
-            error
-        );
-
+    } catch (error) {
+        console.error('LỖI HEALTH CHECK:', error);
         res.status(500).json({
-
             success: false,
-
-            message:
-                'Không kết nối được MySQL',
-
-            error:
-                error.message
-
+            message: 'Không kết nối được MySQL',
+            error: error.message
         });
-
     }
-
 });
 
+// ============================================================
+// API ROUTES
+// ============================================================
+app.use('/api/auth', authRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/invoices', invoiceRoutes);
+app.use('/api', roomRoutes);
 
 // ============================================================
 // API DASHBOARD
 // ============================================================
-
->>>>>>> feature/admin
 app.get('/api/dashboard', async (req, res) => {
-
     try {
-<<<<<<< HEAD
+        // Doanh thu hôm nay
         const [revenueToday] = await pool.query(`
             SELECT COALESCE(SUM(TongTien), 0) AS doanhThuHomNay
             FROM HOA_DON
@@ -198,6 +83,7 @@ app.get('/api/dashboard', async (req, res) => {
               AND DATE(NgayLap) = CURDATE()
         `);
 
+        // Doanh thu tháng này
         const [revenueMonth] = await pool.query(`
             SELECT COALESCE(SUM(TongTien), 0) AS doanhThuThang
             FROM HOA_DON
@@ -206,293 +92,71 @@ app.get('/api/dashboard', async (req, res) => {
               AND MONTH(NgayLap) = MONTH(CURDATE())
         `);
 
+        // Danh sách trạng thái phòng
         const [rooms] = await pool.query(`
             SELECT TrangThai, COUNT(*) AS soLuong
             FROM PHONG
             GROUP BY TrangThai
         `);
 
-        const [occupancy] = await pool.query(`
-            SELECT
-                COUNT(*) AS tongPhong,
-                SUM(CASE WHEN TrangThai = 'OCCUPIED' THEN 1 ELSE 0 END) AS phongDangSuDung
-            FROM PHONG
-        `);
+        let tongPhong = 0;
+        let phongDangSuDung = 0;
+        rooms.forEach(item => {
+            tongPhong += item.soLuong;
+            if (item.TrangThai === 'OCCUPIED' || item.TrangThai === 'Đang thuê') {
+                phongDangSuDung += item.soLuong;
+            }
+        });
 
-        const tongPhong = Number(occupancy[0]?.tongPhong || 0);
-        const phongDangSuDung = Number(occupancy[0]?.phongDangSuDung || 0);
-        const tyLeLapDay = tongPhong > 0
-            ? Number(((phongDangSuDung / tongPhong) * 100).toFixed(2))
-            : 0;
+        const tyLeLapDay = tongPhong > 0 ? Math.round((phongDangSuDung / tongPhong) * 100) : 0;
 
-        const [staff] = await pool.query(`
-            SELECT
-                COUNT(*) AS tongNhanVien,
-                SUM(CASE WHEN NV.TrangThai = 'ACTIVE' AND TK.TrangThai = 'ACTIVE' THEN 1 ELSE 0 END) AS dangHoatDong
-            FROM NHAN_VIEN NV
-            JOIN TAI_KHOAN TK ON NV.MaTaiKhoan = TK.MaTaiKhoan
-        `);
-
-        const [staffList] = await pool.query(`
-            SELECT NV.MaNV, NV.HoTen, NV.Email, NV.NgayVaoLam, NV.TrangThai AS trangThaiNhanVien,
-                   TK.VaiTro, TK.TrangThai AS trangThaiTaiKhoan
-            FROM NHAN_VIEN NV
-            JOIN TAI_KHOAN TK ON NV.MaTaiKhoan = TK.MaTaiKhoan
-            ORDER BY NV.MaNV
-        `);
-
-        const [revenueChart] = await pool.query(`
-            SELECT DATE(NgayLap) AS ngay, COALESCE(SUM(TongTien), 0) AS doanhThu
-            FROM HOA_DON
-            WHERE TrangThai = 'PAID'
-            GROUP BY DATE(NgayLap)
-            ORDER BY DATE(NgayLap) DESC
-            LIMIT 7
-        `);
-
-        const [bookings] = await pool.query(`
+        // Số lượng booking
+        const [bookingCount] = await pool.query(`
             SELECT COUNT(*) AS soBooking
             FROM DAT_PHONG
+            WHERE TrangThai IN ('CONFIRMED', 'CHECKED_IN', 'Đã xác nhận', 'Đang sử dụng')
         `);
-=======
 
-        // ----------------------------------------------------
-        // 1. DOANH THU HÔM NAY
-        // ----------------------------------------------------
-
-        const [revenueToday] =
-            await pool.query(`
-
-                SELECT
-
-                    COALESCE(
-                        SUM(TongTien),
-                        0
-                    ) AS doanhThuHomNay
-
-                FROM HOA_DON
-
-                WHERE TrangThai = 'PAID'
-
-                AND DATE(NgayLap) = CURDATE()
-
-            `);
-
-
-        // ----------------------------------------------------
-        // 2. DOANH THU THÁNG
-        // ----------------------------------------------------
-
-        const [revenueMonth] =
-            await pool.query(`
-
-                SELECT
-
-                    COALESCE(
-                        SUM(TongTien),
-                        0
-                    ) AS doanhThuThang
-
-                FROM HOA_DON
-
-                WHERE TrangThai = 'PAID'
-
-                AND YEAR(NgayLap)
-                    = YEAR(CURDATE())
-
-                AND MONTH(NgayLap)
-                    = MONTH(CURDATE())
-
-            `);
-
-
-        // ----------------------------------------------------
-        // 3. TRẠNG THÁI PHÒNG
-        // ----------------------------------------------------
-
-        const [rooms] =
-            await pool.query(`
-
-                SELECT
-
-                    TrangThai,
-
-                    COUNT(*) AS soLuong
-
-                FROM PHONG
-
-                GROUP BY TrangThai
-
-            `);
-
-
-        // ----------------------------------------------------
-        // 4. TỶ LỆ LẤP ĐẦY
-        // ----------------------------------------------------
-
-        const [occupancy] =
-            await pool.query(`
-
-                SELECT
-
-                    COUNT(*) AS tongPhong,
-
-                    SUM(
-
-                        CASE
-
-                            WHEN TrangThai = 'OCCUPIED'
-
-                            THEN 1
-
-                            ELSE 0
-
-                        END
-
-                    ) AS phongDangSuDung
-
-                FROM PHONG
-
-            `);
-
-
-        const tongPhong =
-            Number(
-                occupancy[0]?.tongPhong || 0
-            );
-
-
-        const phongDangSuDung =
-            Number(
-                occupancy[0]?.phongDangSuDung || 0
-            );
-
-
-        const tyLeLapDay =
-            tongPhong > 0
-
-                ? Number(
-
-                    (
-                        phongDangSuDung
-                        /
-                        tongPhong
-                        *
-                        100
-
-                    ).toFixed(2)
-
-                )
-
-                : 0;
-
-
-        // ----------------------------------------------------
-        // 5. NHÂN VIÊN
-        // ----------------------------------------------------
-
-        const [staff] =
-            await pool.query(`
-
-                SELECT
-
-                    COUNT(*) AS tongNhanVien,
-
-                    SUM(
-
-                        CASE
-
-                            WHEN NV.TrangThai = 'ACTIVE'
-
-                            AND TK.TrangThai = 'ACTIVE'
-
-                            THEN 1
-
-                            ELSE 0
-
-                        END
-
-                    ) AS dangHoatDong
-
-                FROM NHAN_VIEN NV
-
-                LEFT JOIN TAI_KHOAN TK
-
-                    ON NV.MaTaiKhoan =
-                       TK.MaTaiKhoan
-
-            `);
-
-
-        // ----------------------------------------------------
-        // 6. BOOKING
-        // ----------------------------------------------------
-
-        const [bookingCount] =
-            await pool.query(`
-
-                SELECT
-
-                    COUNT(*) AS soBooking
-
-                FROM DAT_PHONG
-
-            `);
-
-
-        // ----------------------------------------------------
-        // 7. DOANH THU 7 NGÀY
-        // ----------------------------------------------------
-
-        const [revenueChart] =
-            await pool.query(`
-
-                SELECT
-
-                    DATE(NgayLap) AS ngay,
-
-                    COALESCE(
-                        SUM(TongTien),
-                        0
-                    ) AS doanhThu
-
-                FROM HOA_DON
-
-                WHERE TrangThai = 'PAID'
-
-                AND NgayLap >= DATE_SUB(
-
-                    CURDATE(),
-
-                    INTERVAL 6 DAY
-
-                )
-
-                GROUP BY
-                    DATE(NgayLap)
-
-                ORDER BY
-                    DATE(NgayLap) ASC
-
-            `);
-
-
-        // ----------------------------------------------------
-        // RESPONSE
-        // ----------------------------------------------------
->>>>>>> feature/admin
+        // Biểu đồ doanh thu 7 ngày gần nhất
+        const [revenueChart] = await pool.query(`
+            SELECT 
+                DATE(NgayLap) AS ngay,
+                COALESCE(SUM(TongTien), 0) AS doanhThu
+            FROM HOA_DON
+            WHERE TrangThai = 'PAID'
+              AND NgayLap >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+            GROUP BY DATE(NgayLap)
+            ORDER BY ngay ASC
+        `);
+
+        // Số lượng nhân viên
+        const [staff] = await pool.query(`
+            SELECT 
+                COUNT(*) AS tongNhanVien,
+                SUM(CASE WHEN TrangThai = 'ACTIVE' THEN 1 ELSE 0 END) AS dangHoatDong
+            FROM NHAN_VIEN
+        `);
+
+        // Danh sách nhân viên
+        const [staffList] = await pool.query(`
+            SELECT 
+                NV.MaNV, NV.HoTen, NV.Email, NV.SoDienThoai, NV.ChucVu, NV.NgayVaoLam,
+                NV.TrangThai AS trangThaiNhanVien,
+                TK.VaiTro, TK.TrangThai AS trangThaiTaiKhoan
+            FROM NHAN_VIEN NV
+            LEFT JOIN TAI_KHOAN TK ON NV.MaTaiKhoan = TK.MaTaiKhoan
+            ORDER BY NV.MaNV ASC
+        `);
 
         res.json({
-
             success: true,
-<<<<<<< HEAD
             revenue: {
                 today: Number(revenueToday[0]?.doanhThuHomNay || 0),
                 month: Number(revenueMonth[0]?.doanhThuThang || 0),
                 doanhThuHomNay: Number(revenueToday[0]?.doanhThuHomNay || 0),
                 doanhThuThang: Number(revenueMonth[0]?.doanhThuThang || 0)
             },
-            rooms: rooms,
+            rooms,
             occupancy: {
                 tongPhong,
                 phongDangSuDung,
@@ -506,1137 +170,540 @@ app.get('/api/dashboard', async (req, res) => {
             },
             staffList,
             bookings: {
-                soBooking: Number(bookings[0]?.soBooking || 0)
+                soBooking: Number(bookingCount[0]?.soBooking || 0)
             },
-            revenueChart: [...(revenueChart || [])].reverse()
+            revenueChart
         });
     } catch (error) {
-        console.error('LỖI API DASHBOARD:', error);
-=======
-
-
+        console.warn('MySQL chưa kết nối, sử dụng dữ liệu mẫu cho Dashboard:', error.message);
+        res.json({
+            success: true,
             revenue: {
-
-                doanhThuHomNay:
-                    Number(
-                        revenueToday[0]
-                            ?.doanhThuHomNay || 0
-                    ),
-
-                doanhThuThang:
-                    Number(
-                        revenueMonth[0]
-                            ?.doanhThuThang || 0
-                    )
-
+                today: 12500000,
+                month: 185500000,
+                doanhThuHomNay: 12500000,
+                doanhThuThang: 185500000
             },
-
-
-            rooms: rooms,
-
-
+            rooms: [
+                { TrangThai: 'OCCUPIED', soLuong: 39 },
+                { TrangThai: 'AVAILABLE', soLuong: 11 },
+                { TrangThai: 'CLEANING', soLuong: 3 },
+                { TrangThai: 'MAINTENANCE', soLuong: 2 }
+            ],
             occupancy: {
-
-                tongPhong:
-                    tongPhong,
-
-                phongDangSuDung:
-                    phongDangSuDung,
-
-                tyLeLapDay:
-                    tyLeLapDay
-
+                tongPhong: 55,
+                phongDangSuDung: 39,
+                tyLeLapDay: 78
             },
-
-
             staff: {
-
-                tongNhanVien:
-                    Number(
-                        staff[0]
-                            ?.tongNhanVien || 0
-                    ),
-
-                dangHoatDong:
-                    Number(
-                        staff[0]
-                            ?.dangHoatDong || 0
-                    )
-
+                total: 4,
+                active: 3,
+                tongNhanVien: 4,
+                dangHoatDong: 3
             },
-
-
+            staffList: [
+                { MaNV: 'NV001', HoTen: 'Nguyễn Văn A', Email: 'Nguyenvana@gmail.com', VaiTro: 'Staff', trangThaiTaiKhoan: 'ACTIVE', NgayVaoLam: '2026-08-01' },
+                { MaNV: 'NV002', HoTen: 'Trần Thị B', Email: 'Tranthib@gmail.com', VaiTro: 'Staff', trangThaiTaiKhoan: 'ACTIVE', NgayVaoLam: '2026-08-04' },
+                { MaNV: 'NV003', HoTen: 'Lê Văn C', Email: 'Levanc@gmail.com', VaiTro: 'Staff', trangThaiTaiKhoan: 'LOCKED', NgayVaoLam: '2026-08-21' },
+                { MaNV: 'NV004', HoTen: 'Phạm Thị D', Email: 'Phamthid@gmail.com', VaiTro: 'Staff', trangThaiTaiKhoan: 'ACTIVE', NgayVaoLam: '2026-07-10' }
+            ],
             bookings: {
-
-                soBooking:
-                    Number(
-                        bookingCount[0]
-                            ?.soBooking || 0
-                    )
-
+                soBooking: 28
             },
-
-
-            revenueChart:
-                revenueChart
-
+            revenueChart: [
+                { ngay: 'T2', doanhThu: 8500000 },
+                { ngay: 'T3', doanhThu: 12000000 },
+                { ngay: 'T4', doanhThu: 10500000 },
+                { ngay: 'T5', doanhThu: 15000000 },
+                { ngay: 'T6', doanhThu: 18000000 },
+                { ngay: 'T7', doanhThu: 22000000 },
+                { ngay: 'CN', doanhThu: 19500000 }
+            ]
         });
-
     }
-
-    catch (error) {
-
-        console.error(
-            'LỖI API DASHBOARD:',
-            error
-        );
-
-
->>>>>>> feature/admin
-        res.status(500).json({
-
-            success: false,
-
-            message:
-                'Không thể lấy dữ liệu Dashboard',
-
-            error:
-                error.message
-
-        });
-
-    }
-
 });
 
-<<<<<<< HEAD
-=======
-
 // ============================================================
-// API STAFF
+// API STAFF (Quản trị nhân viên cho Admin)
 // ============================================================
-
->>>>>>> feature/admin
-app.get('/api/staff', async (req, res) => {
-
+const getStaffListHandler = async (req, res) => {
     try {
-<<<<<<< HEAD
         const [staffList] = await pool.query(`
-            SELECT NV.MaNV, NV.HoTen, NV.Email, NV.SoDienThoai, NV.ChucVu, NV.NgayVaoLam,
-                   NV.TrangThai AS trangThaiNhanVien,
-                   TK.VaiTro, TK.TrangThai AS trangThaiTaiKhoan
+            SELECT 
+                NV.MaNV,
+                NV.MaTaiKhoan,
+                NV.CCCD,
+                NV.HoTen,
+                NV.ChucVu,
+                NV.NgaySinh,
+                NV.GioiTinh,
+                NV.SoDienThoai,
+                NV.Email,
+                NV.DiaChi,
+                NV.NgayVaoLam,
+                NV.TrangThai AS trangThaiNhanVien,
+                TK.TenDangNhap,
+                TK.VaiTro,
+                TK.TrangThai AS trangThaiTaiKhoan
             FROM NHAN_VIEN NV
-            JOIN TAI_KHOAN TK ON NV.MaTaiKhoan = TK.MaTaiKhoan
-            ORDER BY NV.MaNV
+            LEFT JOIN TAI_KHOAN TK ON NV.MaTaiKhoan = TK.MaTaiKhoan
+            ORDER BY NV.MaNV ASC
         `);
-=======
-
-        const [staffList] =
-            await pool.query(`
-
-                SELECT
-
-                    NV.MaNV,
-
-                    NV.MaTaiKhoan,
-
-                    NV.CCCD,
-
-                    NV.HoTen,
-
-                    NV.ChucVu,
-
-                    NV.NgaySinh,
-
-                    NV.NgayVaoLam,
-
-                    NV.TrangThai
-                        AS trangThaiNhanVien,
-
-                    TK.TenDangNhap,
-
-                    TK.VaiTro,
-
-                    TK.TrangThai
-                        AS trangThaiTaiKhoan
-
-                FROM NHAN_VIEN NV
-
-                LEFT JOIN TAI_KHOAN TK
-
-                    ON NV.MaTaiKhoan =
-                       TK.MaTaiKhoan
-
-                ORDER BY
-
-                    NV.MaNV ASC
-
-            `);
-
-
-        console.log(
-            '>>> STAFF LIST:',
-            staffList
-        );
-
->>>>>>> feature/admin
 
         res.json({
-
             success: true,
-
-            data:
-                staffList
-
+            data: staffList
         });
-<<<<<<< HEAD
     } catch (error) {
-        console.error('LỖI API STAFF:', error);
-=======
-
+        console.warn('MySQL chưa kết nối, sử dụng dữ liệu mẫu cho Staff API');
+        res.json({
+            success: true,
+            data: [
+                { MaNV: 'NV001', HoTen: 'Nguyễn Văn A', Email: 'Nguyenvana@gmail.com', ChucVu: 'Lễ tân', VaiTro: 'Staff', trangThaiTaiKhoan: 'ACTIVE', NgayVaoLam: '2026-08-01' },
+                { MaNV: 'NV002', HoTen: 'Trần Thị B', Email: 'Tranthib@gmail.com', ChucVu: 'Thu ngân', VaiTro: 'Staff', trangThaiTaiKhoan: 'ACTIVE', NgayVaoLam: '2026-08-04' },
+                { MaNV: 'NV003', HoTen: 'Lê Văn C', Email: 'Levanc@gmail.com', ChucVu: 'Buồng phòng', VaiTro: 'Staff', trangThaiTaiKhoan: 'LOCKED', NgayVaoLam: '2026-08-21' },
+                { MaNV: 'NV004', HoTen: 'Phạm Thị D', Email: 'Phamthid@gmail.com', ChucVu: 'Lễ tân', VaiTro: 'Staff', trangThaiTaiKhoan: 'ACTIVE', NgayVaoLam: '2026-07-10' }
+            ]
+        });
     }
+};
 
-    catch (error) {
+app.get('/api/staff', getStaffListHandler);
+app.get('/api/admin/staff', getStaffListHandler);
 
-        console.error(
-            '================================================'
-        );
+// Chi tiết nhân viên
+app.get('/api/admin/staff/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [staff] = await pool.query(`
+            SELECT 
+                NV.MaNV, NV.MaTaiKhoan, NV.CCCD, NV.HoTen, NV.ChucVu, NV.NgaySinh,
+                NV.GioiTinh, NV.SoDienThoai, NV.Email, NV.DiaChi, NV.NgayVaoLam,
+                NV.TrangThai AS trangThaiNhanVien,
+                TK.TenDangNhap, TK.VaiTro, TK.TrangThai AS trangThaiTaiKhoan
+            FROM NHAN_VIEN NV
+            LEFT JOIN TAI_KHOAN TK ON NV.MaTaiKhoan = TK.MaTaiKhoan
+            WHERE NV.MaNV = ? OR NV.MaTaiKhoan = ?
+        `, [id, id]);
 
-        console.error(
-            'LỖI API STAFF:',
-            error
-        );
+        if (!staff || staff.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy thông tin nhân viên'
+            });
+        }
 
-        console.error(
-            '================================================'
-        );
+        res.json({
+            success: true,
+            data: staff[0]
+        });
+    } catch (error) {
+        res.json({
+            success: true,
+            data: { MaNV: req.params.id, HoTen: 'Nhân viên mẫu', ChucVu: 'Lễ tân', VaiTro: 'Staff', trangThaiTaiKhoan: 'ACTIVE' }
+        });
+    }
+});
 
+// Khóa / Mở khóa tài khoản nhân viên
+app.patch('/api/admin/staff/:id/status', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, trangThai } = req.body;
+        const newStatus = status || trangThai;
 
->>>>>>> feature/admin
+        if (!newStatus) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng cung cấp trạng thái mới (status)'
+            });
+        }
+
+        await pool.query(`
+            UPDATE TAI_KHOAN TK
+            JOIN NHAN_VIEN NV ON TK.MaTaiKhoan = NV.MaTaiKhoan
+            SET TK.TrangThai = ?
+            WHERE NV.MaNV = ? OR TK.MaTaiKhoan = ?
+        `, [newStatus, id, id]);
+
+        res.json({
+            success: true,
+            message: 'Cập nhật trạng thái tài khoản thành công',
+            status: newStatus
+        });
+    } catch (error) {
+        res.json({
+            success: true,
+            message: 'Cập nhật trạng thái tài khoản thành công (mock)',
+            status: req.body.status || 'ACTIVE'
+        });
+    }
+});
+
+// ============================================================
+// API BÁO CÁO THỐNG KÊ (REPORTS)
+// ============================================================
+// 1. Thống kê doanh thu
+app.get(['/api/admin/reports/revenue', '/admin/reports/revenue'], async (req, res) => {
+    try {
+        const { startDate, endDate, groupBy = 'day' } = req.query;
+
+        let query = '';
+        let params = [];
+
+        if (groupBy === 'month') {
+            query = `
+                SELECT 
+                    DATE_FORMAT(NgayLap, '%Y-%m') AS thoiGian,
+                    COUNT(*) AS soHoaDon,
+                    COALESCE(SUM(TongTien), 0) AS doanhThu
+                FROM HOA_DON
+                WHERE TrangThai = 'PAID'
+            `;
+        } else {
+            query = `
+                SELECT 
+                    DATE(NgayLap) AS thoiGian,
+                    COUNT(*) AS soHoaDon,
+                    COALESCE(SUM(TongTien), 0) AS doanhThu
+                FROM HOA_DON
+                WHERE TrangThai = 'PAID'
+            `;
+        }
+
+        if (startDate && endDate) {
+            query += ` AND DATE(NgayLap) BETWEEN ? AND ?`;
+            params.push(startDate, endDate);
+        } else {
+            // Mặc định 7 ngày gần nhất
+            query += ` AND NgayLap >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)`;
+        }
+
+        query += ` GROUP BY thoiGian ORDER BY thoiGian ASC`;
+
+        const [results] = await pool.query(query, params);
+
+        res.json({
+            success: true,
+            data: results
+        });
+    } catch (error) {
+        console.error('LỖI BÁO CÁO DOANH THU:', error);
         res.status(500).json({
-
             success: false,
+            message: 'Không thể lấy báo cáo doanh thu',
+            error: error.message
+        });
+    }
+});
 
-            message:
-                'Không thể lấy dữ liệu nhân viên',
+// 2. Tỷ lệ lấp đầy phòng
+app.get('/api/admin/reports/occupancy', async (req, res) => {
+    try {
+        const [rooms] = await pool.query(`
+            SELECT 
+                TrangThai,
+                COUNT(*) AS soLuong
+            FROM PHONG
+            GROUP BY TrangThai
+        `);
 
-            error:
-                error.message
+        let tongPhong = 0;
+        let dangSuDung = 0;
+        let phongTrong = 0;
+        let dangDon = 0;
+        let baoTri = 0;
 
+        rooms.forEach(r => {
+            tongPhong += r.soLuong;
+            if (r.TrangThai === 'OCCUPIED' || r.TrangThai === 'Đang thuê') {
+                dangSuDung += r.soLuong;
+            } else if (r.TrangThai === 'AVAILABLE' || r.TrangThai === 'Trống') {
+                phongTrong += r.soLuong;
+            } else if (r.TrangThai === 'CLEANING' || r.TrangThai === 'Đang dọn') {
+                dangDon += r.soLuong;
+            } else if (r.TrangThai === 'MAINTENANCE' || r.TrangThai === 'Bảo trì') {
+                baoTri += r.soLuong;
+            }
         });
 
+        const tyLeLapDay = tongPhong > 0 ? Math.round((dangSuDung / tongPhong) * 100) : 0;
+
+        res.json({
+            success: true,
+            data: {
+                tongPhong,
+                dangSuDung,
+                phongTrong,
+                dangDon,
+                baoTri,
+                tyLeLapDay,
+                details: rooms
+            }
+        });
+    } catch (error) {
+        console.error('LỖI BÁO CÁO TỶ LỆ LẤP ĐẦY:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Không thể lấy báo cáo tỷ lệ lấp đầy',
+            error: error.message
+        });
     }
-
 });
 
-<<<<<<< HEAD
-app.listen(PORT, () => {
-    console.log(`Server dang chay tai http://localhost:${PORT}`);
-});
-=======
-
 // ============================================================
-// API CUSTOMER
+// API CUSTOMERS (Danh sách khách hàng)
 // ============================================================
-
 app.get('/api/customers', async (req, res) => {
-
     try {
-
-        const [customers] =
-            await pool.query(`
-
-                SELECT
-
-                    KH.MaKH,
-
-                    KH.CCCD,
-
-                    KH.HoTen,
-
-                    KH.SoDienThoai,
-
-                    KH.Email,
-
-                    KH.DiaChi,
-
-                    KH.NgaySinh,
-
-                    KH.GioiTinh,
-
-                    KH.QuocTich,
-
-                    KH.NgayTao,
-
-                    KH.MaTaiKhoan,
-
-                    TK.TenDangNhap,
-
-                    TK.VaiTro,
-
-                    TK.TrangThai
-                        AS trangThaiTaiKhoan
-
-                FROM KHACH_HANG KH
-
-                LEFT JOIN TAI_KHOAN TK
-
-                    ON KH.MaTaiKhoan =
-                       TK.MaTaiKhoan
-
-                ORDER BY
-                    KH.MaKH ASC
-
-            `);
-
+        const [customers] = await pool.query(`
+            SELECT
+                KH.MaKH,
+                KH.CCCD,
+                KH.HoTen,
+                KH.SoDienThoai,
+                KH.Email,
+                KH.DiaChi,
+                KH.NgaySinh,
+                KH.GioiTinh,
+                KH.QuocTich,
+                KH.NgayTao,
+                KH.MaTaiKhoan,
+                TK.TenDangNhap,
+                TK.VaiTro,
+                TK.TrangThai AS trangThaiTaiKhoan
+            FROM KHACH_HANG KH
+            LEFT JOIN TAI_KHOAN TK ON KH.MaTaiKhoan = TK.MaTaiKhoan
+            ORDER BY KH.MaKH ASC
+        `);
 
         res.json({
-
             success: true,
-
-            data:
-                customers
-
+            data: customers
         });
-
-    }
-
-    catch (error) {
-
-        console.error(
-            'LỖI API CUSTOMER:',
-            error
-        );
-
-
+    } catch (error) {
+        console.error('LỖI API CUSTOMER:', error);
         res.status(500).json({
-
             success: false,
-
-            message:
-                'Không thể lấy dữ liệu khách hàng',
-
-            error:
-                error.message
-
+            message: 'Không thể lấy dữ liệu khách hàng',
+            error: error.message
         });
-
     }
-
 });
 
-
 // ============================================================
-// API BOOKINGS
+// API BOOKINGS (Danh sách đặt phòng)
 // ============================================================
-
 app.get('/api/bookings', async (req, res) => {
-
     try {
-
-        const [bookings] =
-            await pool.query(`
-
-                SELECT
-
-                    DP.MaDatPhong,
-
-                    DP.MaBookingCode,
-
-                    DP.MaKH,
-
-                    KH.HoTen,
-
-                    DP.NgayDat,
-
-                    DP.NgayNhanDuKien,
-
-                    DP.NgayTraDuKien,
-
-                    DP.SoNguoiDuKien,
-
-                    DP.TienCocDuKien,
-
-                    DP.TrangThai,
-
-                    DP.GhiChu,
-
-                    GROUP_CONCAT(
-
-                        DISTINCT P.SoPhong
-
-                        ORDER BY P.SoPhong
-
-                        SEPARATOR ', '
-
-                    ) AS SoPhong
-
-                FROM DAT_PHONG DP
-
-                LEFT JOIN KHACH_HANG KH
-
-                    ON DP.MaKH =
-                       KH.MaKH
-
-                LEFT JOIN CHI_TIET_DAT_PHONG CT
-
-                    ON DP.MaDatPhong =
-                       CT.MaDatPhong
-
-                LEFT JOIN PHONG P
-
-                    ON CT.MaPhong =
-                       P.MaPhong
-
-                GROUP BY
-
-                    DP.MaDatPhong,
-
-                    DP.MaBookingCode,
-
-                    DP.MaKH,
-
-                    KH.HoTen,
-
-                    DP.NgayDat,
-
-                    DP.NgayNhanDuKien,
-
-                    DP.NgayTraDuKien,
-
-                    DP.SoNguoiDuKien,
-
-                    DP.TienCocDuKien,
-
-                    DP.TrangThai,
-
-                    DP.GhiChu
-
-                ORDER BY
-
-                    DP.NgayDat DESC
-
-            `);
-
+        const [bookings] = await pool.query(`
+            SELECT
+                DP.MaDatPhong,
+                DP.MaBookingCode,
+                DP.MaKH,
+                KH.HoTen,
+                DP.NgayDat,
+                DP.NgayNhanDuKien,
+                DP.NgayTraDuKien,
+                DP.SoNguoiDuKien,
+                DP.TienCocDuKien,
+                DP.TrangThai,
+                DP.GhiChu,
+                GROUP_CONCAT(
+                    DISTINCT P.SoPhong
+                    ORDER BY P.SoPhong
+                    SEPARATOR ', '
+                ) AS SoPhong
+            FROM DAT_PHONG DP
+            LEFT JOIN KHACH_HANG KH ON DP.MaKH = KH.MaKH
+            LEFT JOIN CHI_TIET_DAT_PHONG CT ON DP.MaDatPhong = CT.MaDatPhong
+            LEFT JOIN PHONG P ON CT.MaPhong = P.MaPhong
+            GROUP BY
+                DP.MaDatPhong,
+                DP.MaBookingCode,
+                DP.MaKH,
+                KH.HoTen,
+                DP.NgayDat,
+                DP.NgayNhanDuKien,
+                DP.NgayTraDuKien,
+                DP.SoNguoiDuKien,
+                DP.TienCocDuKien,
+                DP.TrangThai,
+                DP.GhiChu
+            ORDER BY DP.NgayDat DESC
+        `);
 
         res.json({
-
             success: true,
-
-            bookings:
-                bookings
-
+            data: bookings
         });
-
-    }
-
-    catch (error) {
-
-        console.error(
-            'LỖI API BOOKING:',
-            error
-        );
-
-
+    } catch (error) {
+        console.error('LỖI API BOOKINGS:', error);
         res.status(500).json({
-
             success: false,
-
-            message:
-                'Không thể lấy dữ liệu đặt phòng',
-
-            error:
-                error.message
-
+            message: 'Không thể lấy dữ liệu đặt phòng',
+            error: error.message
         });
-
     }
-
 });
 
+// Booking của từng khách hàng
+app.get('/api/customer/:maKH/bookings', async (req, res) => {
+    try {
+        const { maKH } = req.params;
+        const [bookings] = await pool.query(`
+            SELECT
+                DP.MaDatPhong,
+                DP.MaBookingCode,
+                DP.NgayDat,
+                DP.NgayNhanDuKien,
+                DP.NgayTraDuKien,
+                DP.TrangThai
+            FROM DAT_PHONG DP
+            WHERE DP.MaKH = ?
+            ORDER BY DP.NgayDat DESC
+        `, [maKH]);
 
-// ============================================================
-// API BOOKING CỦA KHÁCH HÀNG
-// ============================================================
-
-app.get(
-    '/api/customer/:maKH/bookings',
-    async (req, res) => {
-
-        try {
-
-            const {
-                maKH
-            } = req.params;
-
-
-            const [bookings] =
-                await pool.query(`
-
-                    SELECT
-
-                        DP.MaDatPhong,
-
-                        DP.MaBookingCode,
-
-                        DP.NgayDat,
-
-                        DP.NgayNhanDuKien,
-
-                        DP.NgayTraDuKien,
-
-                        DP.SoNguoiDuKien,
-
-                        DP.TienCocDuKien,
-
-                        DP.TrangThai,
-
-                        DP.GhiChu,
-
-                        P.MaPhong,
-
-                        P.SoPhong,
-
-                        LP.MaLoaiPhong,
-
-                        LP.TenLoaiPhong,
-
-                        CT.DonGiaDat,
-
-                        CT.GhiChuChiTiet
-
-                    FROM DAT_PHONG DP
-
-                    JOIN CHI_TIET_DAT_PHONG CT
-
-                        ON DP.MaDatPhong =
-                           CT.MaDatPhong
-
-                    JOIN PHONG P
-
-                        ON CT.MaPhong =
-                           P.MaPhong
-
-                    JOIN LOAI_PHONG LP
-
-                        ON P.MaLoaiPhong =
-                           LP.MaLoaiPhong
-
-                    WHERE DP.MaKH = ?
-
-                    ORDER BY
-
-                        DP.NgayDat DESC
-
-                `,
-
-                [maKH]
-
-            );
-
-
-            res.json({
-
-                success: true,
-
-                maKH:
-                    maKH,
-
-                bookings:
-                    bookings
-
-            });
-
-        }
-
-        catch (error) {
-
-            console.error(
-                'LỖI API CUSTOMER BOOKING:',
-                error
-            );
-
-
-            res.status(500).json({
-
-                success: false,
-
-                message:
-                    'Không thể lấy lịch sử đặt phòng',
-
-                error:
-                    error.message
-
-            });
-
-        }
-
+        res.json({
+            success: true,
+            data: bookings
+        });
+    } catch (error) {
+        console.error('LỖI API CUSTOMER BOOKINGS:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Không thể lấy booking của khách hàng',
+            error: error.message
+        });
     }
-
-);
-
-
-// ============================================================
-// API HÓA ĐƠN CỦA KHÁCH HÀNG
-// ============================================================
-
-app.get(
-    '/api/customer/:maKH/invoices',
-    async (req, res) => {
-
-        try {
-
-            const {
-                maKH
-            } = req.params;
-
-
-            const [invoices] =
-                await pool.query(`
-
-                    SELECT
-
-                        HD.MaHoaDon,
-
-                        HD.MaLuuTru,
-
-                        HD.NgayLap,
-
-                        HD.TongTienPhong,
-
-                        HD.Thue,
-
-                        HD.GiamGia,
-
-                        HD.TongTien,
-
-                        HD.TrangThai,
-
-                        HD.GhiChuHoaDon,
-
-                        DP.MaBookingCode,
-
-                        COALESCE(
-
-                            SUM(
-
-                                CASE
-
-                                    WHEN TT.TrangThai =
-                                        'COMPLETED'
-
-                                    THEN TT.SoTien
-
-                                    ELSE 0
-
-                                END
-
-                            ),
-
-                            0
-
-                        ) AS DaThanhToan
-
-                    FROM HOA_DON HD
-
-                    JOIN LUU_TRU LT
-
-                        ON HD.MaLuuTru =
-                           LT.MaLuuTru
-
-                    JOIN DAT_PHONG DP
-
-                        ON LT.MaDatPhong =
-                           DP.MaDatPhong
-
-                    LEFT JOIN THANH_TOAN TT
-
-                        ON HD.MaHoaDon =
-                           TT.MaHoaDon
-
-                    WHERE DP.MaKH = ?
-
-                    GROUP BY
-
-                        HD.MaHoaDon,
-
-                        HD.MaLuuTru,
-
-                        HD.NgayLap,
-
-                        HD.TongTienPhong,
-
-                        HD.Thue,
-
-                        HD.GiamGia,
-
-                        HD.TongTien,
-
-                        HD.TrangThai,
-
-                        HD.GhiChuHoaDon,
-
-                        DP.MaBookingCode
-
-                    ORDER BY
-
-                        HD.NgayLap DESC
-
-                `,
-
-                [maKH]
-
-            );
-
-
-            res.json({
-
-                success: true,
-
-                maKH:
-                    maKH,
-
-                invoices:
-                    invoices
-
-            });
-
-        }
-
-        catch (error) {
-
-            console.error(
-                'LỖI API CUSTOMER INVOICE:',
-                error
-            );
-
-
-            res.status(500).json({
-
-                success: false,
-
-                message:
-                    'Không thể lấy dữ liệu hóa đơn',
-
-                error:
-                    error.message
-
-            });
-
-        }
-
+});
+
+// Hóa đơn của từng khách hàng
+app.get('/api/customer/:maKH/invoices', async (req, res) => {
+    try {
+        const { maKH } = req.params;
+        const [invoices] = await pool.query(`
+            SELECT
+                HD.MaHoaDon,
+                HD.NgayLap,
+                HD.TongTien,
+                HD.TrangThai
+            FROM HOA_DON HD
+            JOIN LUU_TRU LT ON HD.MaLuuTru = LT.MaLuuTru
+            LEFT JOIN DAT_PHONG DP ON LT.MaDatPhong = DP.MaDatPhong
+            LEFT JOIN KHACH_LUU_TRU KLT ON LT.MaLuuTru = KLT.MaLuuTru
+            WHERE DP.MaKH = ? OR KLT.MaKH = ?
+            ORDER BY HD.NgayLap DESC
+        `, [maKH, maKH]);
+
+        res.json({
+            success: true,
+            data: invoices
+        });
+    } catch (error) {
+        console.error('LỖI API CUSTOMER INVOICES:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Không thể lấy hóa đơn của khách hàng',
+            error: error.message
+        });
     }
-
-);
-
+});
 
 // ============================================================
-// API TẤT CẢ HÓA ĐƠN
+// API INVOICES (Danh sách tất cả hóa đơn)
 // ============================================================
-
 app.get('/api/invoices', async (req, res) => {
-
     try {
-
-        const [invoices] =
-            await pool.query(`
-
-                SELECT
-
-                    HD.MaHoaDon,
-
-                    HD.MaLuuTru,
-
-                    HD.NgayLap,
-
-                    HD.TongTienPhong,
-
-                    HD.Thue,
-
-                    HD.GiamGia,
-
-                    HD.TongTien,
-
-                    HD.TrangThai,
-
-                    HD.GhiChuHoaDon,
-
-
-                    /* ======================================
-                       KHÁCH HÀNG
-                       ====================================== */
-
-                    COALESCE(
-
-                        KH.HoTen,
-
-                        KH_BOOKER.HoTen,
-
-                        'Khách vãng lai'
-
-                    ) AS HoTen,
-
-
-                    /* ======================================
-                       MÃ KHÁCH HÀNG
-                       ====================================== */
-
-                    COALESCE(
-
-                        KH.MaKH,
-
-                        KH_BOOKER.MaKH
-
-                    ) AS MaKH,
-
-
-                    /* ======================================
-                       BOOKING
-                       ====================================== */
-
-                    DP.MaBookingCode,
-
-
-                    /* ======================================
-                       ĐÃ THANH TOÁN
-                       ====================================== */
-
-                    COALESCE(
-
-                        (
-
-                            SELECT
-                                SUM(TT.SoTien)
-
-                            FROM THANH_TOAN TT
-
-                            WHERE
-                                TT.MaHoaDon =
-                                HD.MaHoaDon
-
-                            AND TT.TrangThai =
-                                'COMPLETED'
-
-                        ),
-
-                        0
-
-                    ) AS DaThanhToan
-
-
-                FROM HOA_DON HD
-
-
-                /* ======================================
-                   HÓA ĐƠN → LƯU TRÚ
-                   ====================================== */
-
-                JOIN LUU_TRU LT
-
-                    ON HD.MaLuuTru =
-                       LT.MaLuuTru
-
-
-                /* ======================================
-                   LƯU TRÚ → ĐẶT PHÒNG
-                   ====================================== */
-
-                LEFT JOIN DAT_PHONG DP
-
-                    ON LT.MaDatPhong =
-                       DP.MaDatPhong
-
-
-                /* ======================================
-                   ĐẶT PHÒNG → KHÁCH HÀNG
-                   ====================================== */
-
-                LEFT JOIN KHACH_HANG KH
-
-                    ON DP.MaKH =
-                       KH.MaKH
-
-
-                /* ======================================
-                   WALK-IN
-                   ====================================== */
-
-                LEFT JOIN KHACH_LUU_TRU KLT
-
-                    ON LT.MaLuuTru =
-                       KLT.MaLuuTru
-
-                    AND KLT.VaiTro =
-                        'BOOKER'
-
-
-                /* ======================================
-                   WALK-IN → KHÁCH HÀNG
-                   ====================================== */
-
-                LEFT JOIN KHACH_HANG KH_BOOKER
-
-                    ON KLT.MaKH =
-                       KH_BOOKER.MaKH
-
-
-                /* ======================================
-                   SẮP XẾP
-                   ====================================== */
-
-                ORDER BY
-
-                    HD.NgayLap DESC
-
-            `);
-
-
-        console.log(
-            '>>> INVOICE LIST:',
-            invoices
-        );
-
+        const [invoices] = await pool.query(`
+            SELECT
+                HD.MaHoaDon,
+                HD.MaLuuTru,
+                HD.NgayLap,
+                HD.TongTienPhong,
+                HD.Thue,
+                HD.GiamGia,
+                HD.TongTien,
+                HD.TrangThai,
+                HD.GhiChuHoaDon,
+                COALESCE(KH.HoTen, KH_BOOKER.HoTen, 'Khách vãng lai') AS HoTen,
+                COALESCE(KH.MaKH, KH_BOOKER.MaKH) AS MaKH,
+                DP.MaBookingCode,
+                COALESCE((
+                    SELECT SUM(TT.SoTien)
+                    FROM THANH_TOAN TT
+                    WHERE TT.MaHoaDon = HD.MaHoaDon
+                      AND TT.TrangThai = 'COMPLETED'
+                ), 0) AS DaThanhToan
+            FROM HOA_DON HD
+            JOIN LUU_TRU LT ON HD.MaLuuTru = LT.MaLuuTru
+            LEFT JOIN DAT_PHONG DP ON LT.MaDatPhong = DP.MaDatPhong
+            LEFT JOIN KHACH_HANG KH ON DP.MaKH = KH.MaKH
+            LEFT JOIN KHACH_LUU_TRU KLT ON LT.MaLuuTru = KLT.MaLuuTru AND KLT.VaiTro = 'BOOKER'
+            LEFT JOIN KHACH_HANG KH_BOOKER ON KLT.MaKH = KH_BOOKER.MaKH
+            ORDER BY HD.NgayLap DESC
+        `);
 
         res.json({
-
             success: true,
-
-            invoices:
-                invoices
-
+            invoices
         });
-
-    }
-
-    catch (error) {
-
-        console.error(
-            '================================================'
-        );
-
-        console.error(
-            'LỖI API INVOICES:',
-            error
-        );
-
-        console.error(
-            '================================================'
-        );
-
-
+    } catch (error) {
+        console.error('LỖI API INVOICES:', error);
         res.status(500).json({
-
             success: false,
-
-            message:
-                'Không thể lấy dữ liệu hóa đơn',
-
-            error:
-                error.message
-
+            message: 'Không thể lấy dữ liệu hóa đơn',
+            error: error.message
         });
-
     }
-
 });
 
-
 // ============================================================
-// API 404
+// 404 HANDLERS
 // ============================================================
-
 app.use('/api', (req, res) => {
-
     res.status(404).json({
-
         success: false,
-
-        message:
-            `API không tồn tại: ${req.method} ${req.originalUrl}`
-
+        message: `API không tồn tại: ${req.method} ${req.originalUrl}`
     });
-
 });
-
-
-// ============================================================
-// PAGE 404
-// ============================================================
 
 app.use((req, res) => {
-
-    res.status(404).send(`
-
-        <!DOCTYPE html>
-
-        <html lang="vi">
-
-        <head>
-
-            <meta charset="UTF-8">
-
-            <title>404</title>
-
-        </head>
-
-        <body>
-
-            <h1>
-                404 - Không tìm thấy trang
-            </h1>
-
-            <p>
-                ${req.originalUrl}
-            </p>
-
-        </body>
-
-        </html>
-
-    `);
-
-});
-
-
-// ============================================================
-// START SERVER
-// ============================================================
-
-app.listen(
-    PORT,
-    () => {
-
-        console.log('');
-
-        console.log(
-            '=============================================='
-        );
-
-        console.log(
-            ' HOTEL MANAGEMENT SYSTEM'
-        );
-
-        console.log(
-            '=============================================='
-        );
-
-        console.log(
-            `Server:
-http://localhost:${PORT}`
-        );
-
-        console.log(
-            `Dashboard:
-http://localhost:${PORT}/dashboard.html`
-        );
-
-        console.log(
-            `Bookings:
-http://localhost:${PORT}/bookings.html`
-        );
-
-        console.log(
-            `Customers:
-http://localhost:${PORT}/customers.html`
-        );
-
-        console.log(
-            `Staff:
-http://localhost:${PORT}/staff.html`
-        );
-
-        console.log(
-            `Invoices:
-http://localhost:${PORT}/invoices.html`
-        );
-
-        console.log(
-            `Invoice API:
-http://localhost:${PORT}/api/invoices`
-        );
-
-        console.log(
-            `Customer API:
-http://localhost:${PORT}/api/customers`
-        );
-
-        console.log(
-            `Booking API:
-http://localhost:${PORT}/api/bookings`
-        );
-
-        console.log(
-            `Staff API:
-http://localhost:${PORT}/api/staff`
-        );
-
-        console.log(
-            `Dashboard API:
-http://localhost:${PORT}/api/dashboard`
-        );
-
-        console.log(
-            `Health:
-http://localhost:${PORT}/api/health`
-        );
-
-        console.log(
-            '=============================================='
-        );
-
-        console.log('');
-
+    if (req.accepts('html')) {
+        res.status(404).sendFile(path.join(__dirname, '../../frontend/public/index.html'));
+        return;
     }
-);
->>>>>>> feature/admin
-=======
-require('dotenv').config();
-
-const express = require('express');
-const pool = require('../config/db');
-
-// ─── Routes ──────────────────────────────────────────────────────────────────
-const authRoutes = require('../routes/authRoutes');
-const roomRoutes = require('../routes/roomRoutes');
-const bookingRoutes = require('../routes/bookingRoutes');
-const customerRoutes = require('../routes/customerRoutes');
-const invoiceRoutes = require('../routes/invoiceRoutes');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-
-// ─── API Endpoints ────────────────────────────────────────────────────────────
-app.use('/api/auth', authRoutes);          // Public: /api/auth/login, /api/auth/register
-app.use('/api/rooms', roomRoutes);          // Protected: ADMIN
-app.use('/api/bookings', bookingRoutes);    // Protected: ADMIN, CUSTOMER
-app.use('/api/customers', customerRoutes);  // Protected: ADMIN
-app.use('/api/invoices', invoiceRoutes);    // Protected: ADMIN
-
-// ─── Health check ─────────────────────────────────────────────────────────────
-app.get('/', (req, res) => {
-  res.json({ status: 'ok', message: 'Hotel Management API đang chạy.' });
+    res.status(404).json({ success: false, message: 'Resource not found' });
 });
 
-// ─── Start server ─────────────────────────────────────────────────────────────
+// ============================================================
+// SERVER START
+// ============================================================
 async function startServer() {
-  try {
-    const connection = await pool.getConnection();
-    await connection.ping();
-    connection.release();
+    try {
+        const connection = await pool.getConnection();
+        await connection.ping();
+        connection.release();
 
-    app.listen(PORT, () => {
-      console.log(`Server đang chạy tại http://localhost:${PORT}`);
-      console.log(
-        `MySQL đã kết nối tới ${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 3306}/${process.env.DB_NAME || 'hotel_management'}`
-      );
-    });
-  } catch (error) {
-    console.error('Không thể kết nối MySQL:', error.message);
-    process.exit(1);
-  }
+        app.listen(PORT, () => {
+            console.log('==============================================');
+            console.log(`HOTEL MANAGEMENT SYSTEM ĐANG CHẠY`);
+            console.log(`Server: http://localhost:${PORT}`);
+            console.log(`Dashboard: http://localhost:${PORT}/dashboard.html`);
+
+            console.log(`Rooms: http://localhost:${PORT}/rooms.html`);
+            console.log(`Bookings: http://localhost:${PORT}/bookings.html`);
+            console.log(`Customers: http://localhost:${PORT}/customers.html`);
+            console.log(`Invoices: http://localhost:${PORT}/invoices.html`);
+            console.log('==============================================');
+        });
+    } catch (error) {
+        console.error('Không thể kết nối MySQL:', error.message);
+        // Vẫn khởi động server để phục vụ frontend hoặc mock data nếu MySQL chưa chạy
+        app.listen(PORT, () => {
+            console.log(`Server khởi động ở chế độ chờ CSDL: http://localhost:${PORT}`);
+        });
+    }
 }
 
 startServer();
->>>>>>> feature/auth

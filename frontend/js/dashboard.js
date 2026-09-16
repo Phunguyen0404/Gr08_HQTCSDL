@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", loadDashboard);
 
 async function loadDashboard() {
     try {
-        const response = await fetch("http://localhost:3000/api/dashboard");
+        const response = await fetch("/api/dashboard");
 
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);
@@ -19,14 +19,13 @@ async function loadDashboard() {
         console.log("DỮ LIỆU DASHBOARD:", data);
 
         // ==========================================
-        // 1. THẺ THỐNG KÊ
+        // 1. THẺ THỐNG KÊ (3 thẻ: Hôm nay, Tháng, Tỷ lệ lấp đầy)
         // ==========================================
 
         const statCards = document.querySelectorAll(".stat-card");
 
         const revenue = data.revenue || {};
         const occupancy = data.occupancy || {};
-        const staffInfo = data.staff || {};
 
         if (statCards[0]) {
             const title = statCards[0].querySelector("h2");
@@ -75,22 +74,6 @@ async function loadDashboard() {
             if (text) {
                 text.innerHTML =
                     '<span>Dữ liệu thực tế từ hệ thống</span>';
-            }
-        }
-
-        if (statCards[3]) {
-            const title = statCards[3].querySelector("h2");
-
-            if (title) {
-                title.textContent = Number(staffInfo.total ?? staffInfo.tongNhanVien ?? 0);
-            }
-
-            const activeText =
-                statCards[3].querySelector(".active-text");
-
-            if (activeText) {
-                activeText.textContent =
-                    `${Number(staffInfo.active ?? staffInfo.dangHoatDong ?? 0)} đang hoạt động`;
             }
         }
 
@@ -266,129 +249,6 @@ async function loadDashboard() {
         }
 
 
-        // ==========================================
-        // 5. DANH SÁCH NHÂN VIÊN
-        // ==========================================
-
-        const staffTableBody =
-            document.querySelector(
-                ".staff-panel table tbody"
-            );
-
-        if (staffTableBody) {
-
-            staffTableBody.innerHTML = "";
-
-            (data.staffList || []).forEach(staff => {
-
-                const row =
-                    document.createElement("tr");
-
-                const initials =
-                    getInitials(staff.HoTen);
-
-                // Trạng thái tài khoản
-                let statusText =
-                    "Đang hoạt động";
-
-                let statusClass =
-                    "active";
-
-                if (
-                    staff.trangThaiTaiKhoan === "LOCKED"
-                ) {
-                    statusText =
-                        "Đã khóa";
-
-                    statusClass =
-                        "locked";
-                }
-
-                if (
-                    staff.trangThaiTaiKhoan === "INACTIVE"
-                ) {
-                    statusText =
-                        "Không hoạt động";
-
-                    statusClass =
-                        "locked";
-                }
-
-                // Vai trò thật từ TAI_KHOAN
-                let roleText =
-                    staff.VaiTro || "STAFF";
-
-                if (roleText === "ADMIN") {
-                    roleText = "Admin";
-                } else if (roleText === "STAFF") {
-                    roleText = "Staff";
-                } else if (roleText === "CUSTOMER") {
-                    roleText = "Customer";
-                }
-
-                row.innerHTML = `
-                    <td>
-                        <div class="staff-info">
-
-                            <div class="staff-avatar">
-                                ${escapeHTML(initials)}
-                            </div>
-
-                            <div>
-                                <strong>
-                                    ${escapeHTML(
-                    staff.HoTen
-                )}
-                                </strong>
-
-                                <small>
-                                    ${escapeHTML(
-                    staff.MaNV
-                )}
-                                </small>
-                            </div>
-
-                        </div>
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                    staff.Email || ""
-                )}
-                    </td>
-
-                    <td>
-                        <span class="role staff">
-                            ${escapeHTML(roleText)}
-                        </span>
-                    </td>
-
-                    <td>
-                        <span class="status ${statusClass}">
-                            ${statusText}
-                        </span>
-                    </td>
-
-                    <td>
-                        ${formatDate(
-                    staff.NgayVaoLam
-                )}
-                    </td>
-
-                    <td>
-                        <button class="btn-action">
-                            ${staff.trangThaiTaiKhoan ===
-                        "LOCKED"
-                        ? "Mở khóa"
-                        : "Khóa"
-                    }
-                        </button>
-                    </td>
-                `;
-
-                staffTableBody.appendChild(row);
-            });
-        }
 
     } catch (error) {
 

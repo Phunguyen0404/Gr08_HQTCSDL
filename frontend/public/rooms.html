@@ -20,10 +20,6 @@
                 <span>▣</span>
                 <span>Dashboard</span>
             </a>
-            <a href="staff.html" class="menu-item">
-                <span>👥</span>
-                <span>Tài khoản nhân viên</span>
-            </a>
             <a href="rooms.html" class="menu-item active">
                 <span>🏨</span>
                 <span>Phòng</span>
@@ -218,10 +214,10 @@
                     <textarea id="roomNote" rows="3" placeholder="Nhập ghi chú về phòng..."></textarea>
                 </label>
 
-                <<<<<<< HEAD <div class="form-actions">
+                <div class="form-actions">
                     <button type="reset" class="btn btn-secondary">Làm mới</button>
                     <button type="submit" class="btn btn-primary">Lưu phòng</button>
-                    </div>
+                </div>
             </form>
         </section>
 
@@ -261,13 +257,14 @@
     </main>
 
     <script src="../js/api.js" defer></script>
-    =======
     <script src="../js/authGuard.js"></script>
     <script>
-        authGuard.requireAuth(['ADMIN']);
-        document.getElementById('logoutBtn').addEventListener('click', () => authGuard.logout());
+        if (typeof authGuard !== 'undefined') {
+            authGuard.requireAuth(['ADMIN']);
+            const logout = document.getElementById('logoutBtn');
+            if (logout) logout.addEventListener('click', () => authGuard.logout());
+        }
     </script>
-    >>>>>>> feature/auth
     <script src="../js/rooms.js" defer></script>
 </body>
 
