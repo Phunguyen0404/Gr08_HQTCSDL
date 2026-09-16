@@ -1,27 +1,19 @@
 const express = require('express');
-<<<<<<< HEAD
 const router = express.Router();
 const customerController = require('../controllers/customerController');
-
-router.get('/search', customerController.searchCustomers);
-router.post('/', customerController.createCustomer);
-
-module.exports = router;
-=======
 const authMiddleware = require('../middleware/authMiddleware');
 const authorizeRoles = require('../middleware/roleMiddleware');
-// const customerController = require('../controllers/customerController');
 
-const router = express.Router();
+// Nhân viên tìm khách vãng lai theo CCCD / SĐT (dùng ở walk-in booking)
+router.get('/search', customerController.searchCustomers);
 
-// Quản lý khách hàng chỉ dành cho ADMIN
-router.use(authMiddleware, authorizeRoles('ADMIN'));
+// Tạo hồ sơ khách vãng lai (không cần đăng nhập, dùng cho nhân viên)
+router.post('/', customerController.createCustomer);
 
-// TODO: Thêm các endpoint khách hàng khi customerController sẵn sàng
-// router.get('/', customerController.getAll);
-// router.post('/', customerController.create);
-// router.put('/:id', customerController.update);
-// router.delete('/:id', customerController.remove);
+// Khách hàng đã đăng nhập: lấy hồ sơ của chính mình
+router.get('/me', authMiddleware, authorizeRoles('CUSTOMER', 'ADMIN'), customerController.getMyProfile);
+
+// Khách hàng đã đăng nhập: tạo / cập nhật hồ sơ và liên kết với tài khoản đang đăng nhập
+router.post('/me', authMiddleware, authorizeRoles('CUSTOMER', 'ADMIN'), customerController.saveMyProfile);
 
 module.exports = router;
->>>>>>> feature/auth

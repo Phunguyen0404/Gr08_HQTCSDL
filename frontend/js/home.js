@@ -167,7 +167,9 @@ function setupSearch() {
             maUuDai: document.getElementById('maUuDai').value.trim()
         });
 
-        window.location.href = `rooms.html?${params.toString()}`;
+        // FIX: trước đây trỏ nhầm sang rooms.html (trang quản trị nội bộ).
+        // Trang đặt phòng cho khách là booking.html.
+        window.location.href = `booking.html?${params.toString()}`;
     });
 }
 
@@ -231,7 +233,8 @@ function taoTheLoaiPhong(loai) {
 
     const link = document.createElement('a');
     link.className = 'room-link';
-    link.href = `rooms.html?loaiPhong=${encodeURIComponent(loai.MaLoaiPhong)}`;
+    // FIX: trước đây trỏ nhầm sang rooms.html (trang quản trị nội bộ).
+    link.href = `booking.html?loaiPhong=${encodeURIComponent(loai.MaLoaiPhong)}`;
     link.textContent = 'Xem phòng';
 
     foot.append(gia, link);
@@ -258,7 +261,12 @@ function veLoaiPhong(danhSach) {
 
 async function loadLoaiPhong() {
     try {
-        const data = await window.RoomTypeAPI.getAll();
+        // FIX: trước đây gọi window.RoomTypeAPI (dữ liệu mẫu trong bộ nhớ,
+        // field id/name/description/price/capacity) không khớp với field
+        // mà taoTheLoaiPhong() đọc (MaLoaiPhong/TenLoaiPhong/...), khiến
+        // card hiển thị rỗng/NaN. Phải dùng PublicRoomTypeAPI (dữ liệu
+        // MySQL thật từ bảng LOAI_PHONG).
+        const data = await window.PublicRoomTypeAPI.getAll();
         const danhSach = Array.isArray(data) ? data : [];
         const dangBan = danhSach.filter((loai) => loai.TrangThai !== 'INACTIVE');
 

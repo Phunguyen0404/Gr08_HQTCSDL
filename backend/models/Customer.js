@@ -35,10 +35,21 @@ async function search({ cccd, phone }) {
 
 async function getById(maKH) {
     const [[row]] = await pool.query(
-        `SELECT MaKH, CCCD, HoTen, NgaySinh, GioiTinh, SoDienThoai, Email, DiaChi, QuocTich
+        `SELECT MaKH, CCCD, HoTen, NgaySinh, GioiTinh, SoDienThoai, Email, DiaChi, QuocTich, MaTaiKhoan
            FROM KHACH_HANG
           WHERE MaKH = ?`,
         [maKH]
+    );
+    return row || null;
+}
+
+/** Tìm hồ sơ khách hàng đã liên kết với một tài khoản đăng nhập. */
+async function getByMaTaiKhoan(maTaiKhoan) {
+    const [[row]] = await pool.query(
+        `SELECT MaKH, CCCD, HoTen, NgaySinh, GioiTinh, SoDienThoai, Email, DiaChi, QuocTich, MaTaiKhoan
+           FROM KHACH_HANG
+          WHERE MaTaiKhoan = ?`,
+        [maTaiKhoan]
     );
     return row || null;
 }
@@ -52,10 +63,11 @@ async function create(data) {
 
         await conn.query(
             `INSERT INTO KHACH_HANG
-                (MaKH, CCCD, HoTen, SoDienThoai, Email, DiaChi, NgaySinh, GioiTinh)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+                (MaKH, MaTaiKhoan, CCCD, HoTen, SoDienThoai, Email, DiaChi, NgaySinh, GioiTinh)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 maKH,
+                data.maTaiKhoan || null,
                 data.cccd,
                 data.hoTen,
                 data.soDienThoai,
@@ -76,8 +88,29 @@ async function create(data) {
     }
 }
 
+/** Cập nhật hồ sơ khách hàng đã tồn tại (dùng khi khách hàng cập nhật lại thông tin của mình). */
+async function update(maKH, data) {
+    await pool.query(
+        `UPDATE KHACH_HANG
+            SET HoTen = ?, SoDienThoai = ?, Email = ?, DiaChi = ?, NgaySinh = ?, GioiTinh = ?
+          WHERE MaKH = ?`,
+        [
+            data.hoTen,
+            data.soDienThoai,
+            data.email || null,
+            data.diaChi || null,
+            data.ngaySinh || null,
+            data.gioiTinh || null,
+            maKH
+        ]
+    );
+    return getById(maKH);
+}
+
 module.exports = {
     search,
     getById,
-    create
+    getByMaTaiKhoan,
+    create,
+    update
 };

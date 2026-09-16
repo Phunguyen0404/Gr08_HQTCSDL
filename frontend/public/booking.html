@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt phòng - Khách sạn</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- booking.css dùng chung biến màu / font khai báo trong home.css -->
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/booking.css">
+</head>
+
+<body>
+
+    <!-- ============================================================
+         HEADER
+         ============================================================ -->
+
+    <header>
+        <div class="booking-header">
+
+            <a href="home.html" class="brand brand-dark">
+                <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                    <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                </svg>
+                <span class="brand-name">KHÁCH SẠN</span>
+            </a>
+
+            <div class="auth-area" id="authArea">
+                <!-- Được điền bằng JS: trạng thái đăng nhập -->
+                <a href="index.html" class="utility-link dark">
+                    <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7" />
+                        <line x1="16.5" y1="16.5" x2="21" y2="21" />
+                    </svg>
+                    <span>Đăng nhập</span>
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ============================================================
+         TÓM TẮT TÌM KIẾM
+         ============================================================ -->
+
+    <section class="search-summary-bar">
+
+        <div class="summary-item">
+            <span class="summary-label">Điểm đến</span>
+            <strong id="summaryDestination">Khách sạn của chúng tôi</strong>
+        </div>
+
+        <div class="summary-sep"></div>
+
+        <div class="summary-item">
+            <span class="summary-label">Ngày nhận - Trả phòng</span>
+            <strong id="summaryDates">-</strong>
+        </div>
+
+        <div class="summary-sep"></div>
+
+        <div class="summary-item">
+            <span class="summary-label">Số phòng - Số khách</span>
+            <strong id="summaryGuests">-</strong>
+        </div>
+
+        <div class="summary-sep"></div>
+
+        <div class="summary-item summary-promo">
+            <span class="summary-label">Mã ưu đãi</span>
+            <input type="text" id="summaryPromo" placeholder="Nhập mã">
+        </div>
+
+        <a href="home.html#tim-kiem" class="summary-link">Đổi tìm kiếm</a>
+
+    </section>
+
+    <!-- ============================================================
+         NỘI DUNG CHÍNH
+         ============================================================ -->
+
+    <div class="booking-layout">
+
+        <section class="booking-rooms">
+
+            <div class="section-head">
+                <h1>Chọn phòng còn trống</h1>
+                <p class="muted">Chọn một hoặc nhiều phòng phù hợp với chuyến đi của bạn.</p>
+            </div>
+
+            <div id="roomGrid" class="booking-room-grid">
+                <p class="grid-state">Đang tìm phòng trống...</p>
+            </div>
+
+        </section>
+
+        <aside class="trip-card">
+
+            <h2>Chuyến của bạn</h2>
+
+            <p class="trip-hotel">Khách sạn của chúng tôi</p>
+            <p class="trip-dates" id="tripDates">-</p>
+            <p class="trip-nights" id="tripNights">-</p>
+
+            <hr class="trip-divider">
+
+            <div id="tripRooms">
+                <p class="trip-empty muted">Bạn chưa chọn phòng nào.</p>
+            </div>
+
+            <hr class="trip-divider" id="tripTotalDivider" hidden>
+
+            <p class="trip-total" id="tripTotal" hidden></p>
+
+            <button type="button" class="btn btn-amber btn-full btn-continue" id="continueBtn" disabled>
+                Tiếp tục đặt phòng
+            </button>
+
+        </aside>
+
+    </div>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+
+    <footer class="site-footer">
+
+        <div class="footer-grid">
+
+            <div class="footer-brand">
+                <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                    <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                </svg>
+                <span class="brand-name">KHÁCH SẠN</span>
+                <p>Nhóm 08 - Đồ án Hệ quản trị cơ sở dữ liệu.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Liên hệ</h4>
+                <p>Hotline: 1900 0000</p>
+                <p>Email: datphong@khachsan.vn</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Giờ làm việc</h4>
+                <p>Nhận phòng từ 14:00</p>
+                <p>Trả phòng trước 12:00</p>
+            </div>
+
+        </div>
+
+        <p class="footer-note">© 2026 - Đồ án môn học, không sử dụng cho mục đích thương mại.</p>
+
+    </footer>
+
+    <!-- ============================================================
+         MODAL ĐẶT PHÒNG
+         ============================================================ -->
+
+    <div class="modal-overlay" id="bookingModal" hidden>
+        <div class="modal-card">
+
+            <button type="button" class="modal-close" id="modalClose" aria-label="Đóng">×</button>
+
+            <ul class="modal-steps" id="modalSteps">
+                <li data-step="account">Thông tin khách</li>
+                <li data-step="confirm">Xác nhận</li>
+                <li data-step="success">Hoàn tất</li>
+            </ul>
+
+            <!-- BƯỚC 1a: ĐĂNG NHẬP / ĐĂNG KÝ (chỉ hiện khi chưa đăng nhập) -->
+            <section class="modal-step" id="stepAccount" data-step="account">
+
+                <div class="account-tabs">
+                    <button type="button" class="account-tab is-active" id="tabLogin">Đăng nhập</button>
+                    <button type="button" class="account-tab" id="tabRegister">Đăng ký tài khoản</button>
+                </div>
+
+                <form class="modal-form" id="loginModalForm">
+                    <label>
+                        Tên đăng nhập
+                        <input type="text" name="username" required autocomplete="username">
+                    </label>
+                    <label>
+                        Mật khẩu
+                        <input type="password" name="password" required autocomplete="current-password">
+                    </label>
+                    <p class="form-error" id="loginError"></p>
+                    <button type="submit" class="btn btn-amber btn-full">Đăng nhập</button>
+                </form>
+
+                <form class="modal-form" id="registerModalForm" hidden>
+                    <label>
+                        Tên đăng nhập
+                        <input type="text" name="username" required minlength="8" maxlength="30"
+                            placeholder="8-30 ký tự, có ít nhất 1 chữ cái">
+                    </label>
+                    <label>
+                        Mật khẩu
+                        <input type="password" name="password" required minlength="8" maxlength="30">
+                    </label>
+                    <label>
+                        Nhập lại mật khẩu
+                        <input type="password" name="confirmPassword" required minlength="8" maxlength="30">
+                    </label>
+                    <p class="form-error" id="registerError"></p>
+                    <button type="submit" class="btn btn-amber btn-full">Đăng ký</button>
+                </form>
+
+            </section>
+
+            <!-- BƯỚC 1b: HỒ SƠ KHÁCH HÀNG (hiện sau khi đăng nhập) -->
+            <section class="modal-step" id="stepProfile" data-step="account" hidden>
+
+                <form class="modal-form modal-form-grid" id="profileForm">
+                    <label class="full-width">
+                        Họ và tên
+                        <input type="text" name="hoTen" required>
+                    </label>
+                    <label>
+                        Số CCCD
+                        <input type="text" name="cccd" id="profileCccd">
+                    </label>
+                    <label>
+                        Số điện thoại
+                        <input type="tel" name="soDienThoai" required>
+                    </label>
+                    <label class="full-width">
+                        Email
+                        <input type="email" name="email">
+                    </label>
+                    <label>
+                        Ngày sinh
+                        <input type="date" name="ngaySinh">
+                    </label>
+                    <label>
+                        Giới tính
+                        <select name="gioiTinh">
+                            <option value="">Không chọn</option>
+                            <option value="MALE">Nam</option>
+                            <option value="FEMALE">Nữ</option>
+                            <option value="OTHER">Khác</option>
+                        </select>
+                    </label>
+                    <label class="full-width">
+                        Địa chỉ
+                        <input type="text" name="diaChi">
+                    </label>
+                    <p class="form-error" id="profileError"></p>
+                    <button type="submit" class="btn btn-amber btn-full full-width">Lưu và tiếp tục</button>
+                </form>
+
+            </section>
+
+            <!-- BƯỚC 2: XÁC NHẬN -->
+            <section class="modal-step" id="stepConfirm" data-step="confirm" hidden>
+
+                <div class="confirm-summary" id="confirmSummary"></div>
+
+                <form class="modal-form" id="confirmForm">
+                    <label>
+                        Ghi chú cho khách sạn (không bắt buộc)
+                        <textarea name="note" rows="3" placeholder="Ví dụ: nhận phòng trễ, phòng tầng cao..."></textarea>
+                    </label>
+                    <p class="form-error" id="confirmError"></p>
+                    <button type="submit" class="btn btn-amber btn-full">Xác nhận đặt phòng</button>
+                </form>
+
+            </section>
+
+            <!-- BƯỚC 3: THÀNH CÔNG -->
+            <section class="modal-step" id="stepSuccess" data-step="success" hidden>
+
+                <div class="success-box">
+                    <h3>Đặt phòng thành công!</h3>
+                    <p class="muted">Mã đặt phòng của bạn</p>
+                    <p class="booking-code" id="successCode">-</p>
+                    <p class="muted">Vui lòng lưu lại mã này để tra cứu hoặc liên hệ khách sạn khi cần.</p>
+                    <a href="home.html" class="btn btn-outline btn-full success-cta">Về trang chủ</a>
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/booking.js"></script>
+
+</body>
+
+</html>

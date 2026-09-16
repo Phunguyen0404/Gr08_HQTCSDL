@@ -1,17 +1,7 @@
-<<<<<<< HEAD
-const mysql = require('mysql2/promise');
-
-console.log('>>> DB.JS DANG DUOC LOAD <<<');
-
-console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_NAME:', process.env.DB_NAME);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? 'DA CO' : 'DANG TRONG');
-
-=======
 require('dotenv').config();
 
-const mysql = require('mysql2/promise')
->>>>>>> feature/auth
+const mysql = require('mysql2/promise');
+
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT) || 3306,
@@ -22,7 +12,12 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
-<<<<<<< HEAD
+
+// ============================================================
+// DỮ LIỆU MẪU (dùng cho các API quản trị phòng kiểu cũ,
+// KHÔNG dùng cho luồng đặt phòng khách hàng - luồng đó dùng
+// thẳng dữ liệu thật trong MySQL: LOAI_PHONG, PHONG, DAT_PHONG...)
+// ============================================================
 
 const store = {
     roomTypes: [
@@ -50,17 +45,14 @@ const store = {
 pool.store = store;
 
 pool.getConnection()
-    .then(connection => {
+    .then((connection) => {
         console.log('MYSQL: KET NOI THANH CONG');
         connection.release();
     })
-    .catch(error => {
+    .catch((error) => {
         console.log('MYSQL: KET NOI THAT BAI');
         console.log(error.message);
     });
 
 module.exports = pool;
 module.exports.store = store;
-=======
-module.exports = pool;
->>>>>>> feature/auth
