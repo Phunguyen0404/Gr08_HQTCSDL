@@ -108,7 +108,7 @@ main_block: BEGIN
      WHERE dp.TrangThai NOT IN ('CANCELLED', 'NO_SHOW')
        AND dp.NgayNhanDuKien < p_NgayTraDuKien
        AND dp.NgayTraDuKien  > p_NgayNhanDuKien
-     FOR UPDATE;
+       FOR UPDATE OF ctp, dp;
 
     IF v_SoLuongTrung > 0 THEN
         ROLLBACK;

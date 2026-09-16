@@ -1,0 +1,88 @@
+.room-type-detail-media {
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    background-color: #dcd7ce;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 18px;
+}
+
+.room-type-detail-gia {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 12px 0 20px;
+}
+
+/* Header trong suốt nằm đè lên ảnh hero: chữ trắng, kể cả khi đã
+   đăng nhập (user-chip / nút đăng xuất mặc định tối màu trong
+   booking.css, ở đây cần đổi thành trắng cho tương phản). */
+#authArea.utility-bar .user-chip span {
+    color: inherit;
+}
+
+#authArea.utility-bar .logout-link {
+    color: inherit;
+    opacity: 0.75;
+}
+
+#authArea.utility-bar .logout-link:hover {
+    opacity: 1;
+}
+
+/* Gợi ý đổi tài khoản ngay trong modal, tránh việc form Hồ sơ
+   âm thầm lưu vào tài khoản cũ đang đăng nhập sẵn. */
+.switch-account-hint {
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--sand);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+}
+
+.switch-account-hint .link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-weight: 500;
+    color: var(--amber-dark);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Khu vực "Phòng còn trống" nằm ngay dưới hero, không cần margin-top
+   kiểu trang riêng như booking.html */
+#ketQua {
+    scroll-margin-top: 24px;
+}
+
+#ketQua .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.filter-loai-phong {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.filter-loai-phong select {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    min-width: 220px;
+}
+
+.room-link {
+    cursor: pointer;
+}

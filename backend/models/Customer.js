@@ -54,6 +54,38 @@ async function getByMaTaiKhoan(maTaiKhoan) {
     return row || null;
 }
 
+/** Tìm hồ sơ khách hàng theo đúng số CCCD (dùng để kiểm tra trùng khi tạo hồ sơ mới). */
+async function getByCCCD(cccd) {
+    const [[row]] = await pool.query(
+        `SELECT MaKH, CCCD, HoTen, NgaySinh, GioiTinh, SoDienThoai, Email, DiaChi, QuocTich, MaTaiKhoan
+           FROM KHACH_HANG
+          WHERE CCCD = ?`,
+        [cccd]
+    );
+    return row || null;
+}
+
+/** Gắn một hồ sơ khách hàng sẵn có (chưa thuộc tài khoản nào) vào tài khoản đang
+ *  đăng nhập, đồng thời cập nhật các thông tin khác mà khách vừa điền lại. */
+async function linkToAccount(maKH, maTaiKhoan, data) {
+    await pool.query(
+        `UPDATE KHACH_HANG
+            SET MaTaiKhoan = ?, HoTen = ?, SoDienThoai = ?, Email = ?, DiaChi = ?, NgaySinh = ?, GioiTinh = ?
+          WHERE MaKH = ?`,
+        [
+            maTaiKhoan,
+            data.hoTen,
+            data.soDienThoai,
+            data.email || null,
+            data.diaChi || null,
+            data.ngaySinh || null,
+            data.gioiTinh || null,
+            maKH
+        ]
+    );
+    return getById(maKH);
+}
+
 async function create(data) {
     const conn = await pool.getConnection();
     try {
@@ -111,6 +143,8 @@ module.exports = {
     search,
     getById,
     getByMaTaiKhoan,
+    getByCCCD,
+    linkToAccount,
     create,
     update
 };

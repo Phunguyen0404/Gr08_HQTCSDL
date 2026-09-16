@@ -89,6 +89,34 @@ async function saveMyProfile(req, res) {
             throw error;
         }
 
+        // Tài khoản này chưa có hồ sơ - kiểm tra CCCD đã tồn tại trong hệ thống
+        // chưa TRƯỚC khi tạo mới. Nếu không kiểm tra, một khách lỡ đăng ký thêm
+        // tài khoản thứ 2/3 (ví dụ quên mật khẩu) sẽ luôn bị lỗi trùng CCCD và
+        // không bao giờ tạo được hồ sơ để đặt phòng.
+        const trungCCCD = await Customer.getByCCCD(cccd);
+
+        if (trungCCCD) {
+            if (!trungCCCD.MaTaiKhoan) {
+                // Hồ sơ có sẵn (ví dụ do lễ tân tạo tay) nhưng chưa gắn tài khoản
+                // nào -> gắn luôn vào tài khoản đang đăng nhập thay vì báo lỗi.
+                const linked = await Customer.linkToAccount(trungCCCD.MaKH, maTaiKhoan, {
+                    hoTen, soDienThoai, email, ngaySinh, gioiTinh, diaChi
+                });
+                return res.status(200).json({
+                    success: true,
+                    data: linked,
+                    message: 'Đã liên kết hồ sơ khách hàng có sẵn với tài khoản của bạn'
+                });
+            }
+
+            // Hồ sơ đã gắn với một tài khoản khác rồi -> không cho tạo trùng.
+            const error = new Error(
+                'Số CCCD này đã được đăng ký bởi một tài khoản khác. Vui lòng đăng nhập bằng tài khoản cũ hoặc liên hệ lễ tân để được hỗ trợ.'
+            );
+            error.status = 409;
+            throw error;
+        }
+
         const customer = await Customer.create({
             hoTen, cccd, soDienThoai, email, ngaySinh, gioiTinh, diaChi, maTaiKhoan
         });
