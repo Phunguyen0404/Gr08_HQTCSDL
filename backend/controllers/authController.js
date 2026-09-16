@@ -28,7 +28,8 @@ async function register(req, res) {
             });
         }
 
-        const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+        // Bỏ bắt buộc hash: lưu trực tiếp mật khẩu (plain text) để dễ dàng quản lý, xem và đăng nhập trong đồ án
+        const passwordHash = password;
 
         for (let attempt = 1; attempt <= MAX_ACCOUNT_ID_ATTEMPTS; attempt += 1) {
             const maTaiKhoan = await User.generateAccountId();
@@ -101,9 +102,39 @@ async function login(req, res) {
             });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, account.MatKhauHash);
+        if (account.TrangThai !== 'ACTIVE') {
+            return res.status(401).json({
+                success: false,
+                message: 'Tài khoản hiện đang bị khóa hoặc chưa kích hoạt.'
+            });
+        }
 
-        if (!isPasswordValid || account.TrangThai !== 'ACTIVE') {
+        let isPasswordValid = false;
+
+        // 1. So khớp trực tiếp dạng Plain-Text (không hash)
+        if (password === account.MatKhauHash) {
+            isPasswordValid = true;
+        }
+
+        // 2. So khớp bcrypt (nếu dữ liệu trong DB vẫn còn lưu dạng hash $2a$ / $2b$)
+        if (!isPasswordValid && account.MatKhauHash && (account.MatKhauHash.startsWith('$2a$') || account.MatKhauHash.startsWith('$2b$'))) {
+            try {
+                isPasswordValid = await bcrypt.compare(password, account.MatKhauHash);
+            } catch (hashErr) {
+                isPasswordValid = false;
+            }
+        }
+
+        // 3. Fallback đặc biệt cho tài khoản demo / nhóm / kiểm thử hệ thống
+        // Chấp nhận mật khẩu phổ biến (admin123, 123456, hoặc chính username)
+        if (!isPasswordValid) {
+            const isCommonDemoAccount = ['admin001', 'staff001', 'staff002', 'customer01', 'customer02', 'admin'].includes(account.TenDangNhap);
+            if (isCommonDemoAccount && (password === 'admin123' || password === '123456' || password === account.TenDangNhap)) {
+                isPasswordValid = true;
+            }
+        }
+
+        if (!isPasswordValid) {
             return res.status(401).json({
                 success: false,
                 message: 'Tên đăng nhập hoặc mật khẩu không đúng.'

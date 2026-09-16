@@ -19,10 +19,10 @@ const validateRegister = (req, res, next) => {
     // Password
     if (
         typeof password !== 'string' ||
-        password.length < 8 ||
+        password.length < 6 ||
         password.length > 30
     ) {
-        errors.push('Password phải dài từ 8 đến 30 ký tự.');
+        errors.push('Password phải dài từ 6 đến 30 ký tự.');
     }
 
     // Confirm password

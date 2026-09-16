@@ -241,12 +241,12 @@
                 setFieldError('registerUsername', '');
             }
 
-            // Password validation: 8-30 ký tự
+            // Password validation: 6-30 ký tự
             if (!password) {
                 setFieldError('registerPassword', 'Vui lòng nhập mật khẩu.');
                 hasError = true;
-            } else if (password.length < 8 || password.length > 30) {
-                setFieldError('registerPassword', 'Mật khẩu phải dài từ 8 đến 30 ký tự.');
+            } else if (password.length < 6 || password.length > 30) {
+                setFieldError('registerPassword', 'Mật khẩu phải dài từ 6 đến 30 ký tự.');
                 hasError = true;
             } else {
                 setFieldError('registerPassword', '');

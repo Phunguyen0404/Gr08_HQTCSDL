@@ -25,35 +25,35 @@ VALUES
 (
     'TK001',
     'admin001',
-    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
+    'admin123',
     'ADMIN',
     'ACTIVE'
 ),
 (
     'TK002',
     'staff001',
-    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
+    'admin123',
     'ADMIN',
     'ACTIVE'
 ),
 (
     'TK003',
     'staff002',
-    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
+    'admin123',
     'ADMIN',
     'ACTIVE'
 ),
 (
     'TK004',
     'customer01',
-    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
+    'admin123',
     'CUSTOMER',
     'ACTIVE'
 ),
 (
     'TK005',
     'customer02',
-    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
+    'admin123',
     'CUSTOMER',
     'ACTIVE'
 );
