@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân &amp; Thông tin lưu trú - Khách Sạn &amp; Nghỉ Dưỡng</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/home.css">
+    <style>
+        .profile-page-section {
+            max-width: 1160px;
+            margin: 40px auto 80px;
+            padding: 0 24px;
+        }
+
+        .section-intro {
+            margin-bottom: 36px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-intro h1 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--ink);
+            margin: 0 0 8px;
+        }
+
+        .section-intro p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .profile-layout-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        /* Architectural Cards */
+        .lux-panel {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-top: 2px solid var(--ink);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(26, 26, 26, 0.04);
+            transition: border-top-color 500ms ease, box-shadow 500ms ease;
+        }
+
+        .lux-panel:hover {
+            border-top-color: var(--amber);
+            box-shadow: 0 8px 30px rgba(26, 26, 26, 0.07);
+        }
+
+        /* Left Side: Member Card */
+        .member-header-card {
+            text-align: center;
+            padding: 32px 24px;
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+            background: var(--sand);
+            border: 2px solid var(--amber);
+            color: var(--ink);
+            font-family: "Playfair Display", serif;
+            font-size: 28px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.05em;
+        }
+
+        .member-name {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .member-username {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .membership-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .member-discount-note {
+            font-size: 12px;
+            color: var(--amber-dark);
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Stats List */
+        .profile-stat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            border-top: 1px solid var(--line);
+            padding-top: 18px;
+            text-align: left;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .stat-row span {
+            color: var(--muted);
+        }
+
+        .stat-row strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        /* Concierge Card */
+        .concierge-card h3 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 18px;
+            color: var(--ink);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .concierge-card p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .concierge-contacts {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: var(--sand);
+            padding: 16px;
+            border: 1px solid var(--line);
+            font-size: 13px;
+        }
+
+        .concierge-item strong {
+            color: var(--ink);
+        }
+
+        /* Right Side: Form Sections */
+        .form-section-title {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 20px;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .form-section-desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-field label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid var(--line);
+            border-radius: 0 !important;
+            font-family: "Be Vietnam Pro", sans-serif;
+            font-size: 13.5px;
+            color: var(--ink);
+            background: #ffffff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-field textarea {
+            height: auto;
+            padding: 12px 14px;
+            resize: vertical;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: var(--amber);
+        }
+
+        /* Checkbox list */
+        .pref-checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            background: var(--sand);
+            padding: 18px 20px;
+            border: 1px solid var(--line);
+            margin-bottom: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13.5px;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--amber-dark);
+            cursor: pointer;
+        }
+
+        .form-submit-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line);
+        }
+
+        @media (max-width: 900px) {
+            .profile-layout-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .pref-checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+         HEADER (Đồng bộ chuẩn từ home.html)
+         ============================================================ -->
+    <header class="site-header" id="siteHeader">
+        <div class="utility-bar" id="utilityBar">
+            <span id="userGreeting" style="font-size:13px; color:#475569; font-weight:500;">
+                Đang tải thông tin...
+            </span>
+            <span class="utility-sep">/</span>
+            <a href="customer-rooms.html" class="utility-link" style="color:var(--amber-dark); font-weight:600;">🏨 Đặt phòng</a>
+            <span class="utility-sep">/</span>
+            <a href="my-bookings.html" class="utility-link" style="color:var(--ink); font-weight:500;">📋 Đơn của tôi</a>
+            <span class="utility-sep">/</span>
+            <a href="profile.html" class="utility-link" style="color:var(--amber-dark); font-weight:600;">👤 Hồ sơ cá nhân</a>
+            <span class="utility-sep">/</span>
+            <a href="#" id="logoutBtn" class="utility-link" style="color:#dc2626; font-weight:600;">Đăng xuất</a>
+        </div>
+
+        <nav class="main-nav">
+            <ul class="nav-group nav-left">
+                <li><a href="home.html#phong">Khách sạn</a></li>
+                <li><a href="home.html#tien-ich">Trải nghiệm</a></li>
+                <li><a href="home.html#uu-dai">Ưu đãi</a></li>
+            </ul>
+
+            <a href="home.html" class="brand">
+                <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                    <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                </svg>
+                <span class="brand-name">KHÁCH SẠN</span>
+            </a>
+
+            <ul class="nav-group nav-right">
+                <li><a href="customer-rooms.html">Tìm phòng</a></li>
+                <li><a href="my-bookings.html">Đơn của tôi</a></li>
+                <li><a href="profile.html" style="color: var(--amber-dark); font-weight: 600;">Hồ sơ cá nhân</a></li>
+                <li><a href="home.html#lien-he">Liên hệ</a></li>
+            </ul>
+
+            <a href="customer-rooms.html" class="btn btn-amber btn-book">+ Đặt phòng</a>
+        </nav>
+    </header>
+
+    <!-- ============================================================
+         MAIN CONTENT
+         ============================================================ -->
+    <main class="profile-page-section">
+        <div class="section-intro">
+            <div>
+                <h1>Hồ sơ cá nhân &amp; Thông tin lưu trú</h1>
+                <p>Quản lý thông tin định danh, sở thích phòng và kết nối trực tiếp cùng ban quản lý khách sạn</p>
+            </div>
+            <a href="my-bookings.html" class="btn" style="background:var(--sand); color:var(--ink); border:1px solid var(--line); padding:10px 20px; font-size:13.5px;">📋 Xem các đơn đặt phòng</a>
+        </div>
+
+        <div class="profile-layout-grid">
+            <!-- ========================================================
+                 LEFT COLUMN: MEMBER CARD & HOTEL SUPPORT
+                 ======================================================== -->
+            <div>
+                <!-- Member Card -->
+                <div class="lux-panel member-header-card">
+                    <div class="member-avatar" id="profileAvatar">KH</div>
+                    <div class="member-name" id="profileNameDisplay">Khách hàng</div>
+                    <div class="member-username" id="profileUsernameDisplay">@username</div>
+                    <div class="membership-badge" id="membershipTier">Hạng Tiêu Chuẩn</div>
+                    <div class="member-discount-note" id="membershipDiscount">Tích lũy thêm để nhận ưu đãi</div>
+
+                    <div class="profile-stat-list">
+                        <div class="stat-row">
+                            <span>Mã định danh:</span>
+                            <strong id="profileMaKH" style="font-family:monospace; font-size:13.5px;">-</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Tổng đơn đặt:</span>
+                            <strong id="statTotalBookings">0</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Kỳ nghỉ hoàn tất:</span>
+                            <strong id="statCompletedStays">0</strong>
+                        </div>
+                        <div class="stat-row">
+                            <span>Tổng chi tiêu:</span>
+                            <strong id="statTotalSpend">0 ₫</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concierge & Hotel Support Card -->
+                <div class="lux-panel concierge-card">
+                    <h3>🛎️ Concierge &amp; Lễ Tân</h3>
+                    <p>Khách sạn luôn sẵn sàng hỗ trợ quý khách chu đáo trong suốt kỳ nghỉ dưỡng.</p>
+                    
+                    <div class="concierge-contacts">
+                        <div class="concierge-item">
+                            <span>Đường dây nóng Concierge 24/7:</span><br>
+                            <strong>1900 0000</strong> (Nhánh 1)
+                        </div>
+                        <div class="concierge-item">
+                            <span>Email chăm sóc khách hàng:</span><br>
+                            <strong>concierge@khachsan.vn</strong>
+                        </div>
+                        <div class="concierge-item">
+                            <span>Quy định nhận/trả phòng:</span><br>
+                            <span>Check-in: <strong>14:00</strong> | Check-out: <strong>12:00</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 RIGHT COLUMN: EDIT PROFILE & HOSPITALITY PREFERENCES
+                 ======================================================== -->
+            <div>
+                <form id="profileForm">
+                    <!-- Form Panel 1: Personal Identification -->
+                    <div class="lux-panel">
+                        <h2 class="form-section-title">1. Thông tin định danh cá nhân</h2>
+                        <p class="form-section-desc">Dữ liệu được bảo mật và sử dụng khi làm thủ tục nhận phòng (Check-in) theo quy định khách sạn.</p>
+
+                        <div class="form-grid-2">
+                            <div class="form-field">
+                                <label for="inputHoTen">Họ và tên đầy đủ *</label>
+                                <input type="text" id="inputHoTen" required placeholder="Ví dụ: Nguyễn Văn A">
+                            </div>
+
+                            <div class="form-field">
+                                <label for="inputCCCD">Số CCCD / CMND / Hộ chiếu *</label>
+                                <input type="text" id="inputCCCD" required placeholder="Số định danh công dân">
+                            </div>
+
+                            <div class="form-field">
+                                <label for="inputPhone">Số điện thoại liên lạc *</label>
+                                <input type="tel" id="inputPhone" required placeholder="09xxxxxxxx">
+                            </div>
+
+                            <div class="form-field">
+                                <label for="inputEmail">Địa chỉ Email</label>
+                                <input type="email" id="inputEmail" placeholder="email@domain.com">
+                            </div>
+
+                            <div class="form-field">
+                                <label for="inputNgaySinh">Ngày sinh</label>
+                                <input type="date" id="inputNgaySinh">
+                            </div>
+
+                            <div class="form-field">
+                                <label for="inputGioiTinh">Giới tính</label>
+                                <select id="inputGioiTinh">
+                                    <option value="MALE">Nam</option>
+                                    <option value="FEMALE">Nữ</option>
+                                    <option value="OTHER">Khác</option>
+                                </select>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="inputQuocTich">Quốc tịch</label>
+                                <input type="text" id="inputQuocTich" value="Việt Nam">
+                            </div>
+
+                            <div class="form-field">
+                                <label for="inputDiaChi">Địa chỉ thường trú</label>
+                                <input type="text" id="inputDiaChi" placeholder="Tỉnh / Thành phố, Quận / Huyện">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Panel 2: Hospitality & Concierge Preferences -->
+                    <div class="lux-panel">
+                        <h2 class="form-section-title">2. Sở thích lưu trú &amp; Yêu cầu đặc biệt</h2>
+                        <p class="form-section-desc">Khách sạn sẽ ưu tiên sắp xếp phòng và dịch vụ phù hợp nhất với sở thích của quý khách.</p>
+
+                        <div class="form-grid-2">
+                            <div class="form-field">
+                                <label for="prefFloor">Vị trí tầng ưu tiên</label>
+                                <select id="prefFloor">
+                                    <option value="HIGH">Tầng cao (Tầm nhìn thoáng đãng)</option>
+                                    <option value="LOW">Tầng thấp (Di chuyển thuận tiện)</option>
+                                    <option value="NEAR_ELEVATOR">Gần khu vực thang máy</option>
+                                    <option value="CORNER">Phòng góc yên tĩnh</option>
+                                </select>
+                            </div>
+
+                            <div class="form-field">
+                                <label for="prefBed">Tùy chọn giường ngủ</label>
+                                <select id="prefBed">
+                                    <option value="KING">1 Giường đôi lớn (King Bed)</option>
+                                    <option value="TWIN">2 Giường đơn riêng biệt (Twin Bed)</option>
+                                    <option value="EXTRA_BED">Yêu cầu kê thêm giường phụ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="pref-checkbox-grid">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefNonSmoking" checked>
+                                <span>Phòng tuyệt đối không hút thuốc</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefQuiet">
+                                <span>Ưu tiên không gian cách âm / yên tĩnh</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefAirport">
+                                <span>Quan tâm dịch vụ đưa đón sân bay</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="prefEarlyCheckin">
+                                <span>Muốn nhận thông báo khi có phòng sớm</span>
+                            </label>
+                        </div>
+
+                        <div class="form-field form-group-full">
+                            <label for="prefNotes">Ghi chú riêng cho Lễ tân &amp; Quản gia khi đặt phòng</label>
+                            <textarea id="prefNotes" rows="3" placeholder="Ví dụ: Ăn chay, dị ứng phấn hoa, kỷ niệm ngày cưới, cần gối lông vũ..."></textarea>
+                        </div>
+
+                        <div class="form-submit-row">
+                            <button type="submit" class="btn btn-amber" id="saveProfileBtn" style="padding:12px 32px; font-size:14px; font-weight:600;">
+                                Lưu cập nhật thông tin
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================================
+         FOOTER (Đồng bộ chuẩn từ home.html)
+         ============================================================ -->
+    <footer class="site-footer" id="lien-he">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                    <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                </svg>
+                <span class="brand-name">KHÁCH SẠN</span>
+                <p>Nhóm 08 - Đồ án Hệ quản trị cơ sở dữ liệu.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Liên hệ</h4>
+                <p>Hotline: 1900 0000</p>
+                <p>Email: datphong@khachsan.vn</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Giờ làm việc</h4>
+                <p>Nhận phòng từ 14:00</p>
+                <p>Trả phòng trước 12:00</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <p><a href="customer-rooms.html">Tìm phòng trống</a></p>
+                <p><a href="my-bookings.html">Đơn đặt của tôi</a></p>
+                <p><a href="profile.html">Hồ sơ cá nhân</a></p>
+            </div>
+        </div>
+
+        <p class="footer-note">© 2026 - Đồ án môn học, không sử dụng cho mục đích thương mại.</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/authGuard.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+
+</html>

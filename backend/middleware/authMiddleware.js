@@ -10,7 +10,8 @@ module.exports = function authMiddleware(req, res, next) {
   const token = authorization.split(/\s+/)[1];
 
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    const secret = process.env.JWT_SECRET || 'hotel_jwt_secret_key_2026';
+    req.user = jwt.verify(token, secret);
     return next();
   } catch (error) {
     return res.status(401).json({ message: 'Unauthorized' });

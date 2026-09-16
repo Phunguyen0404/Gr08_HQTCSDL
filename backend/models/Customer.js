@@ -76,8 +76,47 @@ async function create(data) {
     }
 }
 
+async function getByAccountId(maTaiKhoan) {
+    const [[row]] = await pool.query(
+        `SELECT MaKH, MaTaiKhoan, CCCD, HoTen, NgaySinh, GioiTinh, SoDienThoai, Email, DiaChi, QuocTich, NgayTao
+           FROM KHACH_HANG
+          WHERE MaTaiKhoan = ?`,
+        [maTaiKhoan]
+    );
+    return row || null;
+}
+
+async function update(maKH, data) {
+    await pool.query(
+        `UPDATE KHACH_HANG
+            SET HoTen = COALESCE(?, HoTen),
+                CCCD = COALESCE(?, CCCD),
+                SoDienThoai = COALESCE(?, SoDienThoai),
+                Email = ?,
+                DiaChi = ?,
+                NgaySinh = ?,
+                GioiTinh = ?,
+                QuocTich = ?
+          WHERE MaKH = ?`,
+        [
+            data.hoTen || null,
+            data.cccd || null,
+            data.soDienThoai || null,
+            data.email !== undefined ? data.email : null,
+            data.diaChi !== undefined ? data.diaChi : null,
+            data.ngaySinh !== undefined ? data.ngaySinh : null,
+            data.gioiTinh !== undefined ? data.gioiTinh : null,
+            data.quocTich !== undefined ? data.quocTich : null,
+            maKH
+        ]
+    );
+    return getById(maKH);
+}
+
 module.exports = {
     search,
     getById,
-    create
+    getByAccountId,
+    create,
+    update
 };

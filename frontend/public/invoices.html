@@ -1,1704 +1,484 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Quản lý Hóa đơn - Hotel Management</title>
     <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/luxury-tokens.css">
     <style>
-        /* =========================================================
-           LUXURY EDITORIAL OVERRIDES
-        ========================================================= */
-
-        body {
-            font-family: var(--font-body);
-            background: var(--lux-bg);
-            color: var(--lux-fg);
-            font-size: 13.5px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .sidebar {
-            background: var(--lux-bg-elevated);
-            border-right: 1px solid var(--lux-border);
-            box-shadow: 2px 0 16px rgba(0,0,0,0.03);
-        }
-
-        .stat-card, .table-card, .invoice-card, .modal-card, .panel, .main-card {
-            background: var(--lux-bg-elevated) !important;
-            border: 1px solid var(--lux-border) !important;
-            border-top: 2px solid var(--lux-fg) !important;
-            border-radius: 0 !important;
-            box-shadow: var(--lux-shadow-sm) !important;
-        }
-
-        .stat-card:hover, .table-card:hover, .invoice-card:hover {
-            border-top-color: var(--lux-accent) !important;
-            box-shadow: var(--lux-shadow-md) !important;
-        }
-
-        .badge, .status-badge, button, input, select, .avatar, .logo-icon {
-            border-radius: 0 !important;
-        }
-
-        th {
-            background: var(--lux-muted-bg) !important;
-            color: var(--lux-fg) !important;
-            font-family: var(--font-body);
-            font-size: 11px !important;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-        }
-
-        h1, h2, h3, .invoice-title, .modal-title {
-            font-family: var(--font-heading);
-        }
-
-
-        /* =========================================================
-           APP
-        ========================================================= */
-
-        .app {
-            display: flex;
-            min-height: 100vh;
-        }
-
-
-        /* =========================================================
-           SIDEBAR
-           Đồng bộ kích thước với Dashboard
-        ========================================================= */
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-
-            width: 250px;
-            min-width: 250px;
-
-            background: #ffffff;
-            border-right: 1px solid #dce8ee;
-
+        .invoices-page-container {
+            width: 100%;
             display: flex;
             flex-direction: column;
-
-            padding: 24px 16px;
-
-            z-index: 100;
+            gap: 24px;
         }
 
-
-        /* LOGO */
-
-        .logo {
-            display: flex;
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 8px 10px 28px;
-
-            border-bottom: 1px solid #e3edf2;
-        }
-
-        .logo-icon {
-            width: 44px;
-            height: 44px;
-
-            border-radius: 10px;
-
-            border: 2px solid #65bfdc;
-
-            background: #eef9fc;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: #087ba7;
-
-            font-size: 23px;
-            font-weight: 700;
-
-            flex-shrink: 0;
-        }
-
-        .logo h2 {
-            font-size: 20px;
-            line-height: 1.1;
-
-            color: #153e56;
-
-            letter-spacing: 0.3px;
-        }
-
-        .logo span {
-            display: block;
-
-            margin-top: 3px;
-
-            color: #78909d;
-
-            font-size: 12px;
-        }
-
-
-        /* =========================================================
-           MENU
-        ========================================================= */
-
-        .menu {
-            margin-top: 28px;
-
-            display: flex;
-            flex-direction: column;
-
-            gap: 6px;
-
-            flex: 1;
-
-            overflow-y: auto;
-        }
-
-        .menu::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        .menu::-webkit-scrollbar-thumb {
-            background: #9ba3a8;
-            border-radius: 10px;
-        }
-
-        .menu-item {
-            text-decoration: none;
-
-            min-height: 46px;
-
-            display: flex;
-            align-items: center;
-
-            gap: 13px;
-
-            padding: 11px 14px;
-
-            border-radius: 9px;
-
-            color: #627b89;
-
-            font-size: 14px;
-
-            transition: 0.2s;
-        }
-
-        .menu-item:hover {
-            background: #f0f8fb;
-            color: #0781b2;
-        }
-
-        .menu-icon {
-            width: 22px;
-
-            text-align: center;
-
-            font-size: 16px;
-
-            flex-shrink: 0;
-        }
-
-        .menu-item.active {
-            background: #e5f5fa;
-
-            color: #007faf;
-
-            font-weight: 600;
-
-            border-left: 4px solid #0b91bd;
-
-            padding-left: 10px;
-        }
-
-
-        /* =========================================================
-           SIDEBAR BOTTOM
-        ========================================================= */
-
-        .sidebar-bottom {
-            border-top: 1px solid #e3edf2;
-
-            padding-top: 17px;
-
-            margin-top: 8px;
-        }
-
-        .admin-mini {
-            display: flex;
-            align-items: center;
-
-            gap: 10px;
-
-            padding: 0 8px 15px;
-        }
-
-        .avatar {
-            width: 38px;
-            height: 38px;
-
-            border-radius: 50%;
-
-            background: #e8f6fa;
-
-            border: 1px solid #a6dced;
-
-            color: #087ba6;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 12px;
-            font-weight: 700;
-
-            flex-shrink: 0;
-        }
-
-        .admin-mini strong {
-            display: block;
-
-            color: #345466;
-
-            font-size: 13px;
-        }
-
-        .admin-mini small {
-            display: block;
-
-            margin-top: 2px;
-
-            color: #91a2ad;
-
-            font-size: 11px;
-        }
-
-        .logout-btn {
-            width: 100%;
-
-            height: 42px;
-
-            border: 1px solid #cfe0e8;
-
-            border-radius: 9px;
-
-            background: #ffffff;
-
-            color: #718793;
-
-            cursor: pointer;
-
-            font-size: 13px;
-        }
-
-        .logout-btn:hover {
-            background: #f5fafc;
-        }
-
-
-        /* =========================================================
-           MAIN
-        ========================================================= */
-
-        .main {
-            margin-left: 250px;
-
-            width: calc(100% - 250px);
-
-            min-height: 100vh;
-
-            padding: 28px 32px;
-
-            overflow-x: hidden;
-        }
-
-
-        /* =========================================================
-           HEADER
-        ========================================================= */
-
-        .header {
-            min-height: 56px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            margin-bottom: 27px;
-        }
-
-        .header-title h1 {
-            color: #163e56;
-
-            font-size: 28px;
-
-            line-height: 1.2;
-
-            margin-bottom: 5px;
-        }
-
-        .header-title p {
-            color: #8398a5;
-
-            font-size: 14px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-
-            gap: 15px;
-        }
-
-
-        /* SEARCH TRÊN HEADER */
-
-        .search-box {
-            width: 190px;
-            height: 38px;
-
-            border: 1px solid #d7e4ea;
-
-            border-radius: 8px;
-
-            background: #ffffff;
-
-            display: flex;
-            align-items: center;
-
-            padding: 0 12px;
-
-            color: #89a0ad;
-        }
-
-        .search-box input {
-            width: 100%;
-
-            border: none;
-            outline: none;
-
-            margin-left: 8px;
-
-            font-size: 13px;
-
-            color: #506977;
-        }
-
-
-        /* NOTIFICATION */
-
-        .notification {
-            position: relative;
-
-            width: 38px;
-            height: 38px;
-
-            border: none;
-
-            border-radius: 8px;
-
-            background: #f2f7f9;
-
-            cursor: pointer;
-
-            font-size: 16px;
-        }
-
-        .notification-dot {
-            position: absolute;
-
-            width: 6px;
-            height: 6px;
-
-            border-radius: 50%;
-
-            background: #d29a38;
-
-            top: 7px;
-            right: 7px;
-        }
-
-
-        /* PROFILE */
-
-        .profile {
-            display: flex;
-            align-items: center;
-
-            gap: 9px;
-        }
-
-        .profile strong {
-            display: block;
-
-            font-size: 13px;
-
-            color: #355466;
-        }
-
-        .profile small {
-            display: block;
-
-            margin-top: 2px;
-
-            font-size: 11px;
-
-            color: #91a3ae;
-        }
-
-
-        /* =========================================================
-           PAGE TITLE
-        ========================================================= */
-
-        .page-title {
-            margin-bottom: 23px;
-        }
-
-        .page-title h2 {
-            color: #153f58;
-
-            font-size: 27px;
-
-            line-height: 1.2;
-
-            margin-bottom: 5px;
-        }
-
-        .page-title p {
-            color: #8297a4;
-
-            font-size: 14px;
-        }
-
-
-        /* =========================================================
-           STATISTICS
-        ========================================================= */
-
-        .statistics {
-            width: 100%;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-
-            gap: 18px;
-
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            min-width: 0;
-
-            background: #ffffff;
-
-            border: 1px solid #d7e4ea;
-
-            border-radius: 12px;
-
-            min-height: 108px;
-
-            padding: 20px;
-
-            display: flex;
-            align-items: center;
-
-            gap: 14px;
-
-            box-shadow:
-                0 4px 12px rgba(35, 70, 90, 0.035);
-        }
-
-        .stat-icon {
-            width: 52px;
-            height: 52px;
-
-            flex-shrink: 0;
-
-            border-radius: 11px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 22px;
-        }
-
-        .total-icon {
-            background: #e9f7fb;
-            color: #1382ad;
-        }
-
-        .paid-icon {
-            background: #eaf8f1;
-            color: #32a36c;
-        }
-
-        .unpaid-icon {
-            background: #fff5dc;
-            color: #c48a28;
-        }
-
-        .money-icon {
-            background: #edf1fa;
-            color: #526da5;
-        }
-
-        .stat-content {
-            min-width: 0;
-        }
-
-        .stat-label {
-            display: block;
-
-            color: #899da8;
-
-            font-size: 12px;
-
-            margin-bottom: 5px;
-
-            white-space: nowrap;
-        }
-
-        .stat-number {
-            display: block;
-
-            color: #123f59;
-
-            font-size: 20px;
-
-            font-weight: 700;
-
-            white-space: nowrap;
-        }
-
-
-        /* =========================================================
-           INVOICE SECTION
-        ========================================================= */
-
-        .invoice-section {
-            width: 100%;
-
-            background: #ffffff;
-
-            border: 1px solid #d7e4ea;
-
-            border-radius: 12px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 4px 12px rgba(35, 70, 90, 0.035);
-        }
-
-
-        /* SECTION HEADER */
-
-        .section-header {
-            min-height: 76px;
-
-            padding: 20px 22px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            border-bottom: 1px solid #e4edf1;
-        }
-
-        .section-header h2 {
-            color: #0e4e71;
-
-            font-size: 20px;
-
-            margin-bottom: 4px;
-        }
-
-        .section-header p {
-            color: #91a3ae;
-
-            font-size: 12px;
-        }
-
-        .invoice-count {
-            color: #8397a2;
-
-            font-size: 12px;
-
-            white-space: nowrap;
-        }
-
-
-        /* =========================================================
-           TOOLBAR
-        ========================================================= */
-
+        /* Toolbar */
         .invoice-toolbar {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-
-            gap: 12px;
-
-            padding: 16px 22px;
-
-            background: #f8fbfc;
-
-            border-bottom: 1px solid #e4edf1;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--lux-bg-elevated);
+            border: 1px solid var(--lux-border);
+            border-top: 2px solid var(--lux-fg);
+            flex-wrap: wrap;
         }
 
         .invoice-search-box {
             position: relative;
-
             flex: 1;
-
-            min-width: 0;
+            min-width: 260px;
         }
 
-        .invoice-search-box .search-icon {
-            position: absolute;
-
-            left: 13px;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            color: #7d97a5;
-
-            font-size: 18px;
-        }
-
-        .invoice-search-box input {
+        .invoice-search-input {
             width: 100%;
-
             height: 40px;
-
-            border: 1px solid #cbdde5;
-
-            border-radius: 9px;
-
-            outline: none;
-
-            background: #ffffff;
-
-            padding: 0 13px 0 40px;
-
+            padding: 0 14px 0 38px;
+            border: 1px solid var(--lux-border);
+            border-radius: 0 !important;
+            font-family: var(--font-body);
             font-size: 13px;
-
-            color: #506977;
+            color: var(--lux-fg);
+            background: var(--lux-bg);
+            outline: none;
+            transition: border-color var(--lux-trans-fast);
         }
 
-        .invoice-search-box input:focus {
-            border-color: #72bdd7;
+        .invoice-search-input:focus {
+            border-color: var(--lux-accent);
+        }
+
+        .invoice-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--lux-muted-fg);
+            font-size: 15px;
+            pointer-events: none;
         }
 
         .status-filter {
-            width: 190px;
-
             height: 40px;
-
-            border: 1px solid #cbdde5;
-
-            border-radius: 9px;
-
+            padding: 0 14px;
+            border: 1px solid var(--lux-border);
+            border-radius: 0 !important;
+            font-family: var(--font-body);
+            font-size: 12.5px;
+            color: var(--lux-fg);
+            background: var(--lux-bg);
             outline: none;
-
-            background: #ffffff;
-
-            padding: 0 12px;
-
-            color: #607986;
-
-            font-size: 13px;
-
             cursor: pointer;
         }
 
-
-        /* =========================================================
-           TABLE
-        ========================================================= */
-
-        .table-wrapper {
-            width: 100%;
-
-            overflow-x: auto;
-
-            overflow-y: hidden;
-        }
-
-        .table-wrapper::-webkit-scrollbar {
-            height: 9px;
-        }
-
-        .table-wrapper::-webkit-scrollbar-thumb {
-            background: #a1a1a1;
-
-            border-radius: 10px;
-        }
-
-        .invoice-table {
-            width: 100%;
-
-            min-width: 1100px;
-
-            border-collapse: collapse;
-
-            table-layout: auto;
-        }
-
-        .invoice-table thead {
-            background: #f4f8fa;
-        }
-
-        .invoice-table th {
-            height: 52px;
-
-            padding: 13px 14px;
-
-            text-align: left;
-
-            border-bottom: 1px solid #dbe6eb;
-
-            color: #718793;
-
-            font-size: 11px;
-
-            font-weight: 700;
-
-            white-space: nowrap;
-        }
-
-        .invoice-table td {
-            padding: 15px 14px;
-
-            border-bottom: 1px solid #e9eff2;
-
-            color: #637b88;
-
-            font-size: 12px;
-
-            white-space: nowrap;
-
-            vertical-align: middle;
-        }
-
-        .invoice-table tbody tr {
-            height: 70px;
-        }
-
-        .invoice-table tbody tr:hover {
-            background: #fbfdfe;
-        }
-
-
-        /* =========================================================
-           INVOICE CODE
-        ========================================================= */
-
-        .invoice-code {
-            color: #07577e;
-
-            font-size: 12px;
-
-            font-weight: 700;
-        }
-
-
-        /* =========================================================
-           CUSTOMER
-        ========================================================= */
-
-        .customer-info {
+        /* Invoice Table styling */
+        .customer-cell {
             display: flex;
             align-items: center;
-
-            gap: 9px;
+            gap: 10px;
         }
 
         .customer-avatar {
-            width: 34px;
-            height: 34px;
-
-            border-radius: 50%;
-
-            background: #e7f6fa;
-
-            color: #087ca6;
-
+            width: 32px;
+            height: 32px;
+            border-radius: 0 !important;
+            background: var(--lux-muted-bg);
+            border: 1px solid var(--lux-border);
+            color: var(--lux-fg);
+            font-family: var(--font-body);
+            font-size: 10.5px;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            font-size: 10px;
-
-            font-weight: 700;
-
             flex-shrink: 0;
+            letter-spacing: 0.05em;
         }
 
         .customer-name {
-            display: block;
-
-            color: #405f70;
-
-            font-size: 12px;
-
             font-weight: 600;
-        }
-
-        .customer-id {
-            display: block;
-
-            color: #9aaab3;
-
-            font-size: 10px;
-
-            margin-top: 2px;
-        }
-
-
-        /* =========================================================
-           OTHER TABLE DATA
-        ========================================================= */
-
-        .booking-code {
-            color: #5d7b8b;
-
-            font-size: 12px;
-
-            font-weight: 600;
-        }
-
-        .date {
-            color: #718691;
-
-            font-size: 12px;
-        }
-
-        .amount {
-            color: #637c89;
-
-            font-size: 12px;
-        }
-
-        .discount {
-            color: #ae725c;
-
-            font-size: 12px;
-        }
-
-        .total {
-            color: #115273;
-
-            font-size: 12px;
-
-            font-weight: 700;
-        }
-
-        .note {
-            color: #7f929c;
-
-            font-size: 10px;
-        }
-
-
-        /* =========================================================
-           STATUS
-        ========================================================= */
-
-        .status {
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 6px;
-
-            padding: 5px 9px;
-
-            border-radius: 20px;
-
-            font-size: 10px;
-
-            font-weight: 600;
-
-            white-space: nowrap;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-
-            border-radius: 50%;
-
-            flex-shrink: 0;
-        }
-
-        .status.paid {
-            background: #eaf8f1;
-
-            color: #287a58;
-        }
-
-        .status.paid .status-dot {
-            background: #35a76f;
-        }
-
-        .status.issued {
-            background: #fff5dc;
-
-            color: #996c1e;
-        }
-
-        .status.issued .status-dot {
-            background: #d4a03b;
-        }
-
-
-        /* =========================================================
-           EMPTY
-        ========================================================= */
-
-        .empty {
-            display: none;
-
-            text-align: center;
-
-            padding: 45px 20px;
-
-            color: #8ea1ab;
-
+            color: var(--lux-fg);
             font-size: 13px;
         }
 
+        .customer-code {
+            font-size: 11px;
+            color: var(--lux-muted-fg);
+        }
 
-        /* =========================================================
-           FOOTER
-        ========================================================= */
+        .booking-code {
+            font-family: monospace;
+            font-size: 12.5px;
+            font-weight: 700;
+            background: var(--lux-muted-bg);
+            color: var(--lux-fg);
+            padding: 3px 8px;
+            border: 1px solid var(--lux-border);
+        }
 
-        footer {
-            padding: 18px 3px 5px;
+        .total-money {
+            font-weight: 700;
+            color: var(--lux-fg);
+            font-size: 13.5px;
+        }
 
+        .invoice-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 0 !important;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .invoice-status.paid {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .invoice-status.unpaid {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .invoice-status.cancelled {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .invoice-status .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 0 !important;
+            background: currentColor;
+        }
+
+        .invoice-message {
+            text-align: center;
+            padding: 36px 16px;
+            color: var(--lux-muted-fg);
+            font-style: italic;
+        }
+
+        .empty {
+            display: none;
+            padding: 40px 16px;
+            text-align: center;
+            color: var(--lux-muted-fg);
+            font-size: 13px;
+        }
+
+        /* Modal Overrides for Luxury Editorial */
+        .lux-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 26, 26, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lux-modal-box {
+            background: var(--lux-bg-elevated);
+            border: 1px solid var(--lux-border);
+            border-top: 3px solid var(--lux-accent);
+            border-radius: 0 !important;
+            width: 100%;
+            max-width: 650px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: var(--lux-shadow-lg);
+        }
+
+        .lux-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--lux-border);
             display: flex;
             justify-content: space-between;
-
-            color: #98a9b2;
-
-            font-size: 10px;
+            align-items: center;
+            background: var(--lux-muted-bg);
         }
 
-
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
-
-        @media (max-width: 1200px) {
-
-            .statistics {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-            .search-box {
-                display: none;
-            }
+        .lux-modal-header h3 {
+            margin: 0;
+            font-family: var(--font-heading);
+            font-size: 19px;
+            color: var(--lux-fg);
+            font-weight: 600;
         }
 
-
-        @media (max-width: 800px) {
-
-            .sidebar {
-                width: 220px;
-                min-width: 220px;
-            }
-
-            .main {
-                margin-left: 220px;
-
-                width: calc(100% - 220px);
-
-                padding: 22px;
-            }
-
-            .statistics {
-                grid-template-columns: 1fr;
-            }
-
-            .invoice-toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .status-filter {
-                width: 100%;
-            }
+        .lux-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--lux-muted-fg);
+            line-height: 1;
+            transition: color var(--lux-trans-fast);
         }
 
+        .lux-modal-close:hover {
+            color: var(--lux-fg);
+        }
+
+        .lux-modal-content {
+            padding: 24px;
+        }
+
+        .lux-modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--lux-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: var(--lux-muted-bg);
+        }
     </style>
-
 </head>
 
-
 <body>
-
-<div class="app">
-
-
-    <!-- =========================================================
+    <!-- =====================================================
          SIDEBAR
-    ========================================================= -->
-
+         ===================================================== -->
     <aside class="sidebar">
-
-
         <!-- LOGO -->
-
         <div class="logo">
-
-            <div class="logo-icon">
-                H
+            <div class="logo-icon">H</div>
+            <div class="logo-name">
+                <h2>HOTEL</h2>
+                <span>Management</span>
             </div>
-
-            <div>
-
-                <h2>
-                    HOTEL
-                </h2>
-
-                <span>
-                    Management
-                </span>
-
-            </div>
-
         </div>
 
-
         <!-- MENU -->
-
         <nav class="menu">
-
-
-            <a
-                href="dashboard.html"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    ▣
-                </span>
-
-                <span>
-                    Dashboard
-                </span>
-
+            <a href="dashboard.html" class="menu-item">
+                <span class="menu-icon">▣</span>
+                <span>Dashboard</span>
             </a>
-
-
-            <a
-                href="bookings.html"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    🛏
-                </span>
-
-                <span>
-                    Đặt phòng
-                </span>
-
+            <a href="bookings.html" class="menu-item">
+                <span class="menu-icon">🛏</span>
+                <span>Đặt phòng</span>
             </a>
-
-
-            <a
-                href="walkin-booking.html"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    📝
-                </span>
-
-                <span>
-                    Đặt phòng tại quầy
-                </span>
-
+            <a href="walkin-booking.html" class="menu-item">
+                <span class="menu-icon">📝</span>
+                <span>Đặt phòng tại quầy</span>
             </a>
-
-
-            <a
-                href="rooms.html"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    🏨
-                </span>
-
-                <span>
-                    Phòng
-                </span>
-
+            <a href="rooms.html" class="menu-item">
+                <span class="menu-icon">🏨</span>
+                <span>Phòng</span>
             </a>
-
-
-            <a
-                href="room-types.html"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    🏷️
-                </span>
-
-                <span>
-                    Loại phòng
-                </span>
-
+            <a href="room-types.html" class="menu-item">
+                <span class="menu-icon">🏷️</span>
+                <span>Loại phòng</span>
             </a>
-
-
-            <a
-                href="customers.html"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    👤
-                </span>
-
-                <span>
-                    Khách hàng
-                </span>
-
+            <a href="customers.html" class="menu-item">
+                <span class="menu-icon">👤</span>
+                <span>Khách hàng</span>
             </a>
-
-
-            <a
-                href="invoices.html"
-                class="menu-item active"
-            >
-
-                <span class="menu-icon">
-                    ▤
-                </span>
-
-                <span>
-                    Hóa đơn
-                </span>
-
+            <a href="invoices.html" class="menu-item active">
+                <span class="menu-icon">🧾</span>
+                <span>Hóa đơn</span>
             </a>
-
-
             <a href="payments.html" class="menu-item">
                 <span class="menu-icon">💳</span>
                 <span>Thu chi</span>
             </a>
-
             <a href="reports.html" class="menu-item">
                 <span class="menu-icon">📊</span>
                 <span>Báo cáo</span>
             </a>
-
             <a href="settings.html" class="menu-item">
                 <span class="menu-icon">⚙️</span>
                 <span>Cài đặt</span>
             </a>
         </nav>
 
-
-        <!-- SIDEBAR BOTTOM -->
-
+        <!-- ADMIN USER & LOGOUT -->
         <div class="sidebar-bottom">
-
-
             <div class="admin-mini">
-
-                <div class="avatar" data-auth-initials>
-                    AD
+                <div class="avatar" data-auth-initials>AD</div>
+                <div class="admin-info">
+                    <strong data-auth-username>Admin</strong>
+                    <small data-auth-role>Quản trị viên</small>
                 </div>
-
-                <div>
-
-                    <strong data-auth-username>
-                        Admin
-                    </strong>
-
-                    <small data-auth-role>
-                        Quản trị viên
-                    </small>
-
-                </div>
-
             </div>
 
-
-            <button
-                id="logoutBtn"
-                class="logout-btn"
-                onclick="authGuard.logout()"
-            >
-                Đăng xuất
+            <button class="logout-btn" id="logoutBtn" type="button">
+                <span>🚪</span>
+                <span>Đăng xuất</span>
             </button>
-
-
         </div>
-
     </aside>
 
-
-
-    <!-- =========================================================
-         MAIN
-    ========================================================= -->
-
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
     <main class="main">
-
-
-        <!-- =====================================================
-             HEADER
-        ===================================================== -->
-
+        <!-- TOP HEADER -->
         <header class="header">
-
-
             <div class="header-title">
-
-                <h1>
-                    Hóa đơn
-                </h1>
-
-                <p>
-                    Quản lý và theo dõi hóa đơn khách sạn
-                </p>
-
+                <h1>Hóa đơn &amp; Thanh toán</h1>
+                <p>Quản trị chứng từ thanh toán lưu trú, dịch vụ và biên nhận thuế</p>
             </div>
-
 
             <div class="header-right">
-
-
-                <div class="search-box">
-
-                    ⌕
-
-                    <input
-                        type="text"
-                        placeholder="Tìm kiếm..."
-                    >
-
-                </div>
-
-
-                <button class="notification">
-
-                    🔔
-
-                    <span
-                        class="notification-dot"
-                    ></span>
-
-                </button>
-
-
                 <div class="profile">
-
-                    <div class="avatar">
-                        AD
+                    <div class="avatar" data-auth-initials>AD</div>
+                    <div class="profile-info">
+                        <strong data-auth-username>Admin</strong>
+                        <small data-auth-role>Quản trị viên</small>
                     </div>
-
-                    <div>
-
-                        <strong>
-                            Admin
-                        </strong>
-
-                        <small>
-                            Administrator
-                        </small>
-
-                    </div>
-
                 </div>
-
-
             </div>
-
-
         </header>
 
+        <div class="invoices-page-container">
+            <!-- =====================================================
+                 STATISTICS CARDS
+                 ===================================================== -->
+            <section class="statistics">
+                <div class="stat-card">
+                    <div class="stat-icon">🧾</div>
+                    <div class="stat-content">
+                        <span>Tổng hóa đơn</span>
+                        <h2 id="totalInvoices">0</h2>
+                        <p>Toàn bộ hóa đơn phát hành</p>
+                    </div>
+                </div>
 
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#ecfdf5; color:#065f46;">✓</div>
+                    <div class="stat-content">
+                        <span>Đã thanh toán</span>
+                        <h2 id="paidInvoices">0</h2>
+                        <p>Chứng từ hoàn tất thu tiền</p>
+                    </div>
+                </div>
 
-        <!-- =====================================================
-             CONTENT
-        ===================================================== -->
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#fffbeb; color:#92400e;">⏱</div>
+                    <div class="stat-content">
+                        <span>Chưa thanh toán</span>
+                        <h2 id="unpaidInvoices">0</h2>
+                        <p>Đang chờ khách quyết toán</p>
+                    </div>
+                </div>
 
-        <div class="content">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#f5f3ff; color:#6d28d9;">₫</div>
+                    <div class="stat-content">
+                        <span>Tổng doanh thu</span>
+                        <h2 id="totalAmount">0 ₫</h2>
+                        <p>Tổng giá trị trên hóa đơn</p>
+                    </div>
+                </div>
+            </section>
 
+            <!-- =====================================================
+                 TOOLBAR
+                 ===================================================== -->
+            <div class="invoice-toolbar">
+                <div class="invoice-search-box">
+                    <span class="invoice-search-icon">⌕</span>
+                    <input type="text" id="invoiceSearch" class="invoice-search-input" placeholder="Tìm theo mã hóa đơn, tên khách hàng, mã booking...">
+                </div>
 
-            <!-- PAGE TITLE -->
-
-            <div class="page-title">
-
-                <h2>
-                    Tổng quan
-                </h2>
-
-                <p>
-                    Thông tin hóa đơn của khách sạn
-                </p>
-
+                <select id="statusFilter" class="status-filter">
+                    <option value="ALL">Tất cả trạng thái</option>
+                    <option value="PAID">Đã thanh toán</option>
+                    <option value="ISSUED">Chưa thanh toán</option>
+                </select>
             </div>
 
-
-
-            <!-- =================================================
-                 STATISTICS
-            ================================================= -->
-
-            <section class="statistics">
-
-
-                <!-- TOTAL -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon total-icon">
-                        🧾
-                    </div>
-
-                    <div class="stat-content">
-
-                        <span class="stat-label">
-                            Tổng hóa đơn
-                        </span>
-
-                        <strong
-                            class="stat-number"
-                            id="totalInvoices"
-                        >
-                            3
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- PAID -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon paid-icon">
-                        ✓
-                    </div>
-
-                    <div class="stat-content">
-
-                        <span class="stat-label">
-                            Đã thanh toán
-                        </span>
-
-                        <strong
-                            class="stat-number"
-                            id="paidInvoices"
-                        >
-                            2
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- UNPAID -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon unpaid-icon">
-                        ⏱
-                    </div>
-
-                    <div class="stat-content">
-
-                        <span class="stat-label">
-                            Chưa thanh toán
-                        </span>
-
-                        <strong
-                            class="stat-number"
-                            id="unpaidInvoices"
-                        >
-                            1
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- MONEY -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon money-icon">
-                        ₫
-                    </div>
-
-                    <div class="stat-content">
-
-                        <span class="stat-label">
-                            Tổng tiền
-                        </span>
-
-                        <strong
-                            class="stat-number"
-                            id="totalMoney"
-                        >
-                            7.720.000 đ
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-            </section>
-
-
-
-            <!-- =================================================
-                 INVOICE LIST
-            ================================================= -->
-
-            <section class="invoice-section">
-
-
-                <!-- SECTION HEADER -->
-
-                <div class="section-header">
-
+            <!-- =====================================================
+                 TABLE PANEL
+                 ===================================================== -->
+            <div class="panel">
+                <div class="panel-header">
                     <div>
-
-                        <h2>
-                            Danh sách hóa đơn
-                        </h2>
-
-                        <p>
-                            Danh sách toàn bộ hóa đơn của khách hàng
-                        </p>
-
+                        <h2>Danh sách chứng từ hóa đơn</h2>
+                        <p>Hệ thống tự động đồng bộ khi lễ tân thực hiện Check-out hoặc xuất hóa đơn</p>
                     </div>
-
-
-                    <span
-                        class="invoice-count"
-                        id="invoiceCount"
-                    >
-                        3 hóa đơn
-                    </span>
-
+                    <span id="invoiceCount" style="font-size: 12px; font-weight:600; color:var(--lux-muted-fg); letter-spacing:0.1em; text-transform:uppercase;">0 hóa đơn</span>
                 </div>
-
-
-
-                <!-- =================================================
-                     TOOLBAR
-                ================================================= -->
-
-                <div class="invoice-toolbar">
-
-
-                    <div class="invoice-search-box">
-
-                        <span class="search-icon">
-                            ⌕
-                        </span>
-
-                        <input
-                            type="text"
-                            id="invoiceSearch"
-                            placeholder="Tìm mã hóa đơn, khách hàng, booking..."
-                        >
-
-                    </div>
-
-
-                    <select
-                        id="statusFilter"
-                        class="status-filter"
-                    >
-
-                        <option value="ALL">
-                            Tất cả trạng thái
-                        </option>
-
-                        <option value="PAID">
-                            Đã thanh toán
-                        </option>
-
-                        <option value="ISSUED">
-                            Chưa thanh toán
-                        </option>
-
-                    </select>
-
-
-                </div>
-
-
-
-                <!-- =================================================
-                     TABLE
-                ================================================= -->
 
                 <div class="table-wrapper">
-
-
-                    <table class="invoice-table">
-
-
+                    <table>
                         <thead>
-
                             <tr>
-
-                                <th>
-                                    Mã hóa đơn
-                                </th>
-
-                                <th>
-                                    Khách hàng
-                                </th>
-
-                                <th>
-                                    Booking
-                                </th>
-
-                                <th>
-                                    Ngày lập
-                                </th>
-
-                                <th>
-                                    Tiền phòng
-                                </th>
-
-                                <th>
-                                    Thuế
-                                </th>
-
-                                <th>
-                                    Giảm giá
-                                </th>
-
-                                <th>
-                                    Tổng tiền
-                                </th>
-
-                                <th>
-                                    Trạng thái
-                                </th>
-
-                                <th>
-                                    Thao tác
-                                </th>
+                                <th>Mã hóa đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Mã Booking</th>
+                                <th>Ngày lập</th>
+                                <th>Tiền phòng</th>
+                                <th>Thuế</th>
+                                <th>Giảm giá</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
                             </tr>
                         </thead>
-
-
-
                         <tbody id="invoiceTableBody">
-                            <!-- Data loaded dynamically by invoices.js -->
+                            <!-- Populated dynamically via invoices.js -->
                         </tbody>
-
-
                     </table>
 
-
-
-                    <!-- EMPTY -->
-
-                    <div
-                        class="empty"
-                        id="emptyMessage"
-                    >
-                        Không tìm thấy hóa đơn phù hợp.
+                    <div class="empty" id="emptyMessage">
+                        Không tìm thấy chứng từ hóa đơn phù hợp.
                     </div>
-
-
                 </div>
-
-
-            </section>
-
-
-
-            <!-- =================================================
-                 FOOTER
-            ================================================= -->
-
-            <footer>
-
-                <span>
-                    Hotel Management System © 2026
-                </span>
-
-                <span>
-                    Admin Dashboard
-                </span>
-
-            </footer>
-
-
+            </div>
         </div>
-
     </main>
 
-</div>
-
-
-
-<!-- MODAL CHI TIẾT HÓA ĐƠN -->
-<div id="invoiceDetailModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(3px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
-    <div style="background:#fff; border-radius:16px; width:100%; max-width:600px; max-height:85vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
-        <div style="padding:18px 24px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; background:#f8fafc;">
-            <h3 style="margin:0; font-size:18px; color:#0f172a;" id="modalInvTitle">Chi tiết hóa đơn</h3>
-            <button type="button" onclick="closeInvoiceModal()" style="background:none; border:none; font-size:22px; cursor:pointer; color:#64748b;">&times;</button>
-        </div>
-        <div style="padding:24px;" id="modalInvContent">
-            Đang tải dữ liệu...
-        </div>
-        <div style="padding:16px 24px; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px; background:#f8fafc;" id="modalInvActions">
-            <button type="button" onclick="closeInvoiceModal()" style="padding:8px 16px; border:1px solid #cbd5e1; background:#fff; border-radius:8px; cursor:pointer; font-weight:600;">Đóng</button>
+    <!-- =====================================================
+         MODAL CHI TIẾT HÓA ĐƠN
+         ===================================================== -->
+    <div id="invoiceDetailModal" class="lux-modal-overlay">
+        <div class="lux-modal-box">
+            <div class="lux-modal-header">
+                <h3 id="modalInvTitle">Chi tiết hóa đơn</h3>
+                <button type="button" class="lux-modal-close" onclick="closeInvoiceModal()">&times;</button>
+            </div>
+            <div class="lux-modal-content" id="modalInvContent">
+                Đang tải dữ liệu...
+            </div>
+            <div class="lux-modal-footer" id="modalInvActions">
+                <button type="button" onclick="closeInvoiceModal()" class="btn-secondary" style="padding: 8px 18px; border: 1px solid var(--lux-border); background: var(--lux-bg-elevated); cursor: pointer; font-size: 12px; font-weight: 600;">Đóng</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
+    <!-- =====================================================
+         SCRIPTS
+         ===================================================== -->
     <script src="../js/authGuard.js"></script>
     <script>
-        authGuard.requireAuth(["ADMIN"]);
+        if (typeof authGuard !== 'undefined') {
+            authGuard.requireAuth(['ADMIN']);
+            const logout = document.getElementById('logoutBtn');
+            if (logout) {
+                logout.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authGuard.logout();
+                });
+            }
+        }
     </script>
     <script src="../js/invoices.js"></script>
-
 </body>
 
 </html>

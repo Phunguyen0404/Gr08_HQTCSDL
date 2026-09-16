@@ -52,14 +52,15 @@ function renderUserArea() {
         const displayName = session.user.hoTen || session.user.username;
         userArea.innerHTML = `
             <a href="home.html" class="nav-link">🏠 Trang chủ</a>
-            <a href="my-bookings.html" class="nav-link" style="color: #2563eb; font-weight: 700;">📋 Đơn của tôi</a>
+            <a href="my-bookings.html" class="nav-link" style="font-weight: 600;">📋 Đơn của tôi</a>
+            <a href="profile.html" class="nav-link" style="color: var(--lux-accent, #c5a880); font-weight: 600;">👤 Hồ sơ cá nhân</a>
             <div style="display:flex; align-items:center; gap:8px; margin-left:8px;">
-                <div style="width:34px; height:34px; border-radius:50%; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">
+                <div style="width:34px; height:34px; border-radius:0; background:var(--lux-fg, #1a1a1a); color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;">
                     ${displayName.slice(0, 2).toUpperCase()}
                 </div>
-                <span style="font-size:13px; font-weight:600; color:#1e293b;">${displayName}</span>
+                <span style="font-size:13px; font-weight:600; color:var(--lux-fg, #1a1a1a);">${displayName}</span>
             </div>
-            <button id="logoutBtn" style="background:rgba(220,38,38,0.1); color:#dc2626; border:1px solid rgba(220,38,38,0.2); border-radius:8px; padding:6px 12px; font-size:13px; font-weight:600; cursor:pointer;">
+            <button id="logoutBtn" style="background:transparent; color:#dc2626; border:1px solid rgba(220,38,38,0.3); border-radius:0; padding:6px 12px; font-size:12px; font-weight:600; cursor:pointer;">
                 Đăng xuất
             </button>
         `;
