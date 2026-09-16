@@ -1,0 +1,906 @@
+/* ============================================================
+   TOKENS
+   ============================================================ */
+
+:root {
+    --ink: #12161b;
+    --ink-soft: #3d444d;
+    --muted: #6e6a64;
+    --line: #e4e0d9;
+    --sand: #f7f4ef;
+    --white: #ffffff;
+    --amber: #e5a33c;
+    --amber-dark: #cc8b24;
+
+    --shell: 1440px;
+    --gutter: 48px;
+
+    /* Ảnh: bỏ file vào frontend/assets/images/ rồi sửa 2 dòng dưới */
+    --img-hero: url("../assets/images/hero.jpg");
+    --img-offer: url("../assets/images/offer.jpg");
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "Be Vietnam Pro", "Segoe UI", Arial, sans-serif;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--white);
+    -webkit-font-smoothing: antialiased;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex: none;
+}
+
+.icon-sm {
+    width: 14px;
+    height: 14px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+}
+
+/* ============================================================
+   NÚT
+   ============================================================ */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 4px;
+    padding: 14px 28px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-amber {
+    background: var(--amber);
+    color: var(--ink);
+}
+
+.btn-amber:hover {
+    background: var(--amber-dark);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.site-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    color: var(--white);
+    padding: 18px var(--gutter) 0;
+}
+
+.utility-bar {
+    max-width: var(--shell);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.utility-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: 0;
+    padding: 6px 2px;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    opacity: 0.92;
+}
+
+.utility-link:hover {
+    opacity: 1;
+}
+
+.utility-sep {
+    opacity: 0.5;
+}
+
+.main-nav {
+    max-width: var(--shell);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 6px 0 0;
+}
+
+.menu-toggle {
+    width: 34px;
+    height: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: none;
+    border: 0;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+}
+
+.nav-left {
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.nav-group a {
+    padding: 8px 0;
+    border-bottom: 1px solid transparent;
+}
+
+.nav-group a:hover {
+    border-bottom-color: currentColor;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-mark {
+    width: 26px;
+    height: 26px;
+    fill: var(--amber);
+}
+
+.brand-name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 21px;
+    letter-spacing: 0.14em;
+}
+
+.btn-book {
+    padding: 12px 26px;
+    font-size: 15px;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    color: var(--white);
+    overflow: hidden;
+}
+
+.hero-media {
+    position: absolute;
+    inset: 0;
+    background-color: #2b3138;
+    background-image: var(--img-hero);
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(100deg, rgba(10, 14, 18, 0.72) 0%, rgba(10, 14, 18, 0.28) 55%, rgba(10, 14, 18, 0.5) 100%),
+        linear-gradient(to bottom, rgba(10, 14, 18, 0.55) 0%, rgba(10, 14, 18, 0) 32%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 0 var(--gutter) 120px;
+}
+
+.hero-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(38px, 5.4vw, 76px);
+    line-height: 1.08;
+    margin: 0 0 20px;
+    max-width: 18ch;
+}
+
+.hero-sub {
+    font-size: clamp(16px, 1.3vw, 19px);
+    line-height: 1.65;
+    max-width: 46ch;
+    margin: 0 0 34px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 34px;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.hero-cta::after {
+    content: "";
+    width: 26px;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.25s ease;
+}
+
+.hero-cta:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.hero-cta:hover::after {
+    width: 38px;
+}
+
+/* ============================================================
+   THANH TÌM KIẾM
+   ============================================================ */
+
+.search-bar {
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: min(calc(100% - var(--gutter) * 2), var(--shell));
+    background: var(--white);
+    color: var(--ink);
+    border-radius: 6px 6px 0 0;
+    box-shadow: 0 -8px 40px rgba(12, 16, 22, 0.22);
+    display: grid;
+    grid-template-columns: 1.6fr 1.2fr 1fr 0.8fr auto;
+    align-items: stretch;
+    gap: 1px;
+    padding: 6px;
+}
+
+.search-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    min-width: 0;
+    color: var(--ink-soft);
+}
+
+.search-field + .search-field {
+    border-left: 1px solid var(--line);
+}
+
+.field-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.search-field label {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 3px;
+}
+
+.search-field input[type="text"],
+.search-field input[type="date"] {
+    width: 100%;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+    background: transparent;
+}
+
+.search-field input:focus {
+    outline: none;
+}
+
+.search-field input::placeholder {
+    color: #a3a09a;
+}
+
+.date-pair {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.date-pair input {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+}
+
+.date-dash {
+    color: var(--muted);
+}
+
+.guest-trigger {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: 0;
+    padding: 0;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+.guest-popover {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 8px;
+    width: 268px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: 0 16px 40px rgba(12, 16, 22, 0.18);
+    padding: 14px 16px;
+    z-index: 40;
+}
+
+.guest-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 0;
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stepper button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--white);
+    font-size: 17px;
+    line-height: 1;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+.stepper button:hover:not(:disabled) {
+    border-color: var(--amber);
+}
+
+.stepper button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.stepper output {
+    min-width: 18px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.guest-done {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--sand);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+.btn-search {
+    align-self: stretch;
+    padding: 0 46px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* ============================================================
+   SECTION CHUNG
+   ============================================================ */
+
+.section {
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 96px var(--gutter);
+}
+
+.section-sand {
+    max-width: none;
+    background: var(--sand);
+}
+
+.section-sand > * {
+    max-width: var(--shell);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-head {
+    margin-bottom: 42px;
+}
+
+.section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(28px, 3vw, 42px);
+    margin: 0 0 10px;
+}
+
+.section-head p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+}
+
+/* ============================================================
+   LOẠI PHÒNG
+   ============================================================ */
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+}
+
+.grid-state {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    margin: 0;
+}
+
+.room-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--white);
+}
+
+/* Ảnh phòng: đặt data-img="../assets/images/ten-anh.jpg" trên .room-media */
+.room-media {
+    aspect-ratio: 4 / 3;
+    background-color: #dcd7ce;
+    background-size: cover;
+    background-position: center;
+}
+
+.room-body {
+    padding: 20px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.room-body h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0 0 8px;
+}
+
+.room-meta {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 12px;
+}
+
+.room-desc {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0 0 20px;
+}
+
+.room-foot {
+    margin-top: auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.room-price {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.room-price span {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+}
+
+.room-link {
+    font-size: 15px;
+    border-bottom: 1px solid var(--amber);
+    padding-bottom: 2px;
+}
+
+/* ============================================================
+   TIỆN ÍCH
+   ============================================================ */
+
+.amenity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 36px 40px;
+}
+
+.amenity-list h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.amenity-list p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+}
+
+/* ============================================================
+   ƯU ĐÃI
+   ============================================================ */
+
+.offer {
+    position: relative;
+    max-width: none;
+    padding: 0;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    color: var(--white);
+}
+
+.offer-media {
+    position: absolute;
+    inset: 0;
+    background-color: #2b3138;
+    background-image: var(--img-offer);
+    background-size: cover;
+    background-position: center;
+}
+
+.offer-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(10, 14, 18, 0.78) 0%, rgba(10, 14, 18, 0.25) 70%);
+}
+
+.offer-body {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 80px var(--gutter);
+}
+
+.offer-body h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 46px);
+    margin: 0 0 14px;
+}
+
+.offer-body p {
+    max-width: 46ch;
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0 0 28px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.site-footer {
+    background: var(--ink);
+    color: rgba(255, 255, 255, 0.78);
+    padding: 72px var(--gutter) 36px;
+}
+
+.footer-grid {
+    max-width: var(--shell);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: 40px;
+}
+
+.footer-brand .brand-name {
+    color: var(--white);
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+.footer-brand .brand-mark {
+    vertical-align: middle;
+}
+
+.footer-brand p {
+    margin: 16px 0 0;
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 34ch;
+}
+
+.footer-col h4 {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 14px;
+}
+
+.footer-col p {
+    margin: 0 0 8px;
+    font-size: 15px;
+}
+
+.footer-col a:hover {
+    color: var(--amber);
+}
+
+.footer-note {
+    max-width: var(--shell);
+    margin: 48px auto 0;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* ============================================================
+   NÚT THÔNG BÁO
+   ============================================================ */
+
+.notify-fab {
+    position: fixed;
+    left: 22px;
+    bottom: 104px;
+    z-index: 50;
+    width: 54px;
+    height: 54px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--amber);
+    color: var(--ink);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(12, 16, 22, 0.28);
+}
+
+.notify-fab .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.notify-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: #d64545;
+    color: var(--white);
+    font-size: 12px;
+    line-height: 20px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1180px) {
+    :root {
+        --gutter: 28px;
+    }
+
+    .nav-group {
+        gap: 26px;
+        font-size: 14px;
+    }
+
+    .search-bar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .search-field + .search-field {
+        border-left: 0;
+    }
+
+    .search-field {
+        border-top: 1px solid var(--line);
+    }
+
+    .btn-search {
+        grid-column: 1 / -1;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 860px) {
+    .main-nav {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .menu-toggle {
+        order: 1;
+        width: 28px;
+    }
+
+    .brand {
+        order: 2;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .brand-name {
+        font-size: 17px;
+        letter-spacing: 0.1em;
+    }
+
+    .btn-book {
+        order: 3;
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .nav-group {
+        order: 4;
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 6px 0 10px;
+    }
+
+    .main-nav.is-open .nav-group {
+        display: flex;
+    }
+
+    .notify-fab {
+        display: none;
+    }
+
+    .hero {
+        min-height: 88vh;
+    }
+
+    .hero-content {
+        padding-bottom: 330px;
+        padding-top: 150px;
+    }
+
+    .search-bar {
+        grid-template-columns: 1fr;
+    }
+
+    .guest-popover {
+        left: 0;
+        right: 0;
+        width: auto;
+    }
+
+    .section {
+        padding: 64px var(--gutter);
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content {
+        padding-bottom: 360px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    * {
+        transition: none !important;
+    }
+}

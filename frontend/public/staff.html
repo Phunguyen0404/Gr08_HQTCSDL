@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý nhân viên - Hotel Management</title>
+
+    <!-- CSS nằm ngoài thư mục public -->
+    <link rel="stylesheet" href="../css/staff.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <!-- LOGO -->
+        <div class="logo">
+
+            <div class="logo-icon">
+                H
+            </div>
+
+            <div class="logo-text">
+                <h2>HOTEL</h2>
+                <span>Management</span>
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+        <nav class="menu">
+
+            <a href="dashboard.html" class="menu-item">
+                <span class="menu-icon">▣</span>
+                <span>Dashboard</span>
+            </a>
+
+            <span>▼</span>
+
+            <a href="bookings.html" class="menu-item">
+                <span class="menu-icon">🛏</span>
+                <span>Đặt phòng</span>
+            </a>
+
+
+            <a href="dashboard.html#rooms" class="menu-item">
+                <span class="menu-icon">🏨</span>
+                <span>Phòng</span>
+            </a>
+
+
+            <a href="customers.html" class="menu-item">
+                <span class="menu-icon">👤</span>
+                <span>Khách hàng</span>
+            </a>
+
+
+            <a href="invoices.html" class="menu-item">
+                <span class="menu-icon">🧾</span>
+                <span>Hóa đơn</span>
+            </a>
+
+
+            <!-- THU CHI -->
+            <div class="menu-title">
+
+                <span class="menu-icon">💰</span>
+
+                <span>Thu chi</span>
+
+                <span class="menu-arrow">▾</span>
+
+            </div>
+
+
+            <!-- NHÂN VIÊN -->
+            <a href="staff.html" class="menu-item active">
+
+                <span class="menu-icon">👥</span>
+
+                <span>Nhân viên</span>
+
+            </a>
+
+
+            <a href="dashboard.html#report" class="menu-item">
+
+                <span class="menu-icon">📊</span>
+
+                <span>Báo cáo</span>
+
+            </a>
+
+
+            <a href="dashboard.html#settings" class="menu-item">
+
+                <span class="menu-icon">⚙</span>
+
+                <span>Cài đặt</span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- SIDEBAR BOTTOM -->
+        <div class="sidebar-bottom">
+
+            <div class="user-mini">
+
+                <div class="user-avatar">
+                    A
+                </div>
+
+                <div class="user-info">
+
+                    <strong>Admin</strong>
+
+                    <span>Quản trị viên</span>
+
+                </div>
+
+            </div>
+
+
+            <button class="logout-btn" id="logoutBtn" type="button">
+
+                <span>↪</span>
+
+                <span>Đăng xuất</span>
+
+            </button>
+
+            <button class="add-btn" id="addStaffBtn">
+                + Thêm nhân viên
+            </button>
+
+            </section>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <header class="top-header">
+
+            <div class="header-left">
+
+                <h1>
+                    Quản lý nhân viên
+                </h1>
+
+                <p>
+                    Quản lý thông tin và tài khoản nhân viên
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <!-- SEARCH HEADER -->
+                <div class="header-search">
+
+                    <span>⌕</span>
+
+                    <input type="text" id="headerSearch" placeholder="Tìm kiếm...">
+
+                </div>
+
+
+                <!-- NOTIFICATION -->
+                <button class="notification-btn" type="button" title="Thông báo">
+                    🔔
+                </button>
+
+
+                <!-- ADMIN -->
+                <div class="admin-profile">
+
+                    <div class="admin-avatar">
+                        A
+                    </div>
+
+                    <div class="admin-info">
+
+                        <strong>Admin</strong>
+
+                        <span>Quản trị viên</span>
+
+                    </div>
+
+                    <span class="profile-arrow">
+                        ▾
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="stat-box">
+
+
+            <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+            <section class="content">
+
+
+                <!-- BREADCRUMB -->
+
+                <div class="breadcrumb">
+
+                    <a href="dashboard.html">
+                        Dashboard
+                    </a>
+
+                    <span>›</span>
+
+                    <span>
+                        Nhân viên
+                    </span>
+
+                </div>
+
+
+
+                <!-- PAGE TITLE -->
+
+                <div class="page-title-row">
+
+                    <div>
+
+                        <h2>
+                            Quản lý nhân viên
+                        </h2>
+
+                        <p>
+                            Danh sách nhân viên và tài khoản trong hệ thống
+                        </p>
+
+                    </div>
+
+
+                    <button class="add-btn" id="addStaffBtn" type="button">
+
+                        <span>＋</span>
+
+                        Thêm nhân viên
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+                <div class="stats-grid">
+
+
+                    <!-- TOTAL -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon blue">
+                            👥
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Tổng nhân viên
+                            </span>
+
+                            <strong id="totalStaff">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ACTIVE -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Đang hoạt động
+                            </span>
+
+                            <strong id="activeStaff">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- LOCKED -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon red">
+                            🔒
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Đã khóa
+                            </span>
+
+                            <strong id="lockedStaff">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- INACTIVE -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon orange">
+                            ●
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Không hoạt động
+                            </span>
+
+                            <strong id="inactiveStaff">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                 STAFF CARD
+            ================================================== -->
+
+                <div class="staff-card">
+
+
+                    <!-- CARD HEADER -->
+
+                    <div class="staff-card-header">
+
+                        <div>
+
+                            <h3>
+                                Danh sách nhân viên
+                            </h3>
+
+                            <p>
+                                Quản lý thông tin nhân viên trong khách sạn
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TOOLBAR -->
+
+                    <div class="toolbar">
+
+
+                        <!-- SEARCH -->
+
+                        <div class="search-box">
+
+                            <span>
+                                ⌕
+                            </span>
+
+                            <input type="text" id="staffSearch" placeholder="Tìm theo tên, mã NV, email...">
+
+                        </div>
+
+
+
+                        <!-- STATUS -->
+
+                        <div class="status-filter">
+
+                            <label for="statusFilter">
+                                Trạng thái:
+                            </label>
+
+                            <select id="statusFilter">
+
+                                <option value="ALL">
+                                    Tất cả
+                                </option>
+
+                                <option value="ACTIVE">
+                                    Đang hoạt động
+                                </option>
+
+                                <option value="LOCKED">
+                                    Đã khóa
+                                </option>
+
+                                <option value="INACTIVE">
+                                    Không hoạt động
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                     TABLE
+                ================================================== -->
+
+                    <div class="table-wrapper">
+
+                        <table class="staff-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th class="col-code">
+                                        Mã NV
+                                    </th>
+
+                                    <th class="col-name">
+                                        Nhân viên
+                                    </th>
+
+                                    <th class="col-email">
+                                        Email
+                                    </th>
+
+                                    <th class="col-phone">
+                                        Số điện thoại
+                                    </th>
+
+                                    <th class="col-position">
+                                        Chức vụ
+                                    </th>
+
+                                    <th class="col-status">
+                                        Trạng thái
+                                    </th>
+
+                                    <th class="col-date">
+                                        Ngày vào làm
+                                    </th>
+
+                                    <th class="col-action">
+                                        Thao tác
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="staffTableBody">
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+
+                    <!-- EMPTY -->
+
+                    <div id="emptyStaff" class="empty-staff" style="display: none;">
+
+                        <div class="empty-icon">
+                            👥
+                        </div>
+
+                        <h3>
+                            Không tìm thấy nhân viên
+                        </h3>
+
+                        <p>
+                            Không có nhân viên phù hợp với điều kiện tìm kiếm.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+            <footer class="footer">
+
+                Hotel Management System © 2026
+
+            </footer>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../js/staff.js"></script>
+
+</body>
+
+</html>

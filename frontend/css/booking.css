@@ -1,0 +1,555 @@
+/* ============================================================
+   TRANG ĐẶT PHÒNG - dùng chung biến màu / font với home.css
+   ============================================================ */
+
+body {
+    background: var(--white);
+}
+
+.btn-outline {
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    padding: 12px 22px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.btn-outline:hover {
+    background: var(--ink);
+    color: var(--white);
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.booking-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 18px var(--gutter);
+}
+
+.brand-dark {
+    color: var(--ink);
+}
+
+.brand-dark .brand-mark {
+    fill: var(--amber);
+}
+
+.auth-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+}
+
+.utility-link.dark {
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-chip .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.logout-link {
+    color: var(--muted);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    font: inherit;
+}
+
+/* ============================================================
+   THANH TÓM TẮT TÌM KIẾM
+   ============================================================ */
+
+.search-summary-bar {
+    background: var(--sand);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 18px var(--gutter);
+    max-width: var(--shell);
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 140px;
+}
+
+.summary-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.summary-item strong {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.summary-sep {
+    width: 1px;
+    align-self: stretch;
+    background: var(--line);
+}
+
+.summary-promo input {
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: transparent;
+    font-family: inherit;
+    font-size: 15px;
+    padding: 2px 0;
+}
+
+.summary-promo input:focus {
+    outline: none;
+    border-bottom-color: var(--amber);
+}
+
+.summary-link {
+    margin-left: auto;
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: underline;
+}
+
+.summary-link:hover {
+    color: var(--ink);
+}
+
+/* ============================================================
+   LAYOUT CHÍNH
+   ============================================================ */
+
+.booking-layout {
+    max-width: var(--shell);
+    margin: 0 auto;
+    padding: 48px var(--gutter) 96px;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 40px;
+    align-items: start;
+}
+
+.booking-rooms .section-head {
+    margin-bottom: 28px;
+}
+
+.booking-rooms h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(26px, 3vw, 36px);
+    margin: 0 0 8px;
+}
+
+.booking-room-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.grid-state {
+    color: var(--muted);
+}
+
+/* ============================================================
+   THẺ PHÒNG
+   ============================================================ */
+
+.booking-room-card {
+    display: grid;
+    grid-template-columns: 220px 1fr auto;
+    gap: 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px;
+    background: var(--white);
+    align-items: center;
+}
+
+.booking-room-media {
+    aspect-ratio: 4 / 3;
+    border-radius: 6px;
+    background-color: #dcd7ce;
+    background-size: cover;
+    background-position: center;
+}
+
+.booking-room-info h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 20px;
+    margin: 0 0 8px;
+}
+
+.booking-room-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 10px;
+}
+
+.booking-room-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+}
+
+.booking-room-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    text-align: right;
+    min-width: 160px;
+}
+
+.booking-room-declared {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: line-through;
+}
+
+.booking-room-price {
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.booking-room-price span {
+    display: block;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--muted);
+}
+
+.room-select-btn {
+    padding: 10px 28px;
+}
+
+.room-select-btn.is-selected {
+    background: var(--ink);
+    color: var(--white);
+}
+
+@media (max-width: 860px) {
+    .booking-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-room-card {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-room-side {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+/* ============================================================
+   THẺ CHUYẾN ĐI (SIDEBAR)
+   ============================================================ */
+
+.trip-card {
+    position: sticky;
+    top: 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    background: var(--sand);
+}
+
+.trip-card h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 20px;
+    margin: 0 0 16px;
+}
+
+.trip-hotel {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.trip-dates,
+.trip-nights {
+    font-size: 14px;
+    color: var(--ink-soft);
+}
+
+.trip-divider {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 18px 0;
+}
+
+.trip-selected-room {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 18px;
+}
+
+.trip-selected-room strong {
+    font-size: 16px;
+}
+
+.trip-room-price {
+    color: var(--amber-dark);
+    font-weight: 500;
+}
+
+.trip-empty {
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.trip-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-size: 15px;
+    margin-bottom: 18px;
+}
+
+.trip-total strong {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.btn-continue:disabled {
+    background: #ded6c4;
+    color: #9a9384;
+    cursor: not-allowed;
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 22, 27, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 24px;
+}
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+.modal-card {
+    position: relative;
+    background: var(--white);
+    border-radius: 8px;
+    width: min(560px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 32px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: 0;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--muted);
+}
+
+.modal-steps {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.modal-steps li {
+    flex: 1;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--line);
+}
+
+.modal-steps li.is-active {
+    color: var(--ink);
+    font-weight: 500;
+    border-bottom-color: var(--amber);
+}
+
+.modal-steps li.is-done {
+    color: var(--amber-dark);
+    border-bottom-color: var(--amber);
+}
+
+.modal-step[hidden] {
+    display: none;
+}
+
+.account-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.account-tab {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--line);
+    background: var(--white);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--muted);
+}
+
+.account-tab.is-active {
+    border-color: var(--amber);
+    color: var(--ink);
+    font-weight: 500;
+    background: var(--sand);
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.modal-form[hidden] {
+    display: none;
+}
+
+.modal-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+}
+
+.modal-form input:focus,
+.modal-form select:focus,
+.modal-form textarea:focus {
+    outline: none;
+    border-color: var(--amber);
+}
+
+.modal-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.modal-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.form-error {
+    color: #b3261e;
+    font-size: 13px;
+    margin: 0;
+}
+
+.confirm-summary {
+    background: var(--sand);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.confirm-summary strong {
+    font-weight: 500;
+}
+
+.success-box {
+    text-align: center;
+}
+
+.success-box h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    margin: 0 0 10px;
+}
+
+.booking-code {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--amber-dark);
+    margin: 0 0 16px;
+}
+
+.success-cta {
+    margin-top: 18px;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tìm phòng trống</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+        body {
+            background: #f3f6fb;
+        }
+
+        .customer-shell {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px 40px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .page-title p {
+            margin: 8px 0 0;
+            color: #6b7280;
+        }
+
+        .customer-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            padding: 24px;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+
+        .search-grid label {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin-top: 24px;
+        }
+
+        .room-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .room-card header {
+            background: #eff6ff;
+            padding: 16px 18px;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        .room-card body {
+            padding: 18px;
+            display: block;
+        }
+
+        .room-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 12px 0;
+            color: #374151;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .badge-ok {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .empty-state {
+            padding: 20px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            color: #64748b;
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        .muted {
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="customer-shell">
+        <header class="topbar">
+            <div class="page-title">
+                <h1>Khách sạn của bạn</h1>
+                <p>Tìm phòng phù hợp cho chuyến lưu trú của bạn</p>
+            </div>
+            <div class="user-badge">
+                <div class="avatar">KH</div>
+                <div>
+                    <strong>Khách hàng</strong>
+                    <small>Customer</small>
+                </div>
+            </div>
+        </header>
+
+        <section class="customer-card">
+            <form id="searchRoomForm">
+                <div class="search-grid">
+                    <label>
+                        <span>Ngày nhận phòng</span>
+                        <input id="checkIn" type="date" required />
+                    </label>
+                    <label>
+                        <span>Ngày trả phòng</span>
+                        <input id="checkOut" type="date" required />
+                    </label>
+                    <button class="btn btn-primary" type="submit">Tìm phòng trống</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel" style="margin-top: 24px;">
+            <div class="panel-header">
+                <h2>Kết quả tìm kiếm</h2>
+                <span id="resultSummary" class="muted">Chưa có dữ liệu</span>
+            </div>
+            <div id="roomList" class="room-grid"></div>
+        </section>
+    </div>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/customers.js"></script>
+</body>
+
+</html>
