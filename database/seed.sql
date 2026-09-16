@@ -25,35 +25,35 @@ VALUES
 (
     'TK001',
     'admin001',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
     'ADMIN',
     'ACTIVE'
 ),
 (
     'TK002',
     'staff001',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
     'ADMIN',
     'ACTIVE'
 ),
 (
     'TK003',
     'staff002',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
     'ADMIN',
     'ACTIVE'
 ),
 (
     'TK004',
     'customer01',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
     'CUSTOMER',
     'ACTIVE'
 ),
 (
     'TK005',
     'customer02',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS',
     'CUSTOMER',
     'ACTIVE'
 );

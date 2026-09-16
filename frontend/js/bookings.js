@@ -10,6 +10,21 @@ let allBookings = [];
 async function loadBookings() {
 
     try {
+        const tableBody = document.getElementById("bookingTableBody");
+        if (tableBody) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 48px 20px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                            <div class="progress-spinner-indeterminate spinner-md" role="progressbar" aria-label="Đang tải danh sách đặt phòng..." aria-busy="true">
+                                <span class="sr-only">Đang tải danh sách đặt phòng...</span>
+                            </div>
+                            <span style="font-size: 13px; color: var(--lux-muted-fg); font-family: var(--font-body);">Đang truy vấn dữ liệu đặt phòng...</span>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
 
         const token = localStorage.getItem('authToken');
         const response = await fetch(API_URL, {
@@ -395,22 +410,48 @@ async function handleCheckIn(maDatPhong) {
 
     try {
         const token = localStorage.getItem('authToken');
-        const res = await fetch(`${API_URL}/${maDatPhong}/check-in`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-            },
-            body: JSON.stringify({ staffId: 'NV001' })
-        });
 
-        const data = await res.json();
-        if (data.success) {
-            alert('✓ Check-in thành công! Đã tạo thông tin lưu trú.');
-            loadBookings();
+        if (typeof ProgressIndicator !== 'undefined') {
+            await ProgressIndicator.executeWithTransactionFeedback({
+                title: 'Thực thi Giao tác Nhận phòng (SP_CHECK_IN)',
+                subtitle: `Đang kiểm tra ràng buộc CSDL và nhận phòng cho đơn ${maDatPhong}...`,
+                steps: [
+                    '1. Khóa bi quan (FOR UPDATE) & Kiểm tra trạng thái phòng',
+                    '2. Gọi Stored Procedure SP_CHECK_IN (Tạo lưu trú, gán phòng)',
+                    '3. Kích hoạt Trigger đổi phòng sang OCCUPIED & COMMIT'
+                ],
+                minDelayMs: 1400,
+                actionPromise: async () => {
+                    const res = await fetch(`${API_URL}/${maDatPhong}/check-in`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                        },
+                        body: JSON.stringify({ staffId: 'NV001' })
+                    });
+                    const data = await res.json();
+                    if (!data.success) {
+                        throw new Error(data.message || 'Lỗi server');
+                    }
+                    return data;
+                }
+            });
         } else {
-            alert('Không thể Check-in: ' + (data.message || 'Lỗi server'));
+            const res = await fetch(`${API_URL}/${maDatPhong}/check-in`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                },
+                body: JSON.stringify({ staffId: 'NV001' })
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Lỗi server');
         }
+
+        alert('✓ Check-in thành công! Đã tạo thông tin lưu trú và cập nhật trạng thái phòng sang Đang thuê (Occupied).');
+        loadBookings();
     } catch (err) {
         alert('Lỗi kết nối Check-in: ' + err.message);
     }
@@ -422,22 +463,51 @@ async function handleCheckOut(maDatPhong) {
 
     try {
         const token = localStorage.getItem('authToken');
-        const res = await fetch(`${API_URL}/${maDatPhong}/check-out`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-            },
-            body: JSON.stringify({ staffId: 'NV001' })
-        });
+        let checkOutData = null;
 
-        const data = await res.json();
-        if (data.success) {
-            alert(`✓ Trả phòng thành công!\n• Mã hóa đơn: ${data.data?.maHoaDon || ''}\n• Tổng tiền: ${formatMoney(data.data?.totalAmount || 0)}\n\nVui lòng kiểm tra tại mục Quản lý Hóa đơn.`);
-            loadBookings();
+        if (typeof ProgressIndicator !== 'undefined') {
+            await ProgressIndicator.executeWithTransactionFeedback({
+                title: 'Thực thi Giao tác Quyết toán (SP_CHECK_OUT)',
+                subtitle: `Đang tính tiền phòng, xuất hóa đơn và giải phóng phòng cho đơn ${maDatPhong}...`,
+                steps: [
+                    '1. Khóa bản ghi Lưu trú & Đơn đặt phòng (FOR UPDATE)',
+                    '2. Gọi Stored Procedure SP_CHECK_OUT (Tính đêm thực tế & Thuế VAT)',
+                    '3. Kích hoạt Trigger đổi phòng sang CLEANING & COMMIT'
+                ],
+                minDelayMs: 1500,
+                actionPromise: async () => {
+                    const res = await fetch(`${API_URL}/${maDatPhong}/check-out`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                        },
+                        body: JSON.stringify({ staffId: 'NV001' })
+                    });
+                    const data = await res.json();
+                    if (!data.success) {
+                        throw new Error(data.message || 'Lỗi server');
+                    }
+                    checkOutData = data.data;
+                    return data;
+                }
+            });
         } else {
-            alert('Không thể Check-out: ' + (data.message || 'Lỗi server'));
+            const res = await fetch(`${API_URL}/${maDatPhong}/check-out`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                },
+                body: JSON.stringify({ staffId: 'NV001' })
+            });
+            const data = await res.json();
+            if (!data.success) throw new Error(data.message || 'Lỗi server');
+            checkOutData = data.data;
         }
+
+        alert(`✓ Trả phòng thành công!\n• Mã hóa đơn: ${checkOutData?.maHoaDon || ''}\n• Tổng tiền: ${formatMoney(checkOutData?.totalAmount || 0)}\n\nVui lòng kiểm tra tại mục Quản lý Hóa đơn.`);
+        loadBookings();
     } catch (err) {
         alert('Lỗi kết nối Check-out: ' + err.message);
     }
