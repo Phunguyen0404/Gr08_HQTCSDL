@@ -12,6 +12,43 @@
 
     <link rel="stylesheet" href="../css/home.css">
     <style>
+        /* This page has no hero image, so its navigation needs a solid background. */
+        .site-header {
+            position: sticky;
+            background: var(--white);
+            color: var(--ink);
+            padding: 10px var(--gutter) 12px;
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 2px 14px rgba(26, 26, 26, 0.05);
+        }
+
+        .utility-bar {
+            min-height: 30px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .main-nav {
+            min-height: 52px;
+            padding-top: 8px;
+        }
+
+        .nav-group {
+            gap: clamp(16px, 2.2vw, 32px);
+            font-size: 14px;
+        }
+
+        .my-bookings-section {
+            max-width: 1100px;
+            margin: 46px auto 80px;
+            padding: 0 24px;
+        }
+
+        @media (max-width: 860px) {
+            .site-header { position: relative; }
+            .my-bookings-section { margin-top: 32px; }
+        }
+
         .my-bookings-section {
             max-width: 1100px;
             margin: 40px auto 80px;
@@ -173,6 +210,79 @@
             border-color: #ef4444;
         }
 
+        .dialog-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.58);
+            backdrop-filter: blur(3px);
+        }
+
+        .dialog-card {
+            width: min(100%, 440px);
+            padding: 30px;
+            background: var(--white);
+            border-top: 4px solid #dc2626;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.25);
+            text-align: center;
+        }
+
+        .dialog-icon {
+            display: grid;
+            place-items: center;
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: #fef2f2;
+            color: #dc2626;
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        .dialog-card h2 {
+            margin: 0 0 10px;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 25px;
+            color: var(--ink);
+        }
+
+        .dialog-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .dialog-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .dialog-btn {
+            padding: 10px 18px;
+            border: 1px solid var(--line);
+            background: var(--white);
+            color: var(--ink);
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .dialog-btn-danger {
+            border-color: #dc2626;
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .dialog-success .dialog-card { border-top-color: #16a34a; }
+        .dialog-success .dialog-icon { background: #dcfce7; color: #15803d; }
+
         .empty-state {
             background: var(--sand);
             border: 1px dashed var(--line);
@@ -252,6 +362,31 @@
             </div>
         </div>
     </main>
+
+    <!-- CANCEL BOOKING CONFIRMATION -->
+    <div id="cancelBookingModal" class="dialog-overlay" role="dialog" aria-modal="true" aria-labelledby="cancelBookingTitle">
+        <div class="dialog-card">
+            <div class="dialog-icon" aria-hidden="true">!</div>
+            <h2 id="cancelBookingTitle">Hủy đơn đặt phòng?</h2>
+            <p>Đơn đặt phòng này sẽ bị hủy và không thể khôi phục từ tài khoản khách hàng.</p>
+            <div class="dialog-actions">
+                <button type="button" class="dialog-btn" onclick="closeCancelBookingModal()">Quay lại</button>
+                <button type="button" id="confirmCancelBtn" class="dialog-btn dialog-btn-danger" onclick="confirmCustomerCancellation()">Xác nhận hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCEL BOOKING SUCCESS -->
+    <div id="cancelSuccessModal" class="dialog-overlay dialog-success" role="dialog" aria-modal="true" aria-labelledby="cancelSuccessTitle">
+        <div class="dialog-card">
+            <div class="dialog-icon" aria-hidden="true">✓</div>
+            <h2 id="cancelSuccessTitle">Đã hủy đơn đặt phòng</h2>
+            <p>Đơn đã được gỡ khỏi danh sách kỳ lưu trú của bạn.</p>
+            <div class="dialog-actions">
+                <button type="button" class="dialog-btn dialog-btn-danger" style="background:#15803d; border-color:#15803d;" onclick="closeCancelSuccessModal()">Đã hiểu</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ============================================================
          FOOTER (Đồng bộ chuẩn từ home.html)

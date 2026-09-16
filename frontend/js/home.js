@@ -177,32 +177,52 @@ function setupSearch() {
 // DANH SÁCH LOẠI PHÒNG
 // ============================================================
 
-const loaiPhongMau = [
+const loaiPhongDuPhong = [
     {
-        MaLoaiPhong: 'STD',
-        TenLoaiPhong: 'Phòng Standard',
-        MoTa: 'Phòng 24m² với giường đôi, bàn làm việc và cửa sổ hướng vườn.',
+        MaLoaiPhong: 'LP001',
+        TenLoaiPhong: 'Standard',
+        MoTa: 'Phòng tiêu chuẩn 1 giường.',
         SucChua: 2,
         GiaCoBan: 600000,
         Img: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&auto=format&fit=crop&q=80'
     },
     {
-        MaLoaiPhong: 'DLX',
-        TenLoaiPhong: 'Phòng Deluxe',
-        MoTa: 'Phòng 32m² có ban công riêng, bồn tắm và tầm nhìn ra hồ bơi.',
-        SucChua: 3,
+        MaLoaiPhong: 'LP002',
+        TenLoaiPhong: 'Deluxe',
+        MoTa: 'Phòng cao cấp 1 giường.',
+        SucChua: 2,
         GiaCoBan: 900000,
         Img: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&auto=format&fit=crop&q=80'
     },
     {
-        MaLoaiPhong: 'SUI',
-        TenLoaiPhong: 'Phòng Suite',
-        MoTa: 'Căn 48m² tách phòng khách và phòng ngủ, kèm quầy bar mini.',
+        MaLoaiPhong: 'LP003',
+        TenLoaiPhong: 'Family',
+        MoTa: 'Phòng gia đình 2 giường.',
         SucChua: 4,
-        GiaCoBan: 1500000,
+        GiaCoBan: 1400000,
+        Img: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&auto=format&fit=crop&q=80'
+    },
+    {
+        MaLoaiPhong: 'LP004',
+        TenLoaiPhong: 'Suite',
+        MoTa: 'Phòng Suite cao cấp.',
+        SucChua: 3,
+        GiaCoBan: 2000000,
         Img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80'
     }
 ];
+
+function chuanHoaLoaiPhong(loai) {
+    return {
+        MaLoaiPhong: loai.MaLoaiPhong || loai.id,
+        TenLoaiPhong: loai.TenLoaiPhong || loai.name,
+        MoTa: loai.MoTa ?? loai.description,
+        SucChua: loai.SucChua ?? loai.capacity,
+        GiaCoBan: loai.GiaCoBan ?? loai.price,
+        TrangThai: loai.TrangThai || loai.status,
+        Img: loai.Img || loai.image
+    };
+}
 
 function taoTheLoaiPhong(loai) {
     const card = document.createElement('article');
@@ -260,19 +280,128 @@ function veLoaiPhong(danhSach) {
         return;
     }
 
-    danhSach.forEach((loai) => grid.appendChild(taoTheLoaiPhong(loai)));
+    danhSach.forEach((loai, i) => {
+        const card = taoTheLoaiPhong(loai);
+        card.style.transitionDelay = `${i * 0.12}s`;
+        grid.appendChild(card);
+        requestAnimationFrame(() => {
+            setTimeout(() => card.classList.add('is-visible'), 50 + i * 120);
+        });
+    });
+}
+
+
+// ============================================================
+// SCROLL REVEAL & HEADER
+// ============================================================
+
+function setupScrollReveal() {
+    const heroReveals = document.querySelectorAll('.hero .reveal');
+    heroReveals.forEach((el, i) => {
+        setTimeout(() => el.classList.add('is-visible'), 200 + i * 120);
+    });
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.reveal').forEach((el) => {
+        if (!el.closest('.hero')) observer.observe(el);
+    });
+}
+
+function setupHeaderScroll() {
+    const header = document.getElementById('siteHeader');
+    if (!header) return;
+
+    const onScroll = () => {
+        header.classList.toggle('is-scrolled', window.scrollY > 60);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+}
+
+
+// ============================================================
+// ĐẾM SỐ THỐNG KÊ
+// ============================================================
+
+function animateCounter(el) {
+    const target = Number(el.dataset.count) || 0;
+    const suffix = el.dataset.suffix || '';
+    const duration = 1600;
+    const start = performance.now();
+
+    function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+}
+
+function setupCounters() {
+    const nums = document.querySelectorAll('.stat-num[data-count]');
+    if (!nums.length) return;
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.5 }
+    );
+
+    nums.forEach((el) => observer.observe(el));
+}
+
+
+// ============================================================
+// ƯU ĐÃI COUNTDOWN
+// ============================================================
+
+function setupOfferCountdown() {
+    const el = document.getElementById('offerDeadline');
+    if (!el) return;
+
+    const end = new Date();
+    end.setDate(end.getDate() + 30);
+
+    function update() {
+        const diff = end - Date.now();
+        const days = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+        el.innerHTML = `Kết thúc sau <strong>${days}</strong> ngày`;
+    }
+
+    update();
+    setInterval(update, 60000);
 }
 
 async function loadLoaiPhong() {
     try {
         const data = await window.RoomTypeAPI.getAll();
-        const danhSach = Array.isArray(data) ? data : [];
+        const danhSach = Array.isArray(data) ? data.map(chuanHoaLoaiPhong) : [];
         const dangBan = danhSach.filter((loai) => loai.TrangThai !== 'INACTIVE');
 
-        veLoaiPhong(dangBan.length ? dangBan : loaiPhongMau);
+        veLoaiPhong(dangBan.length ? dangBan : loaiPhongDuPhong);
     } catch (error) {
         console.error('Không tải được loại phòng:', error);
-        veLoaiPhong(loaiPhongMau);
+        veLoaiPhong(loaiPhongDuPhong);
     }
 }
 
@@ -286,5 +415,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setupGuestPicker();
     setupDates();
     setupSearch();
+    setupScrollReveal();
+    setupHeaderScroll();
+    setupCounters();
+    setupOfferCountdown();
     loadLoaiPhong();
 });

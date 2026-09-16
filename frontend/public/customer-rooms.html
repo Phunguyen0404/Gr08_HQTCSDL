@@ -439,6 +439,67 @@
             cursor: pointer;
         }
 
+        .booking-success-card {
+            max-width: 480px;
+            text-align: center;
+            border-top-color: #16a34a;
+        }
+
+        .booking-success-body {
+            padding: 32px 28px 28px;
+        }
+
+        .success-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 16px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .booking-success-body h3 {
+            margin: 0 0 8px;
+            color: var(--lux-fg);
+            font-family: var(--font-heading);
+            font-size: 23px;
+        }
+
+        .booking-success-body p {
+            margin: 0;
+            color: var(--lux-muted-fg);
+            line-height: 1.55;
+        }
+
+        .success-booking-code {
+            display: inline-block;
+            margin: 18px 0;
+            padding: 8px 14px;
+            border: 1px solid #bbf7d0;
+            background: #f0fdf4;
+            color: #166534;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .success-summary {
+            margin-top: 4px;
+            padding: 14px 16px;
+            border: 1px solid var(--lux-border);
+            background: var(--lux-muted-bg);
+            text-align: left;
+            font-size: 13px;
+            color: var(--lux-muted-fg);
+            line-height: 1.7;
+        }
+
+        .success-summary strong { color: var(--lux-fg); }
+
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
@@ -569,6 +630,27 @@
                     <button type="submit" id="submitBookingBtn" class="btn-book">Xác nhận đặt ngay</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- BOOKING SUCCESS MODAL -->
+    <div id="bookingSuccessModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+        <div class="modal-card booking-success-card">
+            <div class="booking-success-body">
+                <div class="success-icon" aria-hidden="true">✓</div>
+                <h3 id="successTitle">Đặt phòng thành công!</h3>
+                <p>Yêu cầu của bạn đã được ghi nhận. Chúng tôi sẽ chuẩn bị phòng cho kỳ lưu trú của bạn.</p>
+                <div id="successBookingCode" class="success-booking-code">---</div>
+                <div class="success-summary">
+                    <div><strong>Phòng:</strong> <span id="successRoomName">-</span></div>
+                    <div><strong>Thời gian:</strong> <span id="successStayDates">-</span></div>
+                    <div><strong>Tổng tiền tạm tính:</strong> <span id="successTotalAmount">-</span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="continueBrowsingRooms()">Tiếp tục xem phòng</button>
+                <button type="button" class="btn-book" onclick="viewMyBookings()">Xem đơn đặt phòng</button>
+            </div>
         </div>
     </div>
 

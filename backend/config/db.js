@@ -12,9 +12,20 @@ const pool = mysql.createPool({
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'hotel_management',
+    // All booking timestamps are recorded and read as Vietnam time (UTC+7).
+    timezone: '+07:00',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
+});
+
+// NOW() is evaluated by MySQL using the session timezone. Set it explicitly so
+// the booking time is independent from the database server's OS timezone.
+pool.on('connection', (connection) => {
+    connection.query("SET time_zone = '+07:00'");
+    // Do not depend on the server-wide default. This prevents dirty reads and
+    // gives a stable snapshot to every multi-statement transaction by default.
+    connection.query('SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ');
 });
 
 const store = {

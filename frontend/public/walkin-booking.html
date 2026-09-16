@@ -7,7 +7,7 @@
   <title>Đặt phòng hộ - Khách vãng lai</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/walkin.css">
@@ -82,162 +82,228 @@
     </div>
   </aside>
 
-  <main class="main-content">
-    <header class="top-header">
-      <div>
+  <main class="main">
+    <header class="header">
+      <div class="header-title">
         <h1>Đặt phòng hộ cho khách vãng lai</h1>
         <p>Dành cho Quản trị viên: đặt phòng trực tiếp tại quầy cho khách lưu trú.</p>
       </div>
 
-      <div class="admin-info">
-        <div class="admin-avatar">AD</div>
-        <div>
-          <strong>Admin</strong>
-          <small>Quản trị viên</small>
+      <div class="header-right">
+        <div class="profile">
+          <div class="avatar" data-auth-initials>AD</div>
+          <div class="profile-info">
+            <strong data-auth-username>Admin</strong>
+            <small data-auth-role>Quản trị viên</small>
+          </div>
         </div>
-        <span>▼</span>
       </div>
     </header>
 
-    <div class="search-ticket" style="grid-template-columns: 1fr;">
+    <div class="walkin-page">
       <input type="hidden" id="staffIdInput" value="NV001">
-      <div class="field">
-        <label for="noteInput">Ghi chú đặt phòng</label>
-        <input type="text" id="noteInput" class="input-field" placeholder="VD: Khách vãng lai tại quầy, thanh toán tiền mặt">
+
+      <!-- Quy trình 4 bước -->
+      <div class="walkin-steps">
+        <div class="walkin-step active" id="stepCustomer">
+          <span class="walkin-step-num">1</span>
+          <div class="walkin-step-label">
+            Khách hàng
+            <small>Tìm hoặc đăng ký</small>
+          </div>
+        </div>
+        <div class="walkin-step" id="stepCriteria">
+          <span class="walkin-step-num">2</span>
+          <div class="walkin-step-label">
+            Tiêu chí
+            <small>Ngày &amp; số khách</small>
+          </div>
+        </div>
+        <div class="walkin-step" id="stepRooms">
+          <span class="walkin-step-num">3</span>
+          <div class="walkin-step-label">
+            Chọn phòng
+            <small>Phòng còn trống</small>
+          </div>
+        </div>
+        <div class="walkin-step" id="stepConfirm">
+          <span class="walkin-step-num">4</span>
+          <div class="walkin-step-label">
+            Xác nhận
+            <small>Hoàn tất đặt phòng</small>
+          </div>
+        </div>
       </div>
+
+      <!-- Hai cột: Khách hàng + Tiêu chí -->
+      <div class="walkin-grid">
+        <!-- Panel khách hàng -->
+        <section class="walkin-panel">
+          <div class="walkin-panel-header">
+            <span class="step-badge">01</span>
+            <div>
+              <h2>Khách hàng</h2>
+              <p>Tìm khách đã có hoặc đăng ký khách vãng lai mới</p>
+            </div>
+          </div>
+          <div class="walkin-panel-body">
+            <div class="customer-tabs">
+              <button type="button" class="customer-tab active" data-tab="lookup">Khách đã có trong hệ thống</button>
+              <button type="button" class="customer-tab" data-tab="register">Khách mới (vãng lai)</button>
+            </div>
+
+            <div class="customer-tab-panel active" id="lookupPanel">
+              <div class="lookup-row">
+                <div class="field">
+                  <label for="lookupCccdInput">Số CCCD</label>
+                  <input type="text" id="lookupCccdInput" class="input-field" placeholder="VD: 079123456789">
+                </div>
+                <div class="field">
+                  <label for="lookupPhoneInput">Số điện thoại</label>
+                  <input type="text" id="lookupPhoneInput" class="input-field" placeholder="VD: 0912345678">
+                </div>
+              </div>
+              <div class="lookup-actions">
+                <button type="button" class="search-btn" id="lookupBtn">Tìm khách hàng</button>
+              </div>
+              <div class="lookup-results" id="lookupResults"></div>
+            </div>
+
+            <div class="customer-tab-panel" id="registerPanel">
+              <div class="register-grid">
+                <div class="field">
+                  <label for="regHoTen">Họ tên *</label>
+                  <input type="text" id="regHoTen" class="input-field" placeholder="Nguyễn Văn A">
+                </div>
+                <div class="field">
+                  <label for="regCccd">Số CCCD *</label>
+                  <input type="text" id="regCccd" class="input-field" placeholder="079123456789">
+                </div>
+                <div class="field">
+                  <label for="regPhone">Số điện thoại *</label>
+                  <input type="text" id="regPhone" class="input-field" placeholder="0912345678">
+                </div>
+                <div class="field">
+                  <label for="regEmail">Email</label>
+                  <input type="email" id="regEmail" class="input-field" placeholder="email@vidu.com">
+                </div>
+                <div class="field">
+                  <label for="regNgaySinh">Ngày sinh</label>
+                  <input type="date" id="regNgaySinh" class="input-field">
+                </div>
+                <div class="field">
+                  <label for="regGioiTinh">Giới tính</label>
+                  <select id="regGioiTinh" class="input-field">
+                    <option value="">-- Chọn --</option>
+                    <option value="MALE">Nam</option>
+                    <option value="FEMALE">Nữ</option>
+                    <option value="OTHER">Khác</option>
+                  </select>
+                </div>
+                <div class="field field-full">
+                  <label for="regDiaChi">Địa chỉ</label>
+                  <input type="text" id="regDiaChi" class="input-field" placeholder="Địa chỉ liên hệ">
+                </div>
+              </div>
+              <div class="register-actions">
+                <button type="button" class="search-btn" id="registerBtn">Đăng ký khách vãng lai</button>
+              </div>
+            </div>
+
+            <div class="customer-card" id="customerCard" style="display:none;">
+              <div class="who">
+                <h4 id="customerCardName">—</h4>
+                <p id="customerCardMeta">—</p>
+              </div>
+              <button type="button" class="clear-btn" id="clearCustomerBtn">Đổi khách khác</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel tiêu chí đặt phòng -->
+        <section class="walkin-panel">
+          <div class="walkin-panel-header">
+            <span class="step-badge">02</span>
+            <div>
+              <h2>Tiêu chí đặt phòng</h2>
+              <p>Chọn ngày lưu trú, số khách và tiền cọc</p>
+            </div>
+          </div>
+          <div class="walkin-panel-body">
+            <div class="walkin-form-grid">
+              <div class="field">
+                <label for="checkInInput">Nhận phòng</label>
+                <input type="date" id="checkInInput" class="input-field">
+              </div>
+              <div class="field">
+                <label for="checkOutInput">Trả phòng</label>
+                <input type="date" id="checkOutInput" class="input-field">
+              </div>
+              <div class="field">
+                <label for="guestsInput">Số khách</label>
+                <input type="number" id="guestsInput" class="input-field" min="1" value="1">
+              </div>
+              <div class="field">
+                <label for="depositInput">Tiền cọc (nếu có)</label>
+                <input type="number" id="depositInput" class="input-field" min="0" placeholder="0">
+              </div>
+              <div class="field field-full">
+                <label for="noteInput">Ghi chú đặt phòng</label>
+                <input type="text" id="noteInput" class="input-field"
+                  placeholder="VD: Khách vãng lai tại quầy, thanh toán tiền mặt">
+              </div>
+            </div>
+            <div class="walkin-form-actions">
+              <button class="search-btn" id="searchBtn">Tìm phòng trống</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <p id="formMessage" class="form-message"></p>
+
+      <!-- Phòng còn trống -->
+      <section class="walkin-panel walkin-panel-full rooms-section">
+        <div class="walkin-panel-header">
+          <div style="display:flex;align-items:flex-start;gap:14px;">
+            <span class="step-badge">03</span>
+            <div>
+              <h2>Phòng còn trống</h2>
+              <p>Chọn ngày, tìm khách hàng (hoặc đăng ký mới) rồi chọn phòng để đặt.</p>
+            </div>
+          </div>
+        </div>
+        <div class="room-grid" id="roomGrid">
+          <div class="empty-state">
+            <div class="empty-state-icon">🏨</div>
+            Chưa có kết quả tìm kiếm. Hãy chọn ngày và bấm "Tìm phòng trống".
+          </div>
+        </div>
+      </section>
+
+      <!-- Thanh xác nhận -->
+      <section class="walkin-summary" id="summarySection" style="display:none;">
+        <div class="summary-card">
+          <div class="left">
+            <h3 id="summaryRoomName">—</h3>
+            <p id="summaryDates">—</p>
+          </div>
+          <div class="summary-nums">
+            <div>
+              <div class="label">Đơn giá</div>
+              <div class="val" id="summaryPrice">—</div>
+            </div>
+            <div>
+              <div class="label">Tổng cộng</div>
+              <div class="val" id="summaryTotal">—</div>
+            </div>
+          </div>
+          <button class="summary-cta" id="confirmBtn">Xác nhận đặt phòng cho khách</button>
+        </div>
+      </section>
     </div>
 
-    <section class="customer-panel">
-      <div class="section-head">
-        <h2>Khách hàng</h2>
-      </div>
-
-      <div class="customer-tabs">
-        <button type="button" class="customer-tab active" data-tab="lookup">Khách đã có trong hệ thống</button>
-        <button type="button" class="customer-tab" data-tab="register">Khách mới (vãng lai)</button>
-      </div>
-
-      <div class="customer-tab-panel active" id="lookupPanel">
-        <div class="lookup-row">
-          <div class="field">
-            <label for="lookupCccdInput">Số CCCD</label>
-            <input type="text" id="lookupCccdInput" class="input-field" placeholder="VD: 079123456789">
-          </div>
-          <div class="field">
-            <label for="lookupPhoneInput">Số điện thoại</label>
-            <input type="text" id="lookupPhoneInput" class="input-field" placeholder="VD: 0912345678">
-          </div>
-          <button type="button" class="search-btn" id="lookupBtn">Tìm khách hàng</button>
-        </div>
-        <div class="lookup-results" id="lookupResults"></div>
-      </div>
-
-      <div class="customer-tab-panel" id="registerPanel">
-        <div class="register-grid">
-          <div class="field">
-            <label for="regHoTen">Họ tên *</label>
-            <input type="text" id="regHoTen" class="input-field" placeholder="Nguyễn Văn A">
-          </div>
-          <div class="field">
-            <label for="regCccd">Số CCCD *</label>
-            <input type="text" id="regCccd" class="input-field" placeholder="079123456789">
-          </div>
-          <div class="field">
-            <label for="regPhone">Số điện thoại *</label>
-            <input type="text" id="regPhone" class="input-field" placeholder="0912345678">
-          </div>
-          <div class="field">
-            <label for="regEmail">Email</label>
-            <input type="email" id="regEmail" class="input-field" placeholder="email@vidu.com">
-          </div>
-          <div class="field">
-            <label for="regNgaySinh">Ngày sinh</label>
-            <input type="date" id="regNgaySinh" class="input-field">
-          </div>
-          <div class="field">
-            <label for="regGioiTinh">Giới tính</label>
-            <select id="regGioiTinh" class="input-field">
-              <option value="">-- Chọn --</option>
-              <option value="MALE">Nam</option>
-              <option value="FEMALE">Nữ</option>
-              <option value="OTHER">Khác</option>
-            </select>
-          </div>
-          <div class="field full">
-            <label for="regDiaChi">Địa chỉ</label>
-            <input type="text" id="regDiaChi" class="input-field" placeholder="Địa chỉ liên hệ">
-          </div>
-        </div>
-        <div class="register-actions">
-          <button type="button" class="search-btn" id="registerBtn">Đăng ký khách vãng lai</button>
-        </div>
-      </div>
-
-      <div class="customer-card" id="customerCard" style="display:none;">
-        <div class="who">
-          <h4 id="customerCardName">—</h4>
-          <p id="customerCardMeta">—</p>
-        </div>
-        <button type="button" class="clear-btn" id="clearCustomerBtn">Đổi khách khác</button>
-      </div>
-    </section>
-
-    <div class="search-ticket">
-      <div class="field">
-        <label for="checkInInput">Nhận phòng</label>
-        <input type="date" id="checkInInput" class="input-field">
-      </div>
-      <div class="field">
-        <label for="checkOutInput">Trả phòng</label>
-        <input type="date" id="checkOutInput" class="input-field">
-      </div>
-      <div class="field">
-        <label for="guestsInput">Số khách</label>
-        <input type="number" id="guestsInput" class="input-field" min="1" value="1">
-      </div>
-      <div class="field">
-        <label for="depositInput">Tiền cọc (nếu có)</label>
-        <input type="number" id="depositInput" class="input-field" min="0" placeholder="0">
-      </div>
-      <button class="search-btn" id="searchBtn">Tìm phòng trống</button>
-    </div>
-
-    <p id="formMessage" class="form-message"></p>
-
-    <section class="rooms" id="rooms">
-      <div class="section-head">
-        <h2>Phòng còn trống</h2>
-        <p>Chọn ngày, tìm khách hàng (hoặc đăng ký mới) rồi chọn phòng để đặt.</p>
-      </div>
-
-      <div class="room-grid" id="roomGrid">
-        <p class="empty-state">Chưa có kết quả tìm kiếm. Hãy chọn ngày và bấm "Tìm phòng trống".</p>
-      </div>
-    </section>
-
-    <section class="summary" id="summarySection" style="display:none;">
-      <div class="summary-card">
-        <div class="left">
-          <h3 id="summaryRoomName">—</h3>
-          <p id="summaryDates">—</p>
-        </div>
-        <div class="summary-nums">
-          <div>
-            <div class="label">Đơn giá</div>
-            <div class="val" id="summaryPrice">—</div>
-          </div>
-          <div>
-            <div class="label">Tổng cộng</div>
-            <div class="val" id="summaryTotal">—</div>
-          </div>
-        </div>
-        <button class="summary-cta" id="confirmBtn">Xác nhận đặt phòng cho khách</button>
-      </div>
-    </section>
-
-    <footer>
-      © 2026
-    </footer>
+    <footer>© 2026 Hotel Management</footer>
   </main>
 
   <script src="../js/authGuard.js"></script>

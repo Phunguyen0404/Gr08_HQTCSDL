@@ -83,13 +83,27 @@
         <div class="hero-scrim"></div>
 
         <div class="hero-content">
-            <h1 class="hero-title">Chào mừng đến với khách sạn của chúng tôi</h1>
-            <p class="hero-sub">
+            <div class="hero-badges reveal">
+                <span class="hero-badge">⭐ 4.8 · 2.400+ đánh giá</span>
+                <span class="hero-badge">🏆 Khách sạn 5 sao</span>
+            </div>
+            <h1 class="hero-title reveal reveal-delay-1">Chào mừng đến với<br><em>khách sạn của chúng tôi</em></h1>
+            <p class="hero-sub reveal reveal-delay-2">
                 Nghỉ dưỡng trọn vẹn giữa không gian ven biển, phòng đầy đủ tiện nghi và
                 dịch vụ chăm sóc 24/7.
             </p>
-            <a href="#phong" class="hero-cta">Khám phá</a>
+            <div class="hero-actions reveal reveal-delay-3">
+                <a href="#phong" class="hero-cta">Khám phá phòng</a>
+                <a href="#tim-kiem" class="hero-cta hero-cta-ghost">Đặt ngay</a>
+            </div>
         </div>
+
+        <a href="#phong" class="scroll-hint" aria-label="Cuộn xuống">
+            <span>Cuộn xuống</span>
+            <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
+        </a>
 
         <!-- ========================================================
              THANH TÌM KIẾM
@@ -182,13 +196,66 @@
 
     </section>
 
+    <!-- Thống kê nhanh -->
+    <section class="stats-strip" aria-label="Thống kê khách sạn">
+        <div class="stats-inner">
+            <div class="stat-item reveal">
+                <strong class="stat-num" data-count="120" data-suffix="+">0</strong>
+                <span>Phòng nghỉ</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-1">
+                <strong class="stat-num" data-count="98" data-suffix="%">0</strong>
+                <span>Khách hài lòng</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-2">
+                <strong class="stat-num" data-count="15" data-suffix="+">0</strong>
+                <span>Năm kinh nghiệm</span>
+            </div>
+            <div class="stat-item reveal reveal-delay-3">
+                <strong class="stat-num" data-count="24" data-suffix="/7">0</strong>
+                <span>Lễ tân hỗ trợ</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee tin cậy -->
+    <div class="trust-marquee" aria-hidden="true">
+        <div class="marquee-track">
+            <span>Miễn phí hủy trước 48h</span>
+            <span>·</span>
+            <span>Bữa sáng buffet</span>
+            <span>·</span>
+            <span>Wi-Fi tốc độ cao</span>
+            <span>·</span>
+            <span>Hồ bơi ngoài trời</span>
+            <span>·</span>
+            <span>Đưa đón sân bay</span>
+            <span>·</span>
+            <span>Spa &amp; wellness</span>
+            <span>·</span>
+            <span>Miễn phí hủy trước 48h</span>
+            <span>·</span>
+            <span>Bữa sáng buffet</span>
+            <span>·</span>
+            <span>Wi-Fi tốc độ cao</span>
+            <span>·</span>
+            <span>Hồ bơi ngoài trời</span>
+            <span>·</span>
+            <span>Đưa đón sân bay</span>
+            <span>·</span>
+            <span>Spa &amp; wellness</span>
+            <span>·</span>
+        </div>
+    </div>
+
     <!-- ============================================================
          LOẠI PHÒNG
          ============================================================ -->
 
     <section class="section" id="phong">
 
-        <div class="section-head">
+        <div class="section-head reveal">
+            <span class="section-tag">Lưu trú</span>
             <h2>Loại phòng</h2>
             <p>Giá theo đêm, đã bao gồm bữa sáng cho hai khách.</p>
         </div>
@@ -205,29 +272,69 @@
 
     <section class="section section-sand" id="tien-ich">
 
-        <div class="section-head">
+        <div class="section-head reveal">
+            <span class="section-tag">Trải nghiệm</span>
             <h2>Tiện ích tại khách sạn</h2>
+            <p>Mọi chi tiết đều được chăm chút để kỳ nghỉ của bạn trọn vẹn.</p>
         </div>
 
         <ul class="amenity-list">
-            <li>
+            <li class="amenity-card reveal">
+                <div class="amenity-icon">🏊</div>
                 <h3>Hồ bơi ngoài trời</h3>
                 <p>Mở cửa 6:00 - 21:00, có khu riêng cho trẻ em và ghế nằm ven hồ.</p>
             </li>
-            <li>
+            <li class="amenity-card reveal reveal-delay-1">
+                <div class="amenity-icon">🍽️</div>
                 <h3>Nhà hàng &amp; quầy bar</h3>
                 <p>Buffet sáng mỗi ngày, thực đơn Á - Âu phục vụ tại phòng đến 22:00.</p>
             </li>
-            <li>
+            <li class="amenity-card reveal reveal-delay-2">
+                <div class="amenity-icon">💼</div>
                 <h3>Phòng họp</h3>
                 <p>Ba phòng từ 20 đến 120 chỗ, đủ máy chiếu và âm thanh hội nghị.</p>
             </li>
-            <li>
+            <li class="amenity-card reveal reveal-delay-3">
+                <div class="amenity-icon">✈️</div>
                 <h3>Đưa đón sân bay</h3>
                 <p>Đặt trước 12 giờ, xe chờ sẵn tại sảnh đến với bảng tên của khách.</p>
             </li>
         </ul>
 
+    </section>
+
+    <!-- Đánh giá khách hàng -->
+    <section class="section testimonials" id="danh-gia">
+        <div class="section-head reveal">
+            <span class="section-tag">Khách hàng nói gì</span>
+            <h2>Trải nghiệm được yêu thích</h2>
+        </div>
+        <div class="testimonial-grid">
+            <blockquote class="testimonial-card reveal">
+                <div class="testimonial-stars">★★★★★</div>
+                <p>"Phòng sạch sẽ, view biển tuyệt đẹp. Nhân viên lễ tân rất nhiệt tình và chuyên nghiệp."</p>
+                <footer>
+                    <strong>Nguyễn Minh Anh</strong>
+                    <span>Đà Nẵng · Deluxe Sea View</span>
+                </footer>
+            </blockquote>
+            <blockquote class="testimonial-card reveal reveal-delay-1">
+                <div class="testimonial-stars">★★★★★</div>
+                <p>"Buffet sáng phong phú, hồ bơi rộng rãi. Gia đình tôi rất hài lòng với kỳ nghỉ cuối tuần."</p>
+                <footer>
+                    <strong>Trần Hoàng Bảo</strong>
+                    <span>Hà Nội · Family Suite</span>
+                </footer>
+            </blockquote>
+            <blockquote class="testimonial-card reveal reveal-delay-2">
+                <div class="testimonial-stars">★★★★☆</div>
+                <p>"Đặt phòng online nhanh gọn, check-in chỉ mất 5 phút. Sẽ quay lại lần sau."</p>
+                <footer>
+                    <strong>Lê Phương Chi</strong>
+                    <span>TP.HCM · Standard Room</span>
+                </footer>
+            </blockquote>
+        </div>
     </section>
 
     <!-- ============================================================
@@ -239,10 +346,14 @@
         <!-- Ảnh nền ưu đãi: frontend/assets/images/offer.jpg -->
         <div class="offer-media"></div>
 
-        <div class="offer-body">
-            <h2>Đặt sớm, tiết kiệm 20%</h2>
+        <div class="offer-body reveal">
+            <span class="offer-tag">Ưu đãi có hạn</span>
+            <h2>Đặt sớm, tiết kiệm <em>20%</em></h2>
             <p>Áp dụng khi đặt trước 30 ngày và lưu trú từ hai đêm. Hủy miễn phí trước 48 giờ.</p>
-            <a href="#tim-kiem" class="btn btn-amber">Đặt phòng</a>
+            <div class="offer-actions">
+                <a href="#tim-kiem" class="btn btn-amber">Đặt phòng ngay</a>
+                <span class="offer-deadline" id="offerDeadline">Kết thúc sau <strong>30</strong> ngày</span>
+            </div>
         </div>
 
     </section>

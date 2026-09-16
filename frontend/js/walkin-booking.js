@@ -46,6 +46,36 @@ const summaryPrice = document.getElementById('summaryPrice');
 const summaryTotal = document.getElementById('summaryTotal');
 const confirmBtn = document.getElementById('confirmBtn');
 
+const stepEls = {
+    customer: document.getElementById('stepCustomer'),
+    criteria: document.getElementById('stepCriteria'),
+    rooms: document.getElementById('stepRooms'),
+    confirm: document.getElementById('stepConfirm')
+};
+
+function updateSteps() {
+    const hasCustomer = !!state.customer;
+    const hasCriteria = !!(checkInInput.value && checkOutInput.value);
+    const hasRooms = state.availableRooms.length > 0;
+    const hasSelection = !!state.selectedRoom;
+
+    const steps = [
+        { el: stepEls.customer, done: hasCustomer },
+        { el: stepEls.criteria, done: hasCriteria && hasRooms, active: hasCustomer && !hasRooms },
+        { el: stepEls.rooms, done: hasSelection, active: hasRooms && !hasSelection },
+        { el: stepEls.confirm, active: hasSelection }
+    ];
+
+    steps.forEach(({ el, done, active }) => {
+        if (!el) return;
+        el.classList.remove('active', 'done');
+        if (done) el.classList.add('done');
+        else if (active) el.classList.add('active');
+    });
+
+    if (!hasCustomer) stepEls.customer?.classList.add('active');
+}
+
 function formatCurrency(value) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 }
@@ -92,7 +122,7 @@ document.querySelectorAll('.customer-tab').forEach(tab => {
 // === Tìm khách hàng đã có ===
 function renderLookupResults() {
     if (!state.lookupResults.length) {
-        lookupResultsEl.innerHTML = '<p class="empty-state">Không tìm thấy khách hàng phù hợp. Hãy thử tab "Khách mới".</p>';
+        lookupResultsEl.innerHTML = '<p style="margin:12px 0 0;font-size:13px;color:var(--lux-muted-fg);">Không tìm thấy khách hàng phù hợp. Hãy thử tab "Khách mới".</p>';
         return;
     }
     lookupResultsEl.innerHTML = state.lookupResults.map(c => `
@@ -172,45 +202,57 @@ function setCustomer(customer) {
     customerCardName.textContent = customer.HoTen;
     customerCardMeta.textContent = `Mã KH ${customer.MaKH} · CCCD ${customer.CCCD} · SĐT ${customer.SoDienThoai}`;
     customerCard.style.display = 'flex';
+    updateSteps();
 }
 
 clearCustomerBtn.addEventListener('click', () => {
     state.customer = null;
     customerCard.style.display = 'none';
+    updateSteps();
 });
 
 // === Tìm phòng trống ===
 function renderRooms() {
     if (!state.availableRooms.length) {
-        roomGrid.innerHTML = '<p class="empty-state">Không có phòng trống phù hợp trong khoảng ngày này.</p>';
+        roomGrid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            Không có phòng trống phù hợp trong khoảng ngày này.
+          </div>`;
+        updateSteps();
         return;
     }
 
+    const isSelected = (room) => state.selectedRoom && state.selectedRoom.MaPhong === room.MaPhong;
+
     roomGrid.innerHTML = state.availableRooms.map(room => `
-    <div class="ticket ${state.selectedRoom && state.selectedRoom.MaPhong === room.MaPhong ? 'selected' : ''}" data-room="${room.MaPhong}">
-      <div class="ticket-img">
-        <span class="code">RM · ${room.SoPhong}</span>
-        <span class="tag">${room.TenLoaiPhong}</span>
+    <article class="room-card ${isSelected(room) ? 'selected' : ''}" data-room="${room.MaPhong}">
+      <div class="room-card-header">
+        <span class="room-number">${room.SoPhong}</span>
+        <span class="room-type-tag">${room.TenLoaiPhong}</span>
       </div>
-      <div class="perforation"></div>
-      <div class="ticket-body">
+      <div class="room-card-body">
         <h3>Phòng ${room.SoPhong} · Tầng ${room.Tang}</h3>
-        <p class="desc">${room.MoTa || ''} · Sức chứa ${room.SucChua} người</p>
-        <div class="ticket-footer">
-          <div class="price">
+        <p class="room-card-meta">${room.MoTa || 'Phòng tiêu chuẩn'} · Sức chứa ${room.SucChua} người</p>
+        <div class="room-card-footer">
+          <div class="room-price">
             <div class="amount">${formatCurrency(room.GiaCoBan)}</div>
             <div class="unit">/ đêm</div>
           </div>
-          <button type="button" class="choose-btn" data-action="choose" data-room="${room.MaPhong}">Chọn phòng</button>
+          <button type="button" class="choose-btn" data-action="choose" data-room="${room.MaPhong}">
+            ${isSelected(room) ? '✓ Đã chọn' : 'Chọn phòng'}
+          </button>
         </div>
       </div>
-    </div>
+    </article>
   `).join('');
+    updateSteps();
 }
 
 function renderSummary() {
     if (!state.selectedRoom) {
         summarySection.style.display = 'none';
+        updateSteps();
         return;
     }
     const nights = nightsBetween(state.checkIn, state.checkOut);
@@ -221,6 +263,7 @@ function renderSummary() {
     summaryPrice.textContent = formatCurrency(state.selectedRoom.GiaCoBan);
     summaryTotal.textContent = formatCurrency(total);
     summarySection.style.display = 'block';
+    updateSteps();
 }
 
 async function handleSearch() {
@@ -317,4 +360,5 @@ confirmBtn.addEventListener('click', handleConfirm);
 
     checkInInput.value = tomorrow.toISOString().slice(0, 10);
     checkOutInput.value = dayAfter.toISOString().slice(0, 10);
+    updateSteps();
 })();

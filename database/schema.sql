@@ -180,6 +180,8 @@ CREATE TABLE DAT_PHONG (
         'COMPLETED'
     ) NOT NULL DEFAULT 'PENDING',
     GhiChu VARCHAR(255) NULL,
+    -- Dùng cho optimistic locking khi cập nhật booking từ giao diện.
+    PhienBan INT UNSIGNED NOT NULL DEFAULT 1,
 
     CONSTRAINT PK_DAT_PHONG
         PRIMARY KEY (MaDatPhong),
@@ -207,6 +209,14 @@ CREATE TABLE DAT_PHONG (
 
     CONSTRAINT CK_DAT_PHONG_TienCoc
         CHECK (TienCocDuKien >= 0)
+) ENGINE = InnoDB;
+
+-- Sequence dạng bảng giúp sinh mã an toàn khi nhiều request đồng thời.
+-- Không tạo sẵn dòng sequence: procedure sẽ khởi tạo từ MAX mã hiện có ở lần chạy đầu.
+CREATE TABLE ID_SEQUENCE (
+    TenSequence VARCHAR(64) NOT NULL,
+    GiaTriTiepTheo BIGINT UNSIGNED NOT NULL,
+    CONSTRAINT PK_ID_SEQUENCE PRIMARY KEY (TenSequence)
 ) ENGINE = InnoDB;
 
 
@@ -238,7 +248,6 @@ CREATE TABLE CHI_TIET_DAT_PHONG (
     CONSTRAINT CK_CTDPT_DonGiaDat
         CHECK (DonGiaDat >= 0)
 ) ENGINE = InnoDB;
-
 
 -- ============================================================
 -- 8. LUU_TRU
@@ -449,8 +458,8 @@ CREATE INDEX IDX_DAT_PHONG_MaKH
 CREATE INDEX IDX_DAT_PHONG_MaNV_Tao
     ON DAT_PHONG(MaNV_Tao);
 
-CREATE INDEX IDX_CTDPT_MaPhong
-    ON CHI_TIET_DAT_PHONG(MaPhong);
+CREATE INDEX IDX_CTDPT_MaPhong_MaDatPhong
+    ON CHI_TIET_DAT_PHONG(MaPhong, MaDatPhong);
 
 CREATE INDEX IDX_LUU_TRU_TrangThai
     ON LUU_TRU(TrangThai);

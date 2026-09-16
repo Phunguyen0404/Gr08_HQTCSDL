@@ -1,0 +1,16 @@
+◇ injected env (7) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+>>> DB.JS DANG DUOC LOAD <<<
+DB_USER: root
+DB_NAME: hotel_management
+DB_PASSWORD: DA CO
+MYSQL: KET NOI THANH CONG
+==============================================
+HOTEL MANAGEMENT SYSTEM ĐANG CHẠY
+Server: http://localhost:3000
+Dashboard: http://localhost:3000/dashboard.html
+Rooms: http://localhost:3000/rooms.html
+Bookings: http://localhost:3000/bookings.html
+Customers: http://localhost:3000/customers.html
+Invoices: http://localhost:3000/invoices.html
+==============================================

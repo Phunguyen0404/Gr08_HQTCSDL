@@ -33,8 +33,9 @@ main_block: BEGIN
     DECLARE v_SoLuongPhong  INT DEFAULT 0;
     DECLARE v_TongSucChua   INT DEFAULT 0;
     DECLARE v_SoLuongTrung  INT DEFAULT 0;
-    DECLARE v_MaxSuffix     INT DEFAULT 0;
-    DECLARE v_STT           INT DEFAULT 0;
+    DECLARE v_NextBookingId BIGINT UNSIGNED DEFAULT 0;
+    DECLARE v_NextCode      BIGINT UNSIGNED DEFAULT 0;
+    DECLARE v_CodeSequence  VARCHAR(64);
     DECLARE v_err_no        INT;
     DECLARE v_err_msg       VARCHAR(255);
 
@@ -75,18 +76,29 @@ main_block: BEGIN
 
     START TRANSACTION;
 
-    -- Buoc 3+4: Khoa va kiem tra trung lich cho cac phong trong danh sach
+    -- Buoc 3: Khóa trực tiếp các phòng theo cùng một thứ tự.
+    -- Mọi request đặt cùng phòng sẽ xếp hàng tại đây, kể cả khi chưa có booking
+    -- trùng lịch nào (tránh phantom/overbooking).
+    SELECT p.MaPhong
+      FROM PHONG p
+      JOIN JSON_TABLE(
+             p_DanhSachPhong, '$[*]'
+             COLUMNS (MaPhong VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci PATH '$.MaPhong')
+           ) AS jt ON jt.MaPhong = p.MaPhong
+     ORDER BY p.MaPhong
+       FOR UPDATE;
+
+    -- Buoc 4: Sau khi giữ lock phòng, kiểm tra lịch trùng.
     SELECT COUNT(*) INTO v_SoLuongTrung
       FROM JSON_TABLE(
              p_DanhSachPhong, '$[*]'
              COLUMNS (MaPhong VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci PATH '$.MaPhong')
            ) AS jt
       JOIN CHI_TIET_DAT_PHONG ctp ON ctp.MaPhong = jt.MaPhong
-      JOIN DAT_PHONG dp           ON dp.MaDatPhong = ctp.MaDatPhong
+     JOIN DAT_PHONG dp           ON dp.MaDatPhong = ctp.MaDatPhong
      WHERE dp.TrangThai NOT IN ('CANCELLED', 'NO_SHOW')
        AND dp.NgayNhanDuKien < p_NgayTraDuKien
-       AND dp.NgayTraDuKien  > p_NgayNhanDuKien
-     FOR UPDATE OF dp, ctp;
+       AND dp.NgayTraDuKien  > p_NgayNhanDuKien;
 
     IF v_SoLuongTrung > 0 THEN
         ROLLBACK;
@@ -94,18 +106,24 @@ main_block: BEGIN
         LEAVE main_block;
     END IF;
 
-    -- Buoc 5: Sinh ma dat phong (DPxxx)
-    SELECT IFNULL(MAX(CAST(SUBSTRING(MaDatPhong, 3) AS UNSIGNED)), 0) + 1
-      INTO v_MaxSuffix
+    -- Buoc 5: Sinh mã bằng sequence có row lock, không dùng MAX(...) + 1.
+    INSERT IGNORE INTO ID_SEQUENCE (TenSequence, GiaTriTiepTheo)
+    SELECT 'DAT_PHONG', IFNULL(MAX(CAST(SUBSTRING(MaDatPhong, 3) AS UNSIGNED)), 0) + 1
       FROM DAT_PHONG;
-    SET p_MaDatPhong = CONCAT('DP', LPAD(v_MaxSuffix, 3, '0'));
+    SELECT GiaTriTiepTheo INTO v_NextBookingId
+      FROM ID_SEQUENCE WHERE TenSequence = 'DAT_PHONG' FOR UPDATE;
+    UPDATE ID_SEQUENCE SET GiaTriTiepTheo = GiaTriTiepTheo + 1 WHERE TenSequence = 'DAT_PHONG';
+    SET p_MaDatPhong = CONCAT('DP', LPAD(v_NextBookingId, 3, '0'));
 
-    -- Sinh ma booking code (BK + yyyymmdd + STT trong ngay)
-    SELECT IFNULL(MAX(CAST(SUBSTRING(MaBookingCode, 11) AS UNSIGNED)), 0) + 1
-      INTO v_STT
+    SET v_CodeSequence = CONCAT('BOOKING_CODE_', DATE_FORMAT(NOW(), '%Y%m%d'));
+    INSERT IGNORE INTO ID_SEQUENCE (TenSequence, GiaTriTiepTheo)
+    SELECT v_CodeSequence, IFNULL(MAX(CAST(SUBSTRING(MaBookingCode, 11) AS UNSIGNED)), 0) + 1
       FROM DAT_PHONG
      WHERE MaBookingCode LIKE CONCAT('BK', DATE_FORMAT(NOW(), '%Y%m%d'), '%');
-    SET p_MaBookingCode = CONCAT('BK', DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(v_STT, 3, '0'));
+    SELECT GiaTriTiepTheo INTO v_NextCode
+      FROM ID_SEQUENCE WHERE TenSequence = v_CodeSequence FOR UPDATE;
+    UPDATE ID_SEQUENCE SET GiaTriTiepTheo = GiaTriTiepTheo + 1 WHERE TenSequence = v_CodeSequence;
+    SET p_MaBookingCode = CONCAT('BK', DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(v_NextCode, 3, '0'));
 
     -- Buoc 6: Tao don dat phong
     INSERT INTO DAT_PHONG (

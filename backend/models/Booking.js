@@ -55,6 +55,10 @@ async function resolveCustomerId(identifier) {
 async function createBooking(data) {
     const conn = await pool.getConnection();
     try {
+        // DATETIME / NOW() in the stored procedure must use Vietnam time.
+        // Doing this on the checked-out connection guarantees it for every
+        // booking, even when a pool connection was opened before app startup.
+        await conn.query("SET time_zone = '+07:00'");
         const maKH = await resolveCustomerId(data.customerId || data.maKH);
 
         // Chuẩn hóa danh sách phòng sang PascalCase khớp JSON_TABLE
@@ -79,7 +83,10 @@ async function createBooking(data) {
             ]
         );
         const [[out]] = await conn.query(
-            'SELECT @maDatPhong AS bookingId, @maBookingCode AS bookingCode, @ketQua AS result'
+            `SELECT @maDatPhong AS bookingId,
+                    @maBookingCode AS bookingCode,
+                    @ketQua AS result,
+                    (SELECT NgayDat FROM DAT_PHONG WHERE MaDatPhong = @maDatPhong) AS bookedAt`
         );
         return out;
     } finally {
@@ -143,7 +150,12 @@ async function getBookingById(bookingId) {
 }
 
 async function cancelBooking(bookingId, customerId) {
-    let sql = `UPDATE DAT_PHONG SET TrangThai = 'CANCELLED' WHERE (MaDatPhong = ? OR MaBookingCode = ?)`;
+    // Conditional update is optimistic concurrency control: a request that
+    // arrived after check-in/checkout must not overwrite its newer state.
+    let sql = `UPDATE DAT_PHONG
+                  SET TrangThai = 'CANCELLED', PhienBan = PhienBan + 1
+                WHERE (MaDatPhong = ? OR MaBookingCode = ?)
+                  AND TrangThai = 'PENDING'`;
     const params = [bookingId, bookingId];
 
     if (customerId) {

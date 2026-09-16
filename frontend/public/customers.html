@@ -1,23 +1,17 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Khách hàng - Hotel Management</title>
 
-    <link
-        rel="stylesheet"
-        href="../css/dashboard.css"
-    >
+    <link rel="stylesheet" href="../css/dashboard.css">
 
     <style>
-
         /* =====================================================
            CUSTOMER PAGE
         ===================================================== */
@@ -489,7 +483,7 @@
 
             border-radius: 13px;
 
-            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
         }
 
 
@@ -674,7 +668,6 @@
             }
 
         }
-
     </style>
 
 </head>
@@ -683,862 +676,780 @@
 <body>
 
 
-<!-- =========================================================
+    <!-- =========================================================
      SIDEBAR
 ========================================================= -->
 
-<aside class="sidebar">
+    <aside class="sidebar">
 
 
-    <div class="logo">
+        <div class="logo">
 
-        <div class="logo-icon">
-            H
-        </div>
-
-        <div class="logo-name">
-
-            <h2>
-                HOTEL
-            </h2>
-
-            <span>
-                Management
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <nav class="menu">
-
-
-        <a
-            href="/dashboard.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                ▣
-            </span>
-
-            <span>
-                Dashboard
-            </span>
-
-        </a>
-
-
-        <a
-            href="/bookings.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                🛏
-            </span>
-
-            <span>
-                Đặt phòng
-            </span>
-
-        </a>
-
-
-        <a
-            href="/walkin-booking.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                📝
-            </span>
-
-            <span>
-                Đặt phòng tại quầy
-            </span>
-
-        </a>
-
-
-        <a
-            href="/rooms.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                🏨
-            </span>
-
-            <span>
-                Phòng
-            </span>
-
-        </a>
-
-
-        <a
-            href="/room-types.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                🏷️
-            </span>
-
-            <span>
-                Loại phòng
-            </span>
-
-        </a>
-
-
-        <a
-            href="/customers.html"
-            class="menu-item active"
-        >
-
-            <span class="menu-icon">
-                👤
-            </span>
-
-            <span>
-                Khách hàng
-            </span>
-
-        </a>
-
-
-        <a
-            href="/invoices.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                🧾
-            </span>
-
-            <span>
-                Hóa đơn
-            </span>
-
-        </a>
-
-
-        <a
-            href="/rooms.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                🏨
-            </span>
-
-            <span>
-                Quản lý phòng
-            </span>
-
-        </a>
-
-
-        <a
-            href="/room-types.html"
-            class="menu-item"
-        >
-
-            <span class="menu-icon">
-                🧩
-            </span>
-
-            <span>
-                Loại phòng
-            </span>
-
-        </a>
-
-
-        <a href="payments.html" class="menu-item">
-            <span class="menu-icon">💳</span>
-            <span>Thu chi</span>
-        </a>
-
-        <a href="reports.html" class="menu-item">
-            <span class="menu-icon">📊</span>
-            <span>Báo cáo</span>
-        </a>
-
-        <a href="settings.html" class="menu-item">
-            <span class="menu-icon">⚙️</span>
-            <span>Cài đặt</span>
-        </a>
-    </nav>
-
-
-    <div class="sidebar-bottom">
-
-        <div class="admin-mini">
-
-            <div class="avatar" data-auth-initials>
-                AD
+            <div class="logo-icon">
+                H
             </div>
 
-            <div class="admin-info">
+            <div class="logo-name">
 
-                <strong data-auth-username>
-                    Admin
-                </strong>
-
-                <small data-auth-role>
-                    Quản trị viên
-                </small>
-
-            </div>
-
-        </div>
-
-
-        <button
-            id="logoutBtn"
-            class="logout-btn"
-            type="button"
-        >
-
-            <span>
-                🚪
-            </span>
-
-            <span>
-                Đăng xuất
-            </span>
-
-        </button>
-
-    </div>
-
-</aside>
-
-
-
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
-<main class="main">
-
-
-    <!-- HEADER -->
-
-    <header class="header">
-
-
-        <div class="header-title">
-
-            <h1>
-                Quản lý khách hàng
-            </h1>
-
-            <p>
-                Quản lý thông tin khách hàng trong hệ thống
-            </p>
-
-        </div>
-
-
-        <div class="header-right">
-
-
-            <div class="search-box">
+                <h2>
+                    HOTEL
+                </h2>
 
                 <span>
-                    ⌕
+                    Management
                 </span>
-
-                <input
-                    type="text"
-                    id="headerSearch"
-                    placeholder="Tìm kiếm..."
-                >
 
             </div>
 
-
-            <button
-                class="notification"
-                type="button"
-            >
-
-                🔔
-
-                <span class="notification-dot"></span>
-
-            </button>
+        </div>
 
 
-            <div class="profile">
+        <nav class="menu">
 
-                <div class="avatar">
+
+            <a href="/dashboard.html" class="menu-item">
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="/bookings.html" class="menu-item">
+
+                <span class="menu-icon">
+                    🛏
+                </span>
+
+                <span>
+                    Đặt phòng
+                </span>
+
+            </a>
+
+
+            <a href="/walkin-booking.html" class="menu-item">
+
+                <span class="menu-icon">
+                    📝
+                </span>
+
+                <span>
+                    Đặt phòng tại quầy
+                </span>
+
+            </a>
+
+
+            <a href="/rooms.html" class="menu-item">
+
+                <span class="menu-icon">
+                    🏨
+                </span>
+
+                <span>
+                    Phòng
+                </span>
+
+            </a>
+
+
+            <a href="/room-types.html" class="menu-item">
+
+                <span class="menu-icon">
+                    🏷️
+                </span>
+
+                <span>
+                    Loại phòng
+                </span>
+
+            </a>
+
+
+            <a href="/customers.html" class="menu-item active">
+
+                <span class="menu-icon">
+                    👤
+                </span>
+
+                <span>
+                    Khách hàng
+                </span>
+
+            </a>
+
+
+            <a href="/invoices.html" class="menu-item">
+
+                <span class="menu-icon">
+                    🧾
+                </span>
+
+                <span>
+                    Hóa đơn
+                </span>
+
+            </a>
+
+
+
+            <a href="payments.html" class="menu-item">
+                <span class="menu-icon">💳</span>
+                <span>Thu chi</span>
+            </a>
+
+            <a href="reports.html" class="menu-item">
+                <span class="menu-icon">📊</span>
+                <span>Báo cáo</span>
+            </a>
+
+            <a href="settings.html" class="menu-item">
+                <span class="menu-icon">⚙️</span>
+                <span>Cài đặt</span>
+            </a>
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="admin-mini">
+
+                <div class="avatar" data-auth-initials>
                     AD
                 </div>
 
-                <div class="profile-info">
+                <div class="admin-info">
 
-                    <strong>
+                    <strong data-auth-username>
                         Admin
                     </strong>
 
-                    <small>
-                        Administrator
+                    <small data-auth-role>
+                        Quản trị viên
                     </small>
 
                 </div>
 
             </div>
 
-        </div>
 
-    </header>
+            <button id="logoutBtn" class="logout-btn" type="button">
 
-
-
-    <!-- CUSTOMER PAGE -->
-
-    <div class="customer-page">
-
-
-        <div class="customer-page-header">
-
-            <div>
-
-                <h2>
-                    Khách hàng
-                </h2>
-
-                <p>
-                    Quản lý thông tin khách hàng
-                </p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- =================================================
-             STATISTICS
-        ================================================== -->
-
-        <section class="customer-statistics">
-
-
-            <div class="customer-stat-card">
-
-                <div class="customer-stat-icon total">
-                    👥
-                </div>
-
-                <div class="customer-stat-content">
-
-                    <span>
-                        Tổng khách hàng
-                    </span>
-
-                    <strong id="totalCustomers">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="customer-stat-card">
-
-                <div class="customer-stat-icon account">
-                    👤
-                </div>
-
-                <div class="customer-stat-content">
-
-                    <span>
-                        Có tài khoản
-                    </span>
-
-                    <strong id="customersWithAccount">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="customer-stat-card">
-
-                <div class="customer-stat-icon no-account">
-                    ○
-                </div>
-
-                <div class="customer-stat-content">
-
-                    <span>
-                        Chưa có tài khoản
-                    </span>
-
-                    <strong id="customersWithoutAccount">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- =================================================
-             CUSTOMER LIST
-        ================================================== -->
-
-        <section class="customer-panel">
-
-
-            <div class="customer-panel-header">
-
-                <div>
-
-                    <h3>
-                        Danh sách khách hàng
-                    </h3>
-
-                    <p>
-                        Thông tin khách hàng trong hệ thống
-                    </p>
-
-                </div>
-
-                <span
-                    id="customerCount"
-                    class="customer-count"
-                >
-                    0 khách hàng
+                <span>
+                    🚪
                 </span>
 
-            </div>
+                <span>
+                    Đăng xuất
+                </span>
 
-
-
-            <div class="customer-toolbar">
-
-                <div class="customer-search">
-
-                    <span>
-                        🔍
-                    </span>
-
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Tìm theo mã, tên, CCCD, email, số điện thoại..."
-                    >
-
-                </div>
-
-            </div>
-
-
-
-            <div class="customer-table-wrapper">
-
-                <table class="customer-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Mã KH
-                            </th>
-
-                            <th>
-                                Khách hàng
-                            </th>
-
-                            <th>
-                                CCCD
-                            </th>
-
-                            <th>
-                                Số điện thoại
-                            </th>
-
-                            <th>
-                                Email
-                            </th>
-
-                            <th>
-                                Quốc tịch
-                            </th>
-
-                            <th>
-                                Tài khoản
-                            </th>
-
-                            <th>
-                                Thao tác
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="customerTableBody">
-
-                        <tr>
-
-                            <td
-                                colspan="8"
-                                class="customer-message"
-                            >
-                                Đang tải dữ liệu khách hàng...
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-        </section>
-
-
-    </div>
-
-
-
-    <!-- FOOTER -->
-
-    <footer>
-
-        <span>
-            Hotel Management System © 2026
-        </span>
-
-        <span>
-            Admin Dashboard
-        </span>
-
-    </footer>
-
-
-</main>
-
-
-
-<!-- =========================================================
-     CUSTOMER DETAIL MODAL
-========================================================= -->
-
-<div
-    id="customerModal"
-    class="customer-modal"
->
-
-    <div class="customer-modal-content">
-
-
-        <div class="customer-modal-header">
-
-            <h3>
-                Thông tin khách hàng
-            </h3>
-
-            <button
-                id="closeModalBtn"
-                class="customer-close"
-                type="button"
-            >
-                ×
             </button>
 
         </div>
 
+    </aside>
 
-        <div
-            id="customerDetail"
-            class="customer-detail-body"
-        >
+
+
+    <!-- =========================================================
+     MAIN
+========================================================= -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+
+            <div class="header-title">
+
+                <h1>
+                    Quản lý khách hàng
+                </h1>
+
+                <p>
+                    Quản lý thông tin khách hàng trong hệ thống
+                </p>
+
+            </div>
+
+
+            <div class="header-right">
+
+
+                <div class="search-box">
+
+                    <span>
+                        ⌕
+                    </span>
+
+                    <input type="text" id="headerSearch" placeholder="Tìm kiếm...">
+
+                </div>
+
+
+                <button class="notification" type="button">
+
+                    🔔
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        AD
+                    </div>
+
+                    <div class="profile-info">
+
+                        <strong>
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- CUSTOMER PAGE -->
+
+        <div class="customer-page">
+
+
+            <div class="customer-page-header">
+
+                <div>
+
+                    <h2>
+                        Khách hàng
+                    </h2>
+
+                    <p>
+                        Quản lý thông tin khách hàng
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+            <section class="customer-statistics">
+
+
+                <div class="customer-stat-card">
+
+                    <div class="customer-stat-icon total">
+                        👥
+                    </div>
+
+                    <div class="customer-stat-content">
+
+                        <span>
+                            Tổng khách hàng
+                        </span>
+
+                        <strong id="totalCustomers">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="customer-stat-card">
+
+                    <div class="customer-stat-icon account">
+                        👤
+                    </div>
+
+                    <div class="customer-stat-content">
+
+                        <span>
+                            Có tài khoản
+                        </span>
+
+                        <strong id="customersWithAccount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="customer-stat-card">
+
+                    <div class="customer-stat-icon no-account">
+                        ○
+                    </div>
+
+                    <div class="customer-stat-content">
+
+                        <span>
+                            Chưa có tài khoản
+                        </span>
+
+                        <strong id="customersWithoutAccount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+             CUSTOMER LIST
+        ================================================== -->
+
+            <section class="customer-panel">
+
+
+                <div class="customer-panel-header">
+
+                    <div>
+
+                        <h3>
+                            Danh sách khách hàng
+                        </h3>
+
+                        <p>
+                            Thông tin khách hàng trong hệ thống
+                        </p>
+
+                    </div>
+
+                    <span id="customerCount" class="customer-count">
+                        0 khách hàng
+                    </span>
+
+                </div>
+
+
+
+                <div class="customer-toolbar">
+
+                    <div class="customer-search">
+
+                        <span>
+                            🔍
+                        </span>
+
+                        <input type="text" id="searchInput"
+                            placeholder="Tìm theo mã, tên, CCCD, email, số điện thoại...">
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="customer-table-wrapper">
+
+                    <table class="customer-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Mã KH
+                                </th>
+
+                                <th>
+                                    Khách hàng
+                                </th>
+
+                                <th>
+                                    CCCD
+                                </th>
+
+                                <th>
+                                    Số điện thoại
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Quốc tịch
+                                </th>
+
+                                <th>
+                                    Tài khoản
+                                </th>
+
+                                <th>
+                                    Thao tác
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="customerTableBody">
+
+                            <tr>
+
+                                <td colspan="8" class="customer-message">
+                                    Đang tải dữ liệu khách hàng...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </section>
+
 
         </div>
 
 
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <span>
+                Hotel Management System © 2026
+            </span>
+
+            <span>
+                Admin Dashboard
+            </span>
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+     CUSTOMER DETAIL MODAL
+========================================================= -->
+
+    <div id="customerModal" class="customer-modal">
+
+        <div class="customer-modal-content">
+
+
+            <div class="customer-modal-header">
+
+                <h3>
+                    Thông tin khách hàng
+                </h3>
+
+                <button id="closeModalBtn" class="customer-close" type="button">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div id="customerDetail" class="customer-detail-body">
+
+            </div>
+
+
+        </div>
+
     </div>
 
-</div>
 
 
+    <script src="../js/authGuard.js"></script>
+    <script>
+        authGuard.requireAuth(['ADMIN']);
 
-<script src="../js/authGuard.js"></script>
-<script>
-    authGuard.requireAuth(['ADMIN']);
-
-    /* =====================================================
-       API
-    ===================================================== */
-
-    /*
-       QUAN TRỌNG:
-
-       Customer có thể đang mở bằng Live Server:
-       http://127.0.0.1:5500
-
-       Nhưng Node backend chạy:
-       http://localhost:3000
-
-       Vì vậy KHÔNG dùng:
-       /api/customers
-
-       mà gọi thẳng backend 3000.
-    */
-
-    const API_URL = "/api/customers";
-
-
-    /* =====================================================
-       DATA
-    ===================================================== */
-
-    let customers = [];
-
-
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const tableBody =
-        document.getElementById("customerTableBody");
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-    const headerSearch =
-        document.getElementById("headerSearch");
-
-    const totalCustomers =
-        document.getElementById("totalCustomers");
-
-    const customersWithAccount =
-        document.getElementById("customersWithAccount");
-
-    const customersWithoutAccount =
-        document.getElementById("customersWithoutAccount");
-
-    const customerCount =
-        document.getElementById("customerCount");
-
-    const modal =
-        document.getElementById("customerModal");
-
-    const customerDetail =
-        document.getElementById("customerDetail");
-
-
-    /* =====================================================
-       DATE
-    ===================================================== */
-
-    function formatDate(value) {
-
-        if (!value) {
-            return "-";
-        }
-
-        const text = String(value);
+        /* =====================================================
+           API
+        ===================================================== */
 
         /*
-           Nếu MySQL trả về:
-           2000-03-15
-           hoặc:
-           2000-03-15T00:00:00.000Z
+           QUAN TRỌNG:
+    
+           Customer có thể đang mở bằng Live Server:
+           http://127.0.0.1:5500
+    
+           Nhưng Node backend chạy:
+           http://localhost:3000
+    
+           Vì vậy KHÔNG dùng:
+           /api/customers
+    
+           mà gọi thẳng backend 3000.
         */
 
-        const match =
-            text.match(/^(\d{4})-(\d{2})-(\d{2})/);
-
-        if (match) {
-
-            return `${match[3]}/${match[2]}/${match[1]}`;
-
-        }
-
-        return "-";
-
-    }
+        const API_URL = "/api/customers";
 
 
-    /* =====================================================
-       GENDER
-    ===================================================== */
+        /* =====================================================
+           DATA
+        ===================================================== */
 
-    function formatGender(value) {
-
-        const gender =
-            String(value || "").toUpperCase();
-
-        if (gender === "MALE") {
-            return "Nam";
-        }
-
-        if (gender === "FEMALE") {
-            return "Nữ";
-        }
-
-        if (gender === "OTHER") {
-            return "Khác";
-        }
-
-        return "-";
-
-    }
+        let customers = [];
 
 
-    /* =====================================================
-       ESCAPE HTML
-    ===================================================== */
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
 
-    function escapeHTML(value) {
+        const tableBody =
+            document.getElementById("customerTableBody");
 
-        if (
-            value === null ||
-            value === undefined
-        ) {
-            return "";
-        }
+        const searchInput =
+            document.getElementById("searchInput");
 
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+        const headerSearch =
+            document.getElementById("headerSearch");
 
-    }
+        const totalCustomers =
+            document.getElementById("totalCustomers");
 
+        const customersWithAccount =
+            document.getElementById("customersWithAccount");
 
-    /* =====================================================
-       INITIALS
-    ===================================================== */
+        const customersWithoutAccount =
+            document.getElementById("customersWithoutAccount");
 
-    function getInitials(name) {
+        const customerCount =
+            document.getElementById("customerCount");
 
-        if (!name) {
-            return "KH";
-        }
+        const modal =
+            document.getElementById("customerModal");
 
-        const parts =
-            String(name)
-                .trim()
-                .split(/\s+/);
-
-        if (parts.length === 1) {
-
-            return parts[0]
-                .substring(0, 2)
-                .toUpperCase();
-
-        }
-
-        return (
-            parts[0].charAt(0) +
-            parts[parts.length - 1].charAt(0)
-        ).toUpperCase();
-
-    }
+        const customerDetail =
+            document.getElementById("customerDetail");
 
 
-    /* =====================================================
-       ACCOUNT
-    ===================================================== */
+        /* =====================================================
+           DATE
+        ===================================================== */
 
-    function hasAccount(customer) {
+        function formatDate(value) {
 
-        return (
-            customer.MaTaiKhoan !== null &&
-            customer.MaTaiKhoan !== undefined &&
-            String(customer.MaTaiKhoan).trim() !== ""
-        );
+            if (!value) {
+                return "-";
+            }
 
-    }
+            const text = String(value);
 
+            /*
+               Nếu MySQL trả về:
+               2000-03-15
+               hoặc:
+               2000-03-15T00:00:00.000Z
+            */
 
-    /* =====================================================
-       STATISTICS
-    ===================================================== */
+            const match =
+                text.match(/^(\d{4})-(\d{2})-(\d{2})/);
 
-    function updateStatistics() {
+            if (match) {
 
-        const total =
-            customers.length;
+                return `${match[3]}/${match[2]}/${match[1]}`;
 
-        const withAccount =
-            customers.filter(
-                customer =>
-                    hasAccount(customer)
-            ).length;
+            }
 
-        const withoutAccount =
-            total - withAccount;
-
-
-        totalCustomers.textContent =
-            total;
-
-        customersWithAccount.textContent =
-            withAccount;
-
-        customersWithoutAccount.textContent =
-            withoutAccount;
-
-    }
-
-
-    /* =====================================================
-       COUNT
-    ===================================================== */
-
-    function updateCount(number) {
-
-        customerCount.textContent =
-            `${number} khách hàng`;
-
-    }
-
-
-    /* =====================================================
-       RENDER
-    ===================================================== */
-
-    function renderCustomers(list) {
-
-        if (!Array.isArray(list)) {
-
-            list = [];
+            return "-";
 
         }
 
 
-        updateCount(list.length);
+        /* =====================================================
+           GENDER
+        ===================================================== */
+
+        function formatGender(value) {
+
+            const gender =
+                String(value || "").toUpperCase();
+
+            if (gender === "MALE") {
+                return "Nam";
+            }
+
+            if (gender === "FEMALE") {
+                return "Nữ";
+            }
+
+            if (gender === "OTHER") {
+                return "Khác";
+            }
+
+            return "-";
+
+        }
 
 
-        if (list.length === 0) {
+        /* =====================================================
+           ESCAPE HTML
+        ===================================================== */
 
-            tableBody.innerHTML = `
+        function escapeHTML(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =====================================================
+           INITIALS
+        ===================================================== */
+
+        function getInitials(name) {
+
+            if (!name) {
+                return "KH";
+            }
+
+            const parts =
+                String(name)
+                    .trim()
+                    .split(/\s+/);
+
+            if (parts.length === 1) {
+
+                return parts[0]
+                    .substring(0, 2)
+                    .toUpperCase();
+
+            }
+
+            return (
+                parts[0].charAt(0) +
+                parts[parts.length - 1].charAt(0)
+            ).toUpperCase();
+
+        }
+
+
+        /* =====================================================
+           ACCOUNT
+        ===================================================== */
+
+        function hasAccount(customer) {
+
+            return (
+                customer.MaTaiKhoan !== null &&
+                customer.MaTaiKhoan !== undefined &&
+                String(customer.MaTaiKhoan).trim() !== ""
+            );
+
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        function updateStatistics() {
+
+            const total =
+                customers.length;
+
+            const withAccount =
+                customers.filter(
+                    customer =>
+                        hasAccount(customer)
+                ).length;
+
+            const withoutAccount =
+                total - withAccount;
+
+
+            totalCustomers.textContent =
+                total;
+
+            customersWithAccount.textContent =
+                withAccount;
+
+            customersWithoutAccount.textContent =
+                withoutAccount;
+
+        }
+
+
+        /* =====================================================
+           COUNT
+        ===================================================== */
+
+        function updateCount(number) {
+
+            customerCount.textContent =
+                `${number} khách hàng`;
+
+        }
+
+
+        /* =====================================================
+           RENDER
+        ===================================================== */
+
+        function renderCustomers(list) {
+
+            if (!Array.isArray(list)) {
+
+                list = [];
+
+            }
+
+
+            updateCount(list.length);
+
+
+            if (list.length === 0) {
+
+                tableBody.innerHTML = `
 
                 <tr>
 
@@ -1553,63 +1464,63 @@
 
             `;
 
-            return;
+                return;
 
-        }
-
-
-        tableBody.innerHTML =
-
-            list.map(customer => {
-
-                const code =
-                    escapeHTML(
-                        customer.MaKH || "-"
-                    );
-
-                const name =
-                    escapeHTML(
-                        customer.HoTen || "-"
-                    );
-
-                const cccd =
-                    escapeHTML(
-                        customer.CCCD || "-"
-                    );
-
-                const phone =
-                    escapeHTML(
-                        customer.SoDienThoai || "-"
-                    );
-
-                const email =
-                    customer.Email
-                        ? escapeHTML(customer.Email)
-                        : '<span class="empty-value">-</span>';
-
-                const nationality =
-                    customer.QuocTich
-                        ? escapeHTML(customer.QuocTich)
-                        : '<span class="empty-value">-</span>';
+            }
 
 
-                const account =
-                    hasAccount(customer)
+            tableBody.innerHTML =
 
-                        ? `
+                list.map(customer => {
+
+                    const code =
+                        escapeHTML(
+                            customer.MaKH || "-"
+                        );
+
+                    const name =
+                        escapeHTML(
+                            customer.HoTen || "-"
+                        );
+
+                    const cccd =
+                        escapeHTML(
+                            customer.CCCD || "-"
+                        );
+
+                    const phone =
+                        escapeHTML(
+                            customer.SoDienThoai || "-"
+                        );
+
+                    const email =
+                        customer.Email
+                            ? escapeHTML(customer.Email)
+                            : '<span class="empty-value">-</span>';
+
+                    const nationality =
+                        customer.QuocTich
+                            ? escapeHTML(customer.QuocTich)
+                            : '<span class="empty-value">-</span>';
+
+
+                    const account =
+                        hasAccount(customer)
+
+                            ? `
                             <span class="account-badge account-active">
                                 Có tài khoản
                             </span>
                           `
 
-                        : `
+                            : `
                             <span class="account-badge account-none">
                                 Chưa có
                             </span>
                           `;
 
 
-                return `
+                    return `
 
                     <tr>
 
@@ -1686,72 +1597,72 @@
 
                 `;
 
-            }).join("");
+                }).join("");
 
 
-        bindDetailButtons();
+            bindDetailButtons();
 
-    }
-
-
-    /* =====================================================
-       DETAIL BUTTON
-    ===================================================== */
-
-    function bindDetailButtons() {
-
-        document
-            .querySelectorAll(".customer-detail-btn")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        openCustomerDetail(
-                            this.dataset.id
-                        );
-
-                    }
-                );
-
-            });
-
-    }
-
-
-    /* =====================================================
-       DETAIL
-    ===================================================== */
-
-    function openCustomerDetail(id) {
-
-        const customer =
-            customers.find(
-                item =>
-                    String(item.MaKH) ===
-                    String(id)
-            );
-
-
-        if (!customer) {
-            return;
         }
 
 
-        const accountText =
-            hasAccount(customer)
+        /* =====================================================
+           DETAIL BUTTON
+        ===================================================== */
 
-                ? (
-                    customer.TenDangNhap ||
-                    customer.MaTaiKhoan ||
-                    "Có tài khoản"
-                )
+        function bindDetailButtons() {
 
-                : "Chưa có tài khoản";
+            document
+                .querySelectorAll(".customer-detail-btn")
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            openCustomerDetail(
+                                this.dataset.id
+                            );
+
+                        }
+                    );
+
+                });
+
+        }
 
 
-        customerDetail.innerHTML = `
+        /* =====================================================
+           DETAIL
+        ===================================================== */
+
+        function openCustomerDetail(id) {
+
+            const customer =
+                customers.find(
+                    item =>
+                        String(item.MaKH) ===
+                        String(id)
+                );
+
+
+            if (!customer) {
+                return;
+            }
+
+
+            const accountText =
+                hasAccount(customer)
+
+                    ? (
+                        customer.TenDangNhap ||
+                        customer.MaTaiKhoan ||
+                        "Có tài khoản"
+                    )
+
+                    : "Chưa có tài khoản";
+
+
+            customerDetail.innerHTML = `
 
             <div class="customer-detail-top">
 
@@ -1925,127 +1836,127 @@
         `;
 
 
-        modal.classList.add("show");
+            modal.classList.add("show");
 
-    }
+        }
 
 
-    /* =====================================================
-       CLOSE MODAL
-    ===================================================== */
+        /* =====================================================
+           CLOSE MODAL
+        ===================================================== */
 
-    document
-        .getElementById("closeModalBtn")
-        .addEventListener(
+        document
+            .getElementById("closeModalBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    modal.classList.remove("show");
+
+                }
+            );
+
+
+        modal.addEventListener(
             "click",
-            function () {
+            function (event) {
 
-                modal.classList.remove("show");
+                if (event.target === modal) {
+
+                    modal.classList.remove("show");
+
+                }
 
             }
         );
 
 
-    modal.addEventListener(
-        "click",
-        function (event) {
+        /* =====================================================
+           SEARCH
+        ===================================================== */
 
-            if (event.target === modal) {
+        function searchCustomers(keyword) {
 
-                modal.classList.remove("show");
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       SEARCH
-    ===================================================== */
-
-    function searchCustomers(keyword) {
-
-        const value =
-            String(keyword || "")
-                .trim()
-                .toLowerCase();
-
-
-        if (!value) {
-
-            renderCustomers(customers);
-
-            return;
-
-        }
-
-
-        const filtered =
-            customers.filter(customer => {
-
-                const text = [
-
-                    customer.MaKH,
-                    customer.CCCD,
-                    customer.HoTen,
-                    customer.SoDienThoai,
-                    customer.Email,
-                    customer.DiaChi,
-                    customer.QuocTich
-
-                ]
-                    .filter(Boolean)
-                    .join(" ")
+            const value =
+                String(keyword || "")
+                    .trim()
                     .toLowerCase();
 
 
-                return text.includes(value);
+            if (!value) {
 
-            });
+                renderCustomers(customers);
+
+                return;
+
+            }
 
 
-        renderCustomers(filtered);
+            const filtered =
+                customers.filter(customer => {
 
-    }
+                    const text = [
+
+                        customer.MaKH,
+                        customer.CCCD,
+                        customer.HoTen,
+                        customer.SoDienThoai,
+                        customer.Email,
+                        customer.DiaChi,
+                        customer.QuocTich
+
+                    ]
+                        .filter(Boolean)
+                        .join(" ")
+                        .toLowerCase();
 
 
-    searchInput.addEventListener(
-        "input",
-        function () {
+                    return text.includes(value);
 
-            searchCustomers(
-                this.value
-            );
+                });
+
+
+            renderCustomers(filtered);
 
         }
-    );
 
 
-    headerSearch.addEventListener(
-        "input",
-        function () {
+        searchInput.addEventListener(
+            "input",
+            function () {
 
-            searchInput.value =
-                this.value;
+                searchCustomers(
+                    this.value
+                );
 
-            searchCustomers(
-                this.value
-            );
-
-        }
-    );
+            }
+        );
 
 
-    /* =====================================================
-       LOAD CUSTOMERS
-    ===================================================== */
+        headerSearch.addEventListener(
+            "input",
+            function () {
 
-    async function loadCustomers() {
+                searchInput.value =
+                    this.value;
 
-        try {
+                searchCustomers(
+                    this.value
+                );
 
-            tableBody.innerHTML = `
+            }
+        );
+
+
+        /* =====================================================
+           LOAD CUSTOMERS
+        ===================================================== */
+
+        async function loadCustomers() {
+
+            try {
+
+                tableBody.innerHTML = `
 
                 <tr>
 
@@ -2061,86 +1972,86 @@
             `;
 
 
-            console.log(
-                "CALL API:",
-                API_URL
-            );
-
-
-            const token = localStorage.getItem('authToken') || localStorage.getItem('token') || sessionStorage.getItem('token');
-            const response =
-                await fetch(API_URL, {
-                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-                });
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    `Server trả về HTTP ${response.status}`
+                console.log(
+                    "CALL API:",
+                    API_URL
                 );
 
-            }
+
+                const token = localStorage.getItem('authToken') || localStorage.getItem('token') || sessionStorage.getItem('token');
+                const response =
+                    await fetch(API_URL, {
+                        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                    });
 
 
-            const result =
-                await response.json();
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Server trả về HTTP ${response.status}`
+                    );
+
+                }
 
 
-            console.log(
-                "CUSTOMER API:",
-                result
-            );
+                const result =
+                    await response.json();
 
 
-            if (!result.success) {
-
-                throw new Error(
-                    result.message ||
-                    "API trả về lỗi"
+                console.log(
+                    "CUSTOMER API:",
+                    result
                 );
 
-            }
+
+                if (!result.success) {
+
+                    throw new Error(
+                        result.message ||
+                        "API trả về lỗi"
+                    );
+
+                }
 
 
-            if (!Array.isArray(result.data)) {
+                if (!Array.isArray(result.data)) {
 
-                throw new Error(
-                    "Dữ liệu khách hàng không hợp lệ"
+                    throw new Error(
+                        "Dữ liệu khách hàng không hợp lệ"
+                    );
+
+                }
+
+
+                customers =
+                    result.data;
+
+
+                updateStatistics();
+
+                renderCustomers(
+                    customers
                 );
 
+
             }
+            catch (error) {
+
+                console.error(
+                    "LỖI CUSTOMER:",
+                    error
+                );
 
 
-            customers =
-                result.data;
+                customers = [];
 
 
-            updateStatistics();
+                updateStatistics();
 
-            renderCustomers(
-                customers
-            );
+                updateCount(0);
 
 
-        }
-        catch (error) {
-
-            console.error(
-                "LỖI CUSTOMER:",
-                error
-            );
-
-
-            customers = [];
-
-
-            updateStatistics();
-
-            updateCount(0);
-
-
-            tableBody.innerHTML = `
+                tableBody.innerHTML = `
 
                 <tr>
 
@@ -2161,36 +2072,35 @@
 
             `;
 
+            }
+
         }
 
-    }
+
+        /* =====================================================
+           LOGOUT
+        ===================================================== */
+
+        document
+            .getElementById("logoutBtn")
+            .addEventListener(
+                "click",
+                function () {
+
+                    authGuard.logout();
+
+                }
+            );
 
 
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
+        /* =====================================================
+           START
+        ===================================================== */
 
-    document
-        .getElementById("logoutBtn")
-        .addEventListener(
-            "click",
-            function () {
+        loadCustomers();
 
-            authGuard.logout();
-
-            }
-        );
-
-
-    /* =====================================================
-       START
-    ===================================================== */
-
-    loadCustomers();
-
-</script>
+    </script>
 
 </body>
 
 </html>
-

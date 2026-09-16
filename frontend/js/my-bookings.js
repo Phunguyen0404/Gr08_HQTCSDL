@@ -11,6 +11,8 @@ const STATUS_MAP = {
     NO_SHOW: { label: 'Vắng mặt', class: 'status-cancelled' }
 };
 
+let bookingPendingCancellation = null;
+
 function formatCurrency(val) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val || 0);
 }
@@ -25,6 +27,23 @@ function formatDate(dateStr) {
         hour: '2-digit',
         minute: '2-digit'
     });
+}
+
+function formatBookingTimestamp(dateStr) {
+    if (!dateStr) return '-';
+    const date = new Date(dateStr);
+    if (Number.isNaN(date.getTime())) return '-';
+
+    return new Intl.DateTimeFormat('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    }).format(date) + ' (GMT+7)';
 }
 
 async function loadMyBookings() {
@@ -51,8 +70,11 @@ async function loadMyBookings() {
 
         const data = await res.json();
         const bookings = Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []);
+        // Cancelled bookings remain in the database for audit purposes, but are
+        // deliberately not shown in the customer's active-booking list.
+        const visibleBookings = bookings.filter((booking) => (booking.TrangThai || booking.status) !== 'CANCELLED');
 
-        if (bookings.length === 0) {
+        if (visibleBookings.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div style="font-size: 44px; margin-bottom: 12px;">📭</div>
@@ -64,7 +86,7 @@ async function loadMyBookings() {
             return;
         }
 
-        container.innerHTML = bookings.map(b => {
+        container.innerHTML = visibleBookings.map(b => {
             const statusConfig = STATUS_MAP[b.TrangThai || b.status] || { label: b.TrangThai, class: 'status-pending' };
             const canCancel = (b.TrangThai || b.status) === 'PENDING';
             const roomText = b.roomNames || b.rooms || 'Phòng tiêu chuẩn';
@@ -74,7 +96,7 @@ async function loadMyBookings() {
                     <div class="booking-header">
                         <div style="display:flex; align-items:center; gap:12px;">
                             <span class="booking-code">${b.MaBookingCode || b.bookingCode || b.MaDatPhong}</span>
-                            <span style="font-size:13px; color:var(--muted);">Đặt lúc: ${formatDate(b.NgayDat || b.bookedAt)}</span>
+                            <span style="font-size:13px; color:var(--muted);">Đặt lúc: ${formatBookingTimestamp(b.NgayDat || b.bookedAt)}</span>
                         </div>
                         <span class="booking-status ${statusConfig.class}">${statusConfig.label}</span>
                     </div>
@@ -121,14 +143,32 @@ async function loadMyBookings() {
     }
 }
 
-window.cancelCustomerBooking = async function (bookingId) {
+window.cancelCustomerBooking = function (bookingId) {
+    bookingPendingCancellation = bookingId;
+    document.getElementById('cancelBookingModal').style.display = 'flex';
+};
+
+window.closeCancelBookingModal = function () {
+    document.getElementById('cancelBookingModal').style.display = 'none';
+    bookingPendingCancellation = null;
+};
+
+window.closeCancelSuccessModal = function () {
+    document.getElementById('cancelSuccessModal').style.display = 'none';
+};
+
+window.confirmCustomerCancellation = async function () {
+    const bookingId = bookingPendingCancellation;
+    if (!bookingId) return;
+
     const session = typeof authGuard !== 'undefined' ? authGuard.getSession() : null;
     if (!session || !session.user) return;
 
-    const confirmed = confirm('Quý khách có chắc chắn muốn hủy đơn đặt phòng này không? Hành động này không thể hoàn tác.');
-    if (!confirmed) return;
+    const confirmButton = document.getElementById('confirmCancelBtn');
 
     try {
+        confirmButton.disabled = true;
+        confirmButton.textContent = 'Đang hủy...';
         const token = session.token;
         const res = await fetch(`/api/bookings/${bookingId}/cancel`, {
             method: 'PATCH',
@@ -142,14 +182,18 @@ window.cancelCustomerBooking = async function (bookingId) {
         });
 
         const data = await res.json();
-        if (data.success) {
-            alert('Hủy đơn đặt phòng thành công.');
+        if (res.ok && data.success) {
+            closeCancelBookingModal();
             loadMyBookings();
+            document.getElementById('cancelSuccessModal').style.display = 'flex';
         } else {
             alert('Không thể hủy đơn: ' + (data.message || 'Lỗi xử lý'));
         }
     } catch (err) {
         alert('Lỗi kết nối hủy đơn: ' + err.message);
+    } finally {
+        confirmButton.disabled = false;
+        confirmButton.textContent = 'Xác nhận hủy';
     }
 };
 

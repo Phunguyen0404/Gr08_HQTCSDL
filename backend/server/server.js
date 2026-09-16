@@ -17,6 +17,7 @@ const roomRoutes = require('../routes/roomRoutes');
 const bookingRoutes = require('../routes/bookingRoutes');
 const customerRoutes = require('../routes/customerRoutes');
 const invoiceRoutes = require('../routes/invoiceRoutes');
+const transactionDemoRoutes = require('../routes/transactionDemoRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -80,6 +81,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/transaction-demo', transactionDemoRoutes);
 app.use('/api', roomRoutes);
 
 // ============================================================

@@ -255,6 +255,23 @@ window.closeBookingModal = function () {
     currentBookingRoom = null;
 };
 
+window.showBookingSuccessModal = function ({ bookingCode, room, checkIn, checkOut, nights }) {
+    document.getElementById('successBookingCode').textContent = bookingCode;
+    document.getElementById('successRoomName').textContent = room.name;
+    document.getElementById('successStayDates').textContent = `${checkIn} → ${checkOut} (${nights} đêm)`;
+    document.getElementById('successTotalAmount').textContent = formatCurrency(room.total);
+    document.getElementById('bookingSuccessModal').style.display = 'flex';
+};
+
+window.continueBrowsingRooms = function () {
+    document.getElementById('bookingSuccessModal').style.display = 'none';
+    loadAvailableRooms();
+};
+
+window.viewMyBookings = function () {
+    window.location.href = 'my-bookings.html';
+};
+
 window.submitBooking = async function (e) {
     e.preventDefault();
     if (!currentBookingRoom) return;
@@ -308,22 +325,16 @@ window.submitBooking = async function (e) {
 
         if (res.ok && result.success) {
             const bookingCode = result.data?.bookingCode || result.data?.maBookingCode || 'Đã ghi nhận';
+            // closeBookingModal clears the shared selection; retain it for this dialog.
+            const bookedRoom = currentBookingRoom;
             closeBookingModal();
-
-            const viewBookings = confirm(
-                `🎉 ĐẶT PHÒNG THÀNH CÔNG!\n\n` +
-                `• Mã đặt phòng: ${bookingCode}\n` +
-                `• Phòng: ${currentBookingRoom.name}\n` +
-                `• Thời gian: ${checkInInput.value} ➔ ${checkOutInput.value} (${stayNights} đêm)\n` +
-                `• Tổng tiền: ${formatCurrency(currentBookingRoom.total)}\n\n` +
-                `Nhấn "OK" để xem chi tiết trong mục "Đơn đặt của tôi" hoặc "Cancel" để tiếp tục xem phòng.`
-            );
-
-            if (viewBookings) {
-                window.location.href = 'my-bookings.html';
-            } else {
-                loadAvailableRooms();
-            }
+            showBookingSuccessModal({
+                bookingCode,
+                room: bookedRoom,
+                checkIn: checkInInput.value,
+                checkOut: checkOutInput.value,
+                nights: stayNights
+            });
         } else {
             alert('Không thể đặt phòng: ' + (result.message || 'Lỗi hệ thống'));
         }
