@@ -2,7 +2,10 @@ document.addEventListener("DOMContentLoaded", loadDashboard);
 
 async function loadDashboard() {
     try {
-        const response = await fetch("/api/dashboard");
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token') || sessionStorage.getItem('token');
+        const response = await fetch("/api/dashboard", {
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
 
         if (!response.ok) {
             throw new Error(`HTTP error: ${response.status}`);
@@ -16,6 +19,7 @@ async function loadDashboard() {
             );
         }
 
+        hideDashboardError();
         console.log("DỮ LIỆU DASHBOARD:", data);
 
         // ==========================================
@@ -259,6 +263,7 @@ async function loadDashboard() {
 
         // Không để dữ liệu giả tiếp tục tồn tại
         clearFakeDashboardData();
+        showDashboardError(error.message || "Lỗi kết nối cơ sở dữ liệu");
     }
 }
 
@@ -440,4 +445,66 @@ function clearFakeDashboardData() {
         .forEach(bar => {
             bar.style.height = "0%";
         });
+}
+
+function showDashboardError(message) {
+    let banner = document.getElementById("dashboardErrorBanner");
+    if (!banner) {
+        banner = document.createElement("div");
+        banner.id = "dashboardErrorBanner";
+        banner.style.cssText = `
+            margin: 16px 32px;
+            padding: 14px 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            color: #ef4444;
+            font-size: 14px;
+        `;
+        const main = document.querySelector("main.main") || document.querySelector(".main");
+        const header = document.querySelector(".main .header") || document.querySelector("header");
+        if (header && header.nextSibling) {
+            header.parentNode.insertBefore(banner, header.nextSibling);
+        } else if (main) {
+            main.prepend(banner);
+        }
+    }
+    banner.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">⚠️</span>
+            <div>
+                <strong>Không thể kết nối đến máy chủ dữ liệu</strong>
+                <div style="font-size: 12px; color: #f87171; margin-top: 2px;">${escapeHTML(message)}</div>
+            </div>
+        </div>
+        <button id="retryDashboardBtn" style="
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        ">Thử tải lại</button>
+    `;
+    const retryBtn = document.getElementById("retryDashboardBtn");
+    if (retryBtn) {
+        retryBtn.onclick = () => {
+            banner.innerHTML = `<span style="color:#9ca3af;">Đang kết nối lại...</span>`;
+            loadDashboard();
+        };
+    }
+}
+
+function hideDashboardError() {
+    const banner = document.getElementById("dashboardErrorBanner");
+    if (banner) {
+        banner.remove();
+    }
 }

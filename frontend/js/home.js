@@ -159,15 +159,16 @@ function setupSearch() {
 
         const params = new URLSearchParams({
             diemDen: document.getElementById('diemDen').value.trim(),
-            ngayNhan: document.getElementById('ngayNhan').value,
-            ngayTra: document.getElementById('ngayTra').value,
+            checkIn: document.getElementById('ngayNhan').value,
+            checkOut: document.getElementById('ngayTra').value,
             soPhong: state.phong,
+            guests: state.nguoiLon + state.treEm,
             nguoiLon: state.nguoiLon,
             treEm: state.treEm,
             maUuDai: document.getElementById('maUuDai').value.trim()
         });
 
-        window.location.href = `rooms.html?${params.toString()}`;
+        window.location.href = `customer-rooms.html?${params.toString()}`;
     });
 }
 
@@ -182,21 +183,24 @@ const loaiPhongMau = [
         TenLoaiPhong: 'Phòng Standard',
         MoTa: 'Phòng 24m² với giường đôi, bàn làm việc và cửa sổ hướng vườn.',
         SucChua: 2,
-        GiaCoBan: 850000
+        GiaCoBan: 600000,
+        Img: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&auto=format&fit=crop&q=80'
     },
     {
         MaLoaiPhong: 'DLX',
         TenLoaiPhong: 'Phòng Deluxe',
         MoTa: 'Phòng 32m² có ban công riêng, bồn tắm và tầm nhìn ra hồ bơi.',
         SucChua: 3,
-        GiaCoBan: 1450000
+        GiaCoBan: 900000,
+        Img: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&auto=format&fit=crop&q=80'
     },
     {
         MaLoaiPhong: 'SUI',
         TenLoaiPhong: 'Phòng Suite',
         MoTa: 'Căn 48m² tách phòng khách và phòng ngủ, kèm quầy bar mini.',
         SucChua: 4,
-        GiaCoBan: 2600000
+        GiaCoBan: 1500000,
+        Img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80'
     }
 ];
 
@@ -206,7 +210,10 @@ function taoTheLoaiPhong(loai) {
 
     const media = document.createElement('div');
     media.className = 'room-media';
-    media.style.backgroundImage = `url("../assets/images/rooms/${loai.MaLoaiPhong}.jpg")`;
+    const bgUrl = loai.Img || `https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&auto=format&fit=crop&q=80`;
+    media.style.backgroundImage = `url("${bgUrl}")`;
+    media.style.backgroundSize = 'cover';
+    media.style.backgroundPosition = 'center';
 
     const body = document.createElement('div');
     body.className = 'room-body';
@@ -231,7 +238,7 @@ function taoTheLoaiPhong(loai) {
 
     const link = document.createElement('a');
     link.className = 'room-link';
-    link.href = `rooms.html?loaiPhong=${encodeURIComponent(loai.MaLoaiPhong)}`;
+    link.href = `customer-rooms.html?loaiPhong=${encodeURIComponent(loai.MaLoaiPhong)}`;
     link.textContent = 'Xem phòng';
 
     foot.append(gia, link);

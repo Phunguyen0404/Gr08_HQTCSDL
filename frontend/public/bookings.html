@@ -668,17 +668,17 @@
 
         <div class="admin-info">
 
-            <div class="admin-avatar">
-                A
+            <div class="admin-avatar" data-auth-initials>
+                AD
             </div>
 
             <div>
 
-                <strong>
+                <strong data-auth-username>
                     Admin
                 </strong>
 
-                <span>
+                <span data-auth-role>
                     Quản trị viên
                 </span>
 
@@ -734,7 +734,7 @@
 
                     <!-- ĐẶT PHÒNG MỚI -->
 
-                    <a href="#" class="submenu-item" id="newBookingLink">
+                    <a href="walkin-booking.html" class="submenu-item" id="newBookingLink">
                         Đặt phòng mới
                     </a>
 
@@ -752,7 +752,7 @@
 
             <!-- PHÒNG -->
 
-            <a href="#" class="menu-item">
+            <a href="rooms.html" class="menu-item">
 
                 <span class="menu-icon">
                     ▤
@@ -760,6 +760,21 @@
 
                 <span>
                     Phòng
+                </span>
+
+            </a>
+
+
+            <!-- LOẠI PHÒNG -->
+
+            <a href="room-types.html" class="menu-item">
+
+                <span class="menu-icon">
+                    🏷️
+                </span>
+
+                <span>
+                    Loại phòng
                 </span>
 
             </a>
@@ -796,51 +811,22 @@
 
 
             <!-- THU CHI -->
-
-            <a href="#" class="menu-item">
-
-                <span class="menu-icon">
-                    ₫
-                </span>
-
-                <span>
-                    Thu chi
-                </span>
-
+            <a href="payments.html" class="menu-item">
+                <span class="menu-icon">💳</span>
+                <span>Thu chi</span>
             </a>
-
-
-
 
             <!-- BÁO CÁO -->
-
-            <a href="#" class="menu-item">
-
-                <span class="menu-icon">
-                    ▥
-                </span>
-
-                <span>
-                    Báo cáo
-                </span>
-
+            <a href="reports.html" class="menu-item">
+                <span class="menu-icon">📊</span>
+                <span>Báo cáo</span>
             </a>
-
 
             <!-- CÀI ĐẶT -->
-
-            <a href="#" class="menu-item">
-
-                <span class="menu-icon">
-                    ⚙
-                </span>
-
-                <span>
-                    Cài đặt
-                </span>
-
+            <a href="settings.html" class="menu-item">
+                <span class="menu-icon">⚙️</span>
+                <span>Cài đặt</span>
             </a>
-
         </nav>
 
 
@@ -1212,14 +1198,28 @@
          JAVASCRIPT
          ===================================================== -->
 
+    <script src="../js/authGuard.js"></script>
     <script>
+        if (typeof authGuard !== 'undefined') {
+            authGuard.requireAuth(['ADMIN']);
+            const logout = document.getElementById('logoutBtn');
+            if (logout) {
+                logout.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    authGuard.logout();
+                });
+            }
+        }
+    </script>
+    <script src="../js/bookings.js"></script>
+    <script>
+    /* DEPRECATED INLINE SCRIPT
 
         /* =====================================================
            API
            ===================================================== */
 
-        const API_URL =
-            "http://localhost:3000/api/bookings";
+        const API_URL = "/api/bookings";
 
         let allBookings = [];
 
@@ -1650,8 +1650,11 @@
 
             try {
 
+                const token = localStorage.getItem('authToken') || localStorage.getItem('token') || sessionStorage.getItem('token');
                 const response =
-                    await fetch(API_URL);
+                    await fetch(API_URL, {
+                        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                    });
 
 
                 if (!response.ok) {
@@ -1668,7 +1671,7 @@
 
 
                 allBookings =
-                    result.bookings || [];
+                    result.data || result.bookings || [];
 
 
                 updateSummary();
@@ -1751,14 +1754,7 @@
             .addEventListener(
                 "click",
                 function (event) {
-
-                    event.preventDefault();
-
-
-                    alert(
-                        "Chức năng Đặt phòng mới."
-                    );
-
+                    window.location.href = "walkin-booking.html";
                 }
             );
 
@@ -1768,17 +1764,7 @@
            ===================================================== */
 
         loadBookings();
-
-    </script>
-
-
-    <script src="../js/authGuard.js"></script>
-    <script>
-        authGuard.requireAuth(['ADMIN', 'CUSTOMER']);
-        document.getElementById('logoutBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            authGuard.logout();
-        });
+    */
     </script>
 </body>
 

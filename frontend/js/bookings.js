@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api/bookings";
+const API_URL = "/api/bookings";
 
 let allBookings = [];
 
@@ -11,7 +11,10 @@ async function loadBookings() {
 
     try {
 
-        const response = await fetch(API_URL);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(API_URL, {
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
 
         if (!response.ok) {
             throw new Error("Không thể kết nối API");
@@ -21,7 +24,7 @@ async function loadBookings() {
 
         if (result.success) {
 
-            allBookings = result.bookings || [];
+            allBookings = result.data || result.bookings || [];
 
             updateSummary();
 
@@ -253,14 +256,40 @@ function renderBookings(bookings) {
             </td>
 
             <td>
-
-                <button
-                    class="detail-btn"
-                    onclick="showBookingDetail('${booking.MaDatPhong}')"
-                >
-                    Chi tiết
-                </button>
-
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button
+                        class="detail-btn"
+                        style="padding:5px 10px; font-size:12px;"
+                        onclick="showBookingDetail('${booking.MaDatPhong}')"
+                    >
+                        Chi tiết
+                    </button>
+                    ${(booking.TrangThai === 'PENDING' || booking.TrangThai === 'CONFIRMED') ? `
+                        <button
+                            type="button"
+                            style="padding:5px 10px; font-size:12px; background:#16a34a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:600;"
+                            onclick="handleCheckIn('${booking.MaDatPhong}')"
+                        >
+                            Nhận phòng
+                        </button>
+                        <button
+                            type="button"
+                            style="padding:5px 10px; font-size:12px; background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; border-radius:6px; cursor:pointer; font-weight:600;"
+                            onclick="handleCancelBooking('${booking.MaDatPhong}')"
+                        >
+                            Hủy
+                        </button>
+                    ` : ''}
+                    ${booking.TrangThai === 'CHECKED_IN' ? `
+                        <button
+                            type="button"
+                            style="padding:5px 10px; font-size:12px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:600;"
+                            onclick="handleCheckOut('${booking.MaDatPhong}')"
+                        >
+                            Trả phòng & HĐ
+                        </button>
+                    ` : ''}
+                </div>
             </td>
 
         `;
@@ -328,52 +357,116 @@ function filterBookings() {
 
 
 /* =========================
-   BOOKING DETAIL
+   BOOKING DETAIL & ACTIONS
 ========================= */
 
-function showBookingDetail(maDatPhong) {
+async function showBookingDetail(maDatPhong) {
+    try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${API_URL}/${maDatPhong}`, {
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+        const data = await res.json();
+        const b = data.data || data;
 
-    const booking =
-        allBookings.find(
-            item => item.MaDatPhong === maDatPhong
+        const roomsText = (b.rooms || []).map(r => `• Phòng ${r.SoPhong || r.MaPhong} (${r.TenLoaiPhong || 'Standard'}) - ${formatMoney(r.DonGiaDat || r.GiaCoBan)}`).join('\n') || b.rooms || 'Chưa phân phòng';
+
+        alert(
+            `CHI TIẾT ĐƠN ĐẶT PHÒNG [${b.MaBookingCode || b.MaDatPhong}]\n\n` +
+            `• Khách hàng: ${b.HoTen || "-"} (SĐT: ${b.SoDienThoai || "Không có"})\n` +
+            `• CCCD/CMND: ${b.CCCD || "-"}\n` +
+            `• Ngày đặt: ${formatDate(b.NgayDat)}\n` +
+            `• Ngày nhận dự kiến: ${formatDate(b.NgayNhanDuKien)}\n` +
+            `• Ngày trả dự kiến: ${formatDate(b.NgayTraDuKien)}\n` +
+            `• Số lượng khách: ${b.SoNguoiDuKien || 1} người\n` +
+            `• Tiền cọc: ${formatMoney(b.TienCocDuKien)}\n` +
+            `• Trạng thái: ${getStatusText(b.TrangThai)}\n\n` +
+            `DANH SÁCH PHÒNG:\n${roomsText}\n\n` +
+            `Ghi chú: ${b.GhiChu || "-"}`
         );
-
-
-    if (!booking) {
-        return;
+    } catch (err) {
+        alert('Lỗi lấy chi tiết: ' + err.message);
     }
+}
 
+async function handleCheckIn(maDatPhong) {
+    const confirmed = confirm(`Xác nhận KHÁCH ĐÃ ĐẾN NHẬN PHÒNG cho đơn ${maDatPhong}?\n\nPhòng sẽ được chuyển sang trạng thái "Đang thuê" (Occupied).`);
+    if (!confirmed) return;
 
-    const room =
-        booking.SoPhong || "Chưa phân phòng";
+    try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${API_URL}/${maDatPhong}/check-in`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            },
+            body: JSON.stringify({ staffId: 'NV001' })
+        });
 
+        const data = await res.json();
+        if (data.success) {
+            alert('✓ Check-in thành công! Đã tạo thông tin lưu trú.');
+            loadBookings();
+        } else {
+            alert('Không thể Check-in: ' + (data.message || 'Lỗi server'));
+        }
+    } catch (err) {
+        alert('Lỗi kết nối Check-in: ' + err.message);
+    }
+}
 
-    alert(
+async function handleCheckOut(maDatPhong) {
+    const confirmed = confirm(`Xác nhận TRẢ PHÒNG & XUẤT HÓA ĐƠN cho đơn ${maDatPhong}?\n\nHệ thống sẽ tính tổng tiền phòng, sinh hóa đơn và chuyển phòng sang trạng thái "Đang dọn dẹp" (Cleaning).`);
+    if (!confirmed) return;
 
-        `THÔNG TIN ĐẶT PHÒNG\n\n` +
+    try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${API_URL}/${maDatPhong}/check-out`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            },
+            body: JSON.stringify({ staffId: 'NV001' })
+        });
 
-        `Mã đặt phòng: ${booking.MaBookingCode || "-"}\n` +
+        const data = await res.json();
+        if (data.success) {
+            alert(`✓ Trả phòng thành công!\n• Mã hóa đơn: ${data.data?.maHoaDon || ''}\n• Tổng tiền: ${formatMoney(data.data?.totalAmount || 0)}\n\nVui lòng kiểm tra tại mục Quản lý Hóa đơn.`);
+            loadBookings();
+        } else {
+            alert('Không thể Check-out: ' + (data.message || 'Lỗi server'));
+        }
+    } catch (err) {
+        alert('Lỗi kết nối Check-out: ' + err.message);
+    }
+}
 
-        `Khách hàng: ${booking.HoTen || "-"}\n` +
+async function handleCancelBooking(maDatPhong) {
+    const confirmed = confirm(`Bạn có chắc chắn muốn HỦY đơn đặt phòng ${maDatPhong} không?`);
+    if (!confirmed) return;
 
-        `Phòng: ${room}\n` +
+    try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${API_URL}/${maDatPhong}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            }
+        });
 
-        `Ngày đặt: ${formatDate(booking.NgayDat)}\n` +
-
-        `Ngày nhận: ${formatDate(booking.NgayNhanDuKien)}\n` +
-
-        `Ngày trả: ${formatDate(booking.NgayTraDuKien)}\n` +
-
-        `Số người: ${booking.SoNguoiDuKien || 0}\n` +
-
-        `Tiền cọc: ${formatMoney(booking.TienCocDuKien)}\n` +
-
-        `Trạng thái: ${getStatusText(booking.TrangThai)}\n\n` +
-
-        `Ghi chú: ${booking.GhiChu || "-"}`
-
-    );
-
+        const data = await res.json();
+        if (data.success) {
+            alert('✓ Hủy đơn đặt phòng thành công.');
+            loadBookings();
+        } else {
+            alert('Không thể hủy đơn: ' + (data.message || 'Lỗi server'));
+        }
+    } catch (err) {
+        alert('Lỗi kết nối hủy đơn: ' + err.message);
+    }
 }
 
 
@@ -384,9 +477,7 @@ function showBookingDetail(maDatPhong) {
 document
     .getElementById("addBookingBtn")
     .addEventListener("click", function () {
-
-        alert("Chức năng Đặt phòng mới sẽ được thực hiện ở trang đặt phòng.");
-
+        window.location.href = "walkin-booking.html";
     });
 
 

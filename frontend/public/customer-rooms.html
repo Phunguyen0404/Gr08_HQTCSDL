@@ -4,17 +4,28 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tìm phòng trống</title>
+    <title>Đặt phòng khách sạn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css" />
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
         body {
-            background: #f3f6fb;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
         }
 
         .customer-shell {
             max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px 40px;
+            margin: 30px auto;
+            padding: 0 20px 60px;
         }
 
         .topbar {
@@ -22,144 +33,506 @@
             justify-content: space-between;
             align-items: center;
             gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .page-title h1 {
-            margin: 0;
-            font-size: 32px;
-        }
-
-        .page-title p {
-            margin: 8px 0 0;
-            color: #6b7280;
-        }
-
-        .customer-card {
+            margin-bottom: 24px;
             background: #fff;
-            border: 1px solid #e5e7eb;
+            padding: 16px 24px;
             border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+        }
+
+        .brand-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-link {
+            color: #475569;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+        }
+
+        .search-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
             padding: 24px;
+            margin-bottom: 28px;
         }
 
         .search-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 160px;
             gap: 16px;
             align-items: end;
         }
 
-        .search-grid label {
+        .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
             font-weight: 600;
+            color: #334155;
+        }
+
+        .form-control {
+            padding: 10px 14px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn-search {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            height: 42px;
+        }
+
+        .btn-search:hover {
+            background: #1d4ed8;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .stay-banner {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 13px;
+            color: #1e40af;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
         }
 
         .room-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px;
-            margin-top: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
         }
 
         .room-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
             overflow: hidden;
-            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .room-card header {
-            background: #eff6ff;
-            padding: 16px 18px;
-            border-bottom: 1px solid #dbeafe;
+        .room-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
         }
 
-        .room-card body {
-            padding: 18px;
-            display: block;
+        .room-img-wrap {
+            position: relative;
+            height: 190px;
+            background: #e2e8f0;
+            overflow: hidden;
         }
 
-        .room-meta {
+        .room-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .room-card:hover .room-img {
+            transform: scale(1.05);
+        }
+
+        .room-type-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .room-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .room-title-row {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
-            margin: 12px 0;
-            color: #374151;
+            align-items: center;
+            margin-bottom: 8px;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 6px 10px;
-            font-size: 12px;
-            border-radius: 999px;
+        .room-name {
+            font-size: 18px;
             font-weight: 700;
+            color: #0f172a;
+            margin: 0;
         }
 
-        .badge-ok {
-            background: #dcfce7;
-            color: #166534;
+        .room-features {
+            display: flex;
+            gap: 12px;
+            margin: 12px 0 16px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .room-feature {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price-section {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .price-per-night {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .price-val {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .total-est {
+            font-size: 12px;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .btn-book {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-book:hover {
+            background: #1d4ed8;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 540px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            background: #f8fafc;
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: #64748b;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-body {
+            padding: 24px;
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .stay-summary-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #475569;
+        }
+
+        .summary-row.total {
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 8px;
+            margin-top: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: #f8fafc;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         .empty-state {
-            padding: 20px;
-            border: 1px dashed #cbd5e1;
-            border-radius: 12px;
-            color: #64748b;
-            background: #f8fafc;
+            grid-column: 1 / -1;
             text-align: center;
-        }
-
-        .muted {
-            color: #6b7280;
+            padding: 48px 20px;
+            background: #fff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+            color: #64748b;
         }
     </style>
 </head>
 
 <body>
     <div class="customer-shell">
+        <!-- TOPBAR -->
         <header class="topbar">
-            <div class="page-title">
-                <h1>Khách sạn của bạn</h1>
-                <p>Tìm phòng phù hợp cho chuyến lưu trú của bạn</p>
-            </div>
-            <div class="user-badge">
-                <div class="avatar">KH</div>
-                <div>
-                    <strong>Khách hàng</strong>
-                    <small>Customer</small>
-                </div>
+            <a href="home.html" class="brand-link">
+                <span style="font-size: 24px;">🏨</span>
+                <span>Khách sạn &amp; Nghỉ dưỡng</span>
+            </a>
+
+            <div class="nav-actions" id="userArea">
+                <a href="home.html" class="nav-link">🏠 Trang chủ</a>
+                <!-- User state injected by JS -->
             </div>
         </header>
 
-        <section class="customer-card">
+        <!-- SEARCH FORM -->
+        <section class="search-panel">
             <form id="searchRoomForm">
                 <div class="search-grid">
-                    <label>
-                        <span>Ngày nhận phòng</span>
-                        <input id="checkIn" type="date" required />
-                    </label>
-                    <label>
-                        <span>Ngày trả phòng</span>
-                        <input id="checkOut" type="date" required />
-                    </label>
-                    <button class="btn btn-primary" type="submit">Tìm phòng trống</button>
+                    <div class="form-group">
+                        <label for="checkIn">Ngày nhận phòng</label>
+                        <input id="checkIn" type="date" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="checkOut">Ngày trả phòng</label>
+                        <input id="checkOut" type="date" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="guestSelect">Số khách</label>
+                        <select id="guestSelect" class="form-control">
+                            <option value="1">1 khách</option>
+                            <option value="2" selected>2 khách</option>
+                            <option value="3">3 khách</option>
+                            <option value="4">4 khách</option>
+                            <option value="5">5+ khách</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="typeFilter">Loại phòng</label>
+                        <select id="typeFilter" class="form-control">
+                            <option value="ALL">Tất cả loại phòng</option>
+                        </select>
+                    </div>
+                    <button class="btn-search" type="submit">🔍 Tìm phòng</button>
                 </div>
             </form>
         </section>
 
-        <section class="panel" style="margin-top: 24px;">
-            <div class="panel-header">
-                <h2>Kết quả tìm kiếm</h2>
-                <span id="resultSummary" class="muted">Chưa có dữ liệu</span>
+        <!-- SEARCH RESULTS -->
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Danh sách phòng trống</h2>
+                <div id="stayInfo" class="stay-banner" style="margin-top: 6px;">Đang tải thông tin lưu trú...</div>
             </div>
-            <div id="roomList" class="room-grid"></div>
-        </section>
+            <span id="resultSummary" style="font-weight: 600; color: #64748b; font-size: 14px;"></span>
+        </div>
+
+        <div id="roomList" class="room-grid">
+            <div class="empty-state">Đang tìm kiếm phòng trống...</div>
+        </div>
+    </div>
+
+    <!-- BOOKING CONFIRMATION MODAL -->
+    <div id="bookingModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Xác nhận đặt phòng</h3>
+                <button type="button" class="modal-close" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <form id="bookingForm" onsubmit="submitBooking(event)">
+                <div class="modal-body">
+                    <div class="stay-summary-card">
+                        <div class="summary-row">
+                            <span>Phòng chọn:</span>
+                            <strong id="modalRoomName">-</strong>
+                        </div>
+                        <div class="summary-row">
+                            <span>Loại phòng:</span>
+                            <span id="modalRoomType">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Thời gian lưu trú:</span>
+                            <span id="modalStayDates">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Đơn giá mỗi đêm:</span>
+                            <span id="modalRoomRate">-</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Tổng số tiền:</span>
+                            <span id="modalTotalAmount" style="color: #2563eb;">-</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="customerName">Họ và tên khách nhận phòng *</label>
+                        <input type="text" id="customerName" class="form-control" placeholder="Nhập đầy đủ họ tên" required />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="customerPhone">Số điện thoại liên hệ *</label>
+                        <input type="tel" id="customerPhone" class="form-control" placeholder="Ví dụ: 0901234567" required />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label for="customerNote">Ghi chú hoặc yêu cầu đặc biệt</label>
+                        <textarea id="customerNote" class="form-control" rows="2" placeholder="Ví dụ: Giờ check-in dự kiến, phòng yên tĩnh..."></textarea>
+                    </div>
+
+                    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px; font-size: 12px; color: #166534;">
+                        ✓ Hủy miễn phí trước 24 giờ nhận phòng. Thanh toán tại quầy lễ tân hoặc chuyển khoản.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeBookingModal()">Hủy</button>
+                    <button type="submit" id="submitBookingBtn" class="btn-book">Xác nhận đặt ngay</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="../js/api.js"></script>
+    <script src="../js/authGuard.js"></script>
     <script src="../js/customers.js"></script>
 </body>
 

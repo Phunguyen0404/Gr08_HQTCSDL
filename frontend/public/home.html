@@ -24,7 +24,7 @@
     <header class="site-header" id="siteHeader">
 
         <div class="utility-bar">
-            <a href="#" class="utility-link">
+            <a href="/login" class="utility-link">
                 <svg viewBox="0 0 24 24" class="icon" aria-hidden="true">
                     <circle cx="11" cy="11" r="7" />
                     <line x1="16.5" y1="16.5" x2="21" y2="21" />
@@ -276,9 +276,9 @@
             </div>
 
             <div class="footer-col">
-                <h4>Dành cho nhân viên</h4>
+                <h4>Dành cho Quản trị viên</h4>
+                <p><a href="/login">Đăng nhập</a></p>
                 <p><a href="dashboard.html">Trang quản trị</a></p>
-                <p><a href="bookings.html">Quản lý đặt phòng</a></p>
             </div>
 
         </div>
@@ -297,6 +297,34 @@
 
     <script src="../js/api.js"></script>
     <script src="../js/home.js"></script>
+    <script src="../js/authGuard.js"></script>
+    <script>
+        // Cập nhật thanh header nếu đã đăng nhập
+        (function updateHomeHeader() {
+            const session = authGuard.getSession();
+            if (session && session.user) {
+                const utilityBar = document.querySelector('.utility-bar');
+                if (utilityBar) {
+                    const myBookingsLink = '<a href="my-bookings.html" class="utility-link" style="color:#2563eb; font-weight:600;">📋 Đơn của tôi</a> <span class="utility-sep">/</span>';
+                    utilityBar.innerHTML = `
+                        <span style="font-size:13px; color:#475569; font-weight:500;">
+                            Xin chào, <strong style="color:#2563eb;">${session.user.hoTen || session.user.username}</strong> (${roleName})
+                        </span>
+                        <span class="utility-sep">/</span>
+                        ${adminLink}
+                        ${myBookingsLink}
+                        <a href="customer-rooms.html" class="utility-link" style="color:#2563eb; font-weight:600;">🏨 Đặt phòng</a>
+                        <span class="utility-sep">/</span>
+                        <a href="#" id="homeLogoutBtn" class="utility-link" style="color:#dc2626; font-weight:600;">Đăng xuất</a>
+                    `;
+                    document.getElementById('homeLogoutBtn')?.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        authGuard.logout();
+                    });
+                }
+            }
+        })();
+    </script>
 
 </body>
 

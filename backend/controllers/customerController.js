@@ -1,4 +1,5 @@
 const Customer = require('../models/Customer');
+const pool = require('../config/db');
 
 function sendError(res, err) {
     console.error(err);
@@ -8,6 +9,34 @@ function sendError(res, err) {
         data: null,
         message: status === 500 ? 'Lỗi server' : err.message
     });
+}
+
+async function listCustomers(req, res) {
+    try {
+        const [customers] = await pool.query(`
+            SELECT
+                KH.MaKH,
+                KH.CCCD,
+                KH.HoTen,
+                KH.SoDienThoai,
+                KH.Email,
+                KH.DiaChi,
+                KH.NgaySinh,
+                KH.GioiTinh,
+                KH.QuocTich,
+                KH.NgayTao,
+                KH.MaTaiKhoan,
+                TK.TenDangNhap,
+                TK.VaiTro,
+                TK.TrangThai AS trangThaiTaiKhoan
+            FROM KHACH_HANG KH
+            LEFT JOIN TAI_KHOAN TK ON KH.MaTaiKhoan = TK.MaTaiKhoan
+            ORDER BY KH.MaKH ASC
+        `);
+        res.status(200).json({ success: true, data: customers });
+    } catch (err) {
+        sendError(res, err);
+    }
 }
 
 async function searchCustomers(req, res) {
@@ -47,6 +76,7 @@ async function createCustomer(req, res) {
 }
 
 module.exports = {
+    listCustomers,
     searchCustomers,
     createCustomer
 };

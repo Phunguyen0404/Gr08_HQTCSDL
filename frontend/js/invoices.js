@@ -2,7 +2,7 @@
 // INVOICE PAGE
 // ============================================================
 
-const API_URL = "http://localhost:3000/api/invoices";
+const API_URL = "/api/invoices";
 
 let invoiceList = [];
 let filteredInvoices = [];
@@ -195,8 +195,11 @@ async function loadInvoices() {
         );
 
 
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token') || sessionStorage.getItem('token');
         const response =
-            await fetch(API_URL);
+            await fetch(API_URL, {
+                headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+            });
 
 
         console.log(
@@ -280,7 +283,7 @@ async function loadInvoices() {
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="8"
+                <td colspan="10"
                     class="invoice-message error">
 
                     Không thể tải dữ liệu hóa đơn.
@@ -524,7 +527,7 @@ function renderInvoices() {
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="8"
+                <td colspan="10"
                     class="invoice-message">
 
                     Không có hóa đơn nào.
@@ -716,6 +719,13 @@ function renderInvoices() {
 
                         </td>
 
+                        <!-- THAO TÁC -->
+                        <td>
+                            <button type="button" style="padding:5px 12px; font-size:12px; border-radius:6px; border:1px solid #087ba7; color:#087ba7; background:#fff; cursor:pointer; font-weight:600;" onclick="viewInvoiceDetail('${escapeHTML(invoice.MaHoaDon)}')">
+                                👁️ Xem
+                            </button>
+                        </td>
+
                     </tr>
 
                 `;
@@ -774,3 +784,151 @@ function escapeHTML(value) {
         .replace(/'/g, "&#039;");
 
 }
+
+// ============================================================
+// MODAL CHI TIẾT HÓA ĐƠN
+// ============================================================
+
+window.viewInvoiceDetail = async function (id) {
+    const modal = document.getElementById("invoiceDetailModal");
+    const content = document.getElementById("modalInvContent");
+    const actions = document.getElementById("modalInvActions");
+    const title = document.getElementById("modalInvTitle");
+
+    if (!modal) return;
+    modal.style.display = "flex";
+    title.textContent = `Chi tiết hóa đơn ${id}`;
+    content.innerHTML = `<div style="text-align:center; padding:30px; color:#64748b;">Đang tải chi tiết hóa đơn...</div>`;
+
+    try {
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        const res = await fetch(`/api/invoices/${id}`, {
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+        const json = await res.json();
+
+        if (!json.success || !json.data) {
+            content.innerHTML = `<div style="color:#dc2626; padding:20px;">${json.message || 'Không thể lấy thông tin hóa đơn.'}</div>`;
+            return;
+        }
+
+        const inv = json.data;
+        const roomsHtml = (inv.rooms || []).map(r => `
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #e2e8f0; font-size:13px;">
+                <span>Phòng <strong>${r.SoPhong || r.MaPhong}</strong> (${r.TenLoaiPhong || 'Standard'})</span>
+                <strong>${formatMoney(r.DonGiaDat || 0)} / đêm</strong>
+            </div>
+        `).join('') || '<div style="font-size:13px; color:#64748b;">Không có thông tin phòng.</div>';
+
+        const paymentsHtml = (inv.payments || []).map(p => `
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #e2e8f0; font-size:13px;">
+                <span>${formatDate(p.NgayThanhToan)} (${p.PhuongThuc || 'CASH'})</span>
+                <strong style="color:#166534;">+ ${formatMoney(p.SoTien || 0)}</strong>
+            </div>
+        `).join('') || '<div style="font-size:13px; color:#64748b;">Chưa có giao dịch thanh toán nào.</div>';
+
+        const daThanhToan = Number(inv.DaThanhToan || 0);
+        const tongTien = Number(inv.TongTien || 0);
+        const conLai = Math.max(0, tongTien - daThanhToan);
+        const isPaid = String(inv.TrangThai || '').toUpperCase() === 'PAID' || conLai <= 0;
+
+        content.innerHTML = `
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; font-size:13px;">
+                <div>
+                    <div style="color:#64748b;">Khách hàng</div>
+                    <strong style="font-size:15px; color:#0f172a;">${escapeHTML(inv.HoTen || 'Khách vãng lai')}</strong>
+                    <div style="color:#64748b; margin-top:2px;">Mã KH: ${escapeHTML(inv.MaKH || '-')}</div>
+                    <div style="color:#64748b;">SĐT: ${escapeHTML(inv.SoDienThoai || '-')}</div>
+                </div>
+                <div>
+                    <div style="color:#64748b;">Lưu trú & Đơn đặt</div>
+                    <strong style="font-size:14px; color:#0f172a;">Mã Booking: ${escapeHTML(inv.MaBookingCode || '-')}</strong>
+                    <div style="color:#64748b; margin-top:2px;">Mã lưu trú: ${escapeHTML(inv.MaLuuTru || '-')}</div>
+                    <div style="color:#64748b;">Ngày lập: ${formatDate(inv.NgayLap)}</div>
+                </div>
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; margin-bottom:16px;">
+                <div style="font-weight:700; font-size:13px; margin-bottom:8px; color:#334155;">Danh sách phòng lưu trú:</div>
+                ${roomsHtml}
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; margin-bottom:16px;">
+                <div style="font-weight:700; font-size:13px; margin-bottom:8px; color:#334155;">Lịch sử thanh toán:</div>
+                ${paymentsHtml}
+            </div>
+
+            <div style="border-top:1px solid #cbd5e1; padding-top:12px; font-size:14px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span>Tiền phòng:</span>
+                    <span>${formatMoney(inv.TongTienPhong)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span>Thuế VAT:</span>
+                    <span>${formatMoney(inv.Thue)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span>Giảm giá:</span>
+                    <span>${formatMoney(inv.GiamGia)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:16px; font-weight:700; color:#0f172a;">
+                    <span>Tổng hóa đơn:</span>
+                    <span>${formatMoney(inv.TongTien)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#166534; font-weight:600;">
+                    <span>Đã thanh toán:</span>
+                    <span>${formatMoney(daThanhToan)}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:700; color:${isPaid ? '#166534' : '#dc2626'};">
+                    <span>Còn lại cần thu:</span>
+                    <span>${formatMoney(conLai)}</span>
+                </div>
+            </div>
+        `;
+
+        actions.innerHTML = `
+            <button type="button" onclick="closeInvoiceModal()" style="padding:8px 16px; border:1px solid #cbd5e1; background:#fff; border-radius:8px; cursor:pointer; font-weight:600;">Đóng</button>
+            ${!isPaid ? `
+                <button type="button" onclick="payInvoice('${id}', ${conLai})" style="padding:8px 18px; border:none; background:#16a34a; color:#fff; border-radius:8px; cursor:pointer; font-weight:600;">
+                    💳 Thu tiền (${formatMoney(conLai)})
+                </button>
+            ` : '<span style="color:#166534; font-weight:700; font-size:14px; align-self:center;">✓ Đã thanh toán đủ</span>'}
+        `;
+
+    } catch (err) {
+        content.innerHTML = `<div style="color:#dc2626; padding:20px;">Lỗi kết nối: ${err.message}</div>`;
+    }
+};
+
+window.closeInvoiceModal = function () {
+    const modal = document.getElementById("invoiceDetailModal");
+    if (modal) modal.style.display = "none";
+};
+
+window.payInvoice = async function (id, amount) {
+    const confirmPay = confirm(`Xác nhận thu ${formatMoney(amount)} cho hóa đơn ${id}?`);
+    if (!confirmPay) return;
+
+    try {
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+        const res = await fetch(`/api/invoices/${id}/pay`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            },
+            body: JSON.stringify({ amount, method: 'CASH' })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+            alert('Đã ghi nhận thanh toán thành công!');
+            closeInvoiceModal();
+            loadInvoices();
+        } else {
+            alert('Lỗi: ' + (data.message || 'Không thể thanh toán'));
+        }
+    } catch (err) {
+        alert('Lỗi kết nối: ' + err.message);
+    }
+};

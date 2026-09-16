@@ -38,10 +38,22 @@ app.use('/js', express.static(path.join(__dirname, '../../frontend/js')));
 app.use('/assets', express.static(path.join(__dirname, '../../frontend/assets')));
 
 // ============================================================
-// ROOT & HEALTH CHECK
+// AUTH & ROOT PAGES
 // ============================================================
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/public/login.html'));
+});
+
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/public/register.html'));
+});
+
 app.get('/', (req, res) => {
-    res.redirect('/index.html');
+    res.redirect('/login');
+});
+
+app.get('/index.html', (req, res) => {
+    res.redirect('/login');
 });
 
 app.get('/api/health', async (req, res) => {
@@ -69,6 +81,167 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/invoices', invoiceRoutes);
 app.use('/api', roomRoutes);
+
+// ============================================================
+// API THU CHI (PAYMENTS / CASHFLOW)
+// ============================================================
+app.get('/api/payments', async (req, res) => {
+    try {
+        const [rows] = await pool.query(`
+            SELECT 
+                tt.MaThanhToan,
+                tt.MaDatPhong,
+                tt.MaHoaDon,
+                tt.NgayThanhToan,
+                tt.SoTien,
+                tt.PhuongThuc,
+                tt.TrangThai,
+                tt.GhiChuThanhToan,
+                dp.MaBookingCode,
+                kh.HoTen AS TenKhachHang,
+                kh.SoDienThoai
+            FROM THANH_TOAN tt
+            LEFT JOIN DAT_PHONG dp ON dp.MaDatPhong = tt.MaDatPhong
+            LEFT JOIN KHACH_HANG kh ON kh.MaKH = dp.MaKH
+            ORDER BY tt.NgayThanhToan DESC
+        `);
+
+        const totalRevenue = rows.reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+        const cashTotal = rows.filter(r => r.PhuongThuc === 'CASH').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+        const transferTotal = rows.filter(r => r.PhuongThuc === 'TRANSFER').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+        const cardTotal = rows.filter(r => r.PhuongThuc === 'CARD' || r.PhuongThuc === 'E_WALLET').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+
+        res.json({
+            success: true,
+            data: rows,
+            summary: {
+                totalRevenue,
+                cashTotal,
+                transferTotal,
+                cardTotal,
+                totalTransactions: rows.length
+            }
+        });
+    } catch (err) {
+        console.error('Lỗi API payments:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// ============================================================
+// API BÁO CÁO (REPORTS & ANALYTICS)
+// ============================================================
+app.get('/api/reports', async (req, res) => {
+    try {
+        const [[revSummary]] = await pool.query(`
+            SELECT 
+                IFNULL(SUM(SoTien), 0) AS tongDoanhThu,
+                COUNT(*) AS tongGiaoDich
+            FROM THANH_TOAN
+            WHERE TrangThai = 'COMPLETED'
+        `);
+
+        const [monthlyRev] = await pool.query(`
+            SELECT 
+                MONTH(NgayThanhToan) AS thang,
+                IFNULL(SUM(SoTien), 0) AS doanhThu,
+                COUNT(*) AS soGiaoDich
+            FROM THANH_TOAN
+            WHERE TrangThai = 'COMPLETED'
+            GROUP BY MONTH(NgayThanhToan)
+            ORDER BY thang ASC
+        `);
+
+        const [bookingStats] = await pool.query(`
+            SELECT TrangThai, COUNT(*) AS soLuong
+            FROM DAT_PHONG
+            GROUP BY TrangThai
+        `);
+
+        const [roomTypeStats] = await pool.query(`
+            SELECT 
+                lp.MaLoaiPhong,
+                lp.TenLoaiPhong,
+                lp.GiaCoBan,
+                COUNT(p.MaPhong) AS tongSoPhong,
+                IFNULL(SUM(CASE WHEN p.TrangThai = 'OCCUPIED' THEN 1 ELSE 0 END), 0) AS phongDangThue,
+                IFNULL(SUM(CASE WHEN p.TrangThai = 'AVAILABLE' THEN 1 ELSE 0 END), 0) AS phongTrong
+            FROM LOAI_PHONG lp
+            LEFT JOIN PHONG p ON p.MaLoaiPhong = lp.MaLoaiPhong
+            GROUP BY lp.MaLoaiPhong, lp.TenLoaiPhong, lp.GiaCoBan
+        `);
+
+        const [recentDays] = await pool.query(`
+            SELECT 
+                DATE(NgayThanhToan) AS ngay,
+                IFNULL(SUM(SoTien), 0) AS doanhThu,
+                COUNT(*) AS soGiaoDich
+            FROM THANH_TOAN
+            WHERE TrangThai = 'COMPLETED'
+            GROUP BY DATE(NgayThanhToan)
+            ORDER BY ngay DESC
+            LIMIT 7
+        `);
+
+        res.json({
+            success: true,
+            data: {
+                summary: revSummary,
+                monthly: monthlyRev,
+                bookingStats,
+                roomTypeStats,
+                recentDays
+            }
+        });
+    } catch (err) {
+        console.error('Lỗi API reports:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// ============================================================
+// API CÀI ĐẶT (SETTINGS)
+// ============================================================
+const SETTINGS_FILE = path.join(__dirname, '../config/hotel-settings.json');
+const DEFAULT_SETTINGS = {
+    hotelName: "Khách Sạn & Nghỉ Dưỡng Cao Cấp Grand Resort",
+    hotline: "1900 0000 / 024 3888 9999",
+    email: "contact@grandresort.vn",
+    address: "Số 123 Đường Ven Biển, Phường 1, Thành phố Biển",
+    checkInTime: "14:00",
+    checkOutTime: "12:00",
+    vatRate: 10,
+    depositRate: 30,
+    cancellationHours: 24,
+    bankName: "Ngân hàng TMCP Ngoại Thương (Vietcombank)",
+    bankAccount: "1029384756",
+    bankOwner: "CONG TY TNHH KHACH SAN GRAND RESORT"
+};
+
+app.get('/api/settings', (req, res) => {
+    try {
+        const fs = require('fs');
+        if (fs.existsSync(SETTINGS_FILE)) {
+            const data = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
+            return res.json({ success: true, data });
+        }
+        res.json({ success: true, data: DEFAULT_SETTINGS });
+    } catch (err) {
+        res.json({ success: true, data: DEFAULT_SETTINGS });
+    }
+});
+
+app.post('/api/settings', (req, res) => {
+    try {
+        const fs = require('fs');
+        const newSettings = { ...DEFAULT_SETTINGS, ...req.body };
+        fs.writeFileSync(SETTINGS_FILE, JSON.stringify(newSettings, null, 2), 'utf8');
+        res.json({ success: true, data: newSettings, message: 'Lưu cài đặt thành công' });
+    } catch (err) {
+        console.error('Lỗi lưu cài đặt:', err);
+        res.status(500).json({ success: false, message: 'Không thể lưu cài đặt: ' + err.message });
+    }
+});
 
 // ============================================================
 // API DASHBOARD
@@ -655,6 +828,116 @@ app.get('/api/invoices', async (req, res) => {
             message: 'Không thể lấy dữ liệu hóa đơn',
             error: error.message
         });
+    }
+});
+
+// API CHI TIẾT HÓA ĐƠN THEO ID
+app.get('/api/invoices/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [invoices] = await pool.query(`
+            SELECT
+                HD.MaHoaDon,
+                HD.MaLuuTru,
+                HD.NgayLap,
+                HD.TongTienPhong,
+                HD.Thue,
+                HD.GiamGia,
+                HD.TongTien,
+                HD.TrangThai,
+                HD.GhiChuHoaDon,
+                COALESCE(KH.HoTen, KH_BOOKER.HoTen, 'Khách vãng lai') AS HoTen,
+                COALESCE(KH.MaKH, KH_BOOKER.MaKH) AS MaKH,
+                COALESCE(KH.SoDienThoai, KH_BOOKER.SoDienThoai) AS SoDienThoai,
+                COALESCE(KH.Email, KH_BOOKER.Email) AS Email,
+                COALESCE(KH.CCCD, KH_BOOKER.CCCD) AS CCCD,
+                DP.MaBookingCode,
+                DP.NgayNhanDuKien,
+                DP.NgayTraDuKien,
+                LT.CheckInAt,
+                LT.CheckOutAt,
+                COALESCE((
+                    SELECT SUM(TT.SoTien)
+                    FROM THANH_TOAN TT
+                    WHERE TT.MaHoaDon = HD.MaHoaDon
+                      AND TT.TrangThai = 'COMPLETED'
+                ), 0) AS DaThanhToan
+            FROM HOA_DON HD
+            JOIN LUU_TRU LT ON HD.MaLuuTru = LT.MaLuuTru
+            LEFT JOIN DAT_PHONG DP ON LT.MaDatPhong = DP.MaDatPhong
+            LEFT JOIN KHACH_HANG KH ON DP.MaKH = KH.MaKH
+            LEFT JOIN KHACH_LUU_TRU KLT ON LT.MaLuuTru = KLT.MaLuuTru AND KLT.VaiTro = 'BOOKER'
+            LEFT JOIN KHACH_HANG KH_BOOKER ON KLT.MaKH = KH_BOOKER.MaKH
+            WHERE HD.MaHoaDon = ?
+        `, [id]);
+
+        if (!invoices.length) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy hóa đơn' });
+        }
+
+        const invoice = invoices[0];
+
+        // Lấy danh sách phòng
+        const [rooms] = await pool.query(`
+            SELECT ctp.MaPhong, p.SoPhong, lp.TenLoaiPhong, ctp.DonGiaDat
+            FROM LUU_TRU LT
+            JOIN DAT_PHONG DP ON DP.MaDatPhong = LT.MaDatPhong
+            JOIN CHI_TIET_DAT_PHONG ctp ON ctp.MaDatPhong = DP.MaDatPhong
+            JOIN PHONG p ON p.MaPhong = ctp.MaPhong
+            JOIN LOAI_PHONG lp ON lp.MaLoaiPhong = p.MaLoaiPhong
+            WHERE LT.MaLuuTru = ?
+        `, [invoice.MaLuuTru]);
+
+        // Lấy lịch sử thanh toán
+        const [payments] = await pool.query(`
+            SELECT MaThanhToan, NgayThanhToan, PhuongThuc, SoTien, TrangThai
+            FROM THANH_TOAN
+            WHERE MaHoaDon = ?
+            ORDER BY NgayThanhToan ASC
+        `, [id]);
+
+        res.json({
+            success: true,
+            data: {
+                ...invoice,
+                rooms,
+                payments
+            }
+        });
+    } catch (error) {
+        console.error('LỖI API INVOICE DETAIL:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// API XÁC NHẬN THANH TOÁN HÓA ĐƠN
+app.post('/api/invoices/:id/pay', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { amount, method } = req.body;
+
+        const [[hd]] = await pool.query('SELECT * FROM HOA_DON WHERE MaHoaDon = ?', [id]);
+        if (!hd) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy hóa đơn' });
+        }
+
+        const payAmount = Number(amount) || (Number(hd.TongTien) - Number(hd.TongTienPhong * 0));
+        const payMethod = method || 'CASH';
+
+        const [[maxTt]] = await pool.query('SELECT IFNULL(MAX(CAST(SUBSTRING(MaThanhToan, 3) AS UNSIGNED)), 0) + 1 AS nextId FROM THANH_TOAN');
+        const maThanhToan = 'TT' + String(maxTt.nextId).padStart(3, '0');
+
+        await pool.query(`
+            INSERT INTO THANH_TOAN (MaThanhToan, MaHoaDon, NgayThanhToan, PhuongThuc, SoTien, TrangThai)
+            VALUES (?, ?, NOW(), ?, ?, 'COMPLETED')
+        `, [maThanhToan, id, payMethod, payAmount]);
+
+        await pool.query(`UPDATE HOA_DON SET TrangThai = 'PAID' WHERE MaHoaDon = ?`, [id]);
+
+        res.json({ success: true, message: 'Thanh toán thành công!' });
+    } catch (error) {
+        console.error('LỖI API PAY INVOICE:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 

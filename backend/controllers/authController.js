@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 const SALT_ROUNDS = 10;
 const MAX_ACCOUNT_ID_ATTEMPTS = 3;
-const JWT_EXPIRES_IN = '1h';
+const JWT_EXPIRES_IN = '24h';
 
 function isDuplicateEntry(error) {
     return error?.code === 'ER_DUP_ENTRY';
@@ -12,12 +12,11 @@ function isDuplicateEntry(error) {
 
 function isDuplicateAccountId(error) {
     const databaseMessage = error?.sqlMessage || error?.message || '';
-
     return isDuplicateEntry(error) && databaseMessage.includes('PRIMARY');
 }
 
 async function register(req, res) {
-    const { username, password } = req.body;
+    const { username, password, hoTen, soDienThoai } = req.body;
 
     try {
         const existingAccount = await User.findByUsername(username);
@@ -25,7 +24,7 @@ async function register(req, res) {
         if (existingAccount) {
             return res.status(409).json({
                 success: false,
-                message: 'Username đã tồn tại.'
+                message: 'Tên đăng nhập đã tồn tại.'
             });
         }
 
@@ -43,12 +42,23 @@ async function register(req, res) {
                     status: 'ACTIVE'
                 });
 
+                // Đồng bộ tạo hồ sơ trong KHACH_HANG
+                const customer = await User.getOrCreateCustomerForAccount(
+                    maTaiKhoan,
+                    username,
+                    hoTen,
+                    soDienThoai
+                );
+
                 return res.status(201).json({
                     success: true,
                     message: 'Đăng ký tài khoản thành công.',
                     data: {
                         maTaiKhoan,
+                        maKH: customer.MaKH,
                         username,
+                        hoTen: customer.HoTen,
+                        soDienThoai: customer.SoDienThoai,
                         vaiTro: 'CUSTOMER',
                         trangThai: 'ACTIVE'
                     }
@@ -61,7 +71,7 @@ async function register(req, res) {
                 if (isDuplicateEntry(error) && !isDuplicateAccountId(error)) {
                     return res.status(409).json({
                         success: false,
-                        message: 'Username đã tồn tại.'
+                        message: 'Tên đăng nhập đã tồn tại.'
                     });
                 }
 
@@ -100,13 +110,24 @@ async function login(req, res) {
             });
         }
 
+        let customerInfo = null;
+        if (account.VaiTro === 'CUSTOMER') {
+            customerInfo = await User.getOrCreateCustomerForAccount(
+                account.MaTaiKhoan,
+                account.TenDangNhap
+            );
+        }
+
+        const tokenPayload = {
+            maTaiKhoan: account.MaTaiKhoan,
+            username: account.TenDangNhap,
+            role: account.VaiTro,
+            maKH: customerInfo ? customerInfo.MaKH : null
+        };
+
         const token = jwt.sign(
-            {
-                maTaiKhoan: account.MaTaiKhoan,
-                username: account.TenDangNhap,
-                role: account.VaiTro
-            },
-            process.env.JWT_SECRET,
+            tokenPayload,
+            process.env.JWT_SECRET || 'hotel_jwt_secret_key_2026',
             { expiresIn: JWT_EXPIRES_IN }
         );
 
@@ -117,6 +138,9 @@ async function login(req, res) {
                 token,
                 user: {
                     maTaiKhoan: account.MaTaiKhoan,
+                    maKH: customerInfo ? customerInfo.MaKH : null,
+                    hoTen: customerInfo ? customerInfo.HoTen : account.TenDangNhap,
+                    soDienThoai: customerInfo ? customerInfo.SoDienThoai : null,
                     username: account.TenDangNhap,
                     role: account.VaiTro,
                     status: account.TrangThai
@@ -128,7 +152,7 @@ async function login(req, res) {
 
         return res.status(500).json({
             success: false,
-            message: 'Không thể đăng nhập. Vui lòng thử lại sau.'
+            message: 'Không thể đăng ký / đăng nhập. Vui lòng thử lại sau.'
         });
     }
 }

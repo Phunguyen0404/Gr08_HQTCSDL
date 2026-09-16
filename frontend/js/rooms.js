@@ -209,7 +209,7 @@ async function handleSubmit(event) {
     const data = {
         code: roomCode.value.trim(),
         name: roomName.value.trim(),
-        roomTypeId: Number(roomType.value),
+        roomTypeId: roomType.value,
         roomType: selectedType ? selectedType.text : '',
         price: Number(roomPrice.value),
         status: roomStatus.value,

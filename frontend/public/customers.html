@@ -747,7 +747,23 @@
 
 
         <a
-            href="/dashboard.html#rooms"
+            href="/walkin-booking.html"
+            class="menu-item"
+        >
+
+            <span class="menu-icon">
+                📝
+            </span>
+
+            <span>
+                Đặt phòng tại quầy
+            </span>
+
+        </a>
+
+
+        <a
+            href="/rooms.html"
             class="menu-item"
         >
 
@@ -757,6 +773,22 @@
 
             <span>
                 Phòng
+            </span>
+
+        </a>
+
+
+        <a
+            href="/room-types.html"
+            class="menu-item"
+        >
+
+            <span class="menu-icon">
+                🏷️
+            </span>
+
+            <span>
+                Loại phòng
             </span>
 
         </a>
@@ -794,59 +826,52 @@
         </a>
 
 
-        <div class="menu-group">
-
-            <div class="menu-item menu-parent">
-
-                <span class="menu-icon">
-                    💰
-                </span>
-
-                <span>
-                    Thu chi
-                </span>
-
-                <span class="menu-arrow">
-                    ▾
-                </span>
-
-            </div>
-
-        </div>
-
-
-
         <a
-            href="/dashboard.html#report"
+            href="/rooms.html"
             class="menu-item"
         >
 
             <span class="menu-icon">
-                📊
+                🏨
             </span>
 
             <span>
-                Báo cáo
+                Quản lý phòng
             </span>
 
         </a>
 
 
         <a
-            href="/dashboard.html#settings"
+            href="/room-types.html"
             class="menu-item"
         >
 
             <span class="menu-icon">
-                ⚙
+                🧩
             </span>
 
             <span>
-                Cài đặt
+                Loại phòng
             </span>
 
         </a>
 
+
+        <a href="payments.html" class="menu-item">
+            <span class="menu-icon">💳</span>
+            <span>Thu chi</span>
+        </a>
+
+        <a href="reports.html" class="menu-item">
+            <span class="menu-icon">📊</span>
+            <span>Báo cáo</span>
+        </a>
+
+        <a href="settings.html" class="menu-item">
+            <span class="menu-icon">⚙️</span>
+            <span>Cài đặt</span>
+        </a>
     </nav>
 
 
@@ -854,17 +879,17 @@
 
         <div class="admin-mini">
 
-            <div class="avatar">
+            <div class="avatar" data-auth-initials>
                 AD
             </div>
 
             <div class="admin-info">
 
-                <strong>
+                <strong data-auth-username>
                     Admin
                 </strong>
 
-                <small>
+                <small data-auth-role>
                     Quản trị viên
                 </small>
 
@@ -1259,7 +1284,9 @@
 
 
 
+<script src="../js/authGuard.js"></script>
 <script>
+    authGuard.requireAuth(['ADMIN']);
 
     /* =====================================================
        API
@@ -1280,8 +1307,7 @@
        mà gọi thẳng backend 3000.
     */
 
-    const API_URL =
-        "http://localhost:3000/api/customers";
+    const API_URL = "/api/customers";
 
 
     /* =====================================================
@@ -2041,8 +2067,11 @@
             );
 
 
+            const token = localStorage.getItem('authToken') || localStorage.getItem('token') || sessionStorage.getItem('token');
             const response =
-                await fetch(API_URL);
+                await fetch(API_URL, {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
 
 
             if (!response.ok) {
@@ -2147,8 +2176,7 @@
             "click",
             function () {
 
-                window.location.href =
-                    "/dashboard.html";
+            authGuard.logout();
 
             }
         );
@@ -2161,7 +2189,6 @@
     loadCustomers();
 
 </script>
-
 
 </body>
 

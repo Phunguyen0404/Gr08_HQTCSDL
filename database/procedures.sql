@@ -1,35 +1,20 @@
 -- ============================================================
--- HOTEL MANAGEMENT SYSTEM
--- STORED PROCEDURES
--- DBMS: MySQL 9.3.0
+-- STORED PROCEDURES & DATABASE LOGIC
+-- He quan tri co so du lieu - Hotel Management System
 -- ============================================================
 
 USE hotel_management;
 
-
 -- ============================================================
 -- SP_TAO_DAT_PHONG
--- Muc dich: Tao don dat phong moi (mot hoac nhieu phong),
---           co kiem tra trung lich de tranh race condition.
+-- Chuc nang: Tao don dat phong moi voi transaction & row lock,
+-- ngan chan tinh trang overbooking (trung phong / trung lich).
 --
--- Tham so:
---   IN  p_MaKH              VARCHAR(20)   - Khach hang dat phong (FK KHACH_HANG)
---   IN  p_MaNV_Tao          VARCHAR(20)   - NULL neu khach tu dat online
---   IN  p_NgayNhanDuKien    DATETIME      - Ngay gio nhan phong du kien
---   IN  p_NgayTraDuKien     DATETIME      - Ngay gio tra phong du kien
---   IN  p_SoNguoiDuKien     INT           - So khach du kien o
---   IN  p_TienCocDuKien     DECIMAL(15,2) - Tien coc (co the NULL -> mac dinh 0)
---   IN  p_GhiChu            VARCHAR(255)  - Ghi chu don dat phong
---   IN  p_DanhSachPhong     JSON          - Vd: [{"MaPhong":"P201","DonGia":900000,"GhiChu":"..."}]
---   OUT p_MaDatPhong        VARCHAR(20)   - Ma don dat phong vua sinh ra
---   OUT p_MaBookingCode     VARCHAR(30)   - Ma booking code
---   OUT p_KetQua            VARCHAR(255)  - 'OK' hoac thong bao loi cu the
---
--- Cac buoc xu ly chinh:
---   1. Validate ngay nhan < ngay tra
+-- Logic thuc hien:
+--   1. Kiem tra ngay nhan < ngay tra
 --   2. Kiem tra danh sach phong ton tai + tinh tong suc chua
 --   3. START TRANSACTION
---   4. SELECT ... FOR UPDATE de khoa cac don dat phong lien quan,
+--   4. SELECT ... FOR UPDATE OF dp, ctp de khoa cac don dat phong lien quan,
 --      kiem tra trung khoang thoi gian
 --   5. Neu trung lich -> ROLLBACK, tra loi
 --   6. Sinh MaDatPhong (DPxxx) va MaBookingCode (BK + ngay + STT)
@@ -44,17 +29,17 @@ DROP PROCEDURE IF EXISTS SP_TAO_DAT_PHONG;
 DELIMITER $$
 
 CREATE PROCEDURE SP_TAO_DAT_PHONG (
-    IN  p_MaKH              VARCHAR(20),
-    IN  p_MaNV_Tao           VARCHAR(20),
+    IN  p_MaKH              VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+    IN  p_MaNV_Tao           VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
     IN  p_NgayNhanDuKien     DATETIME,
     IN  p_NgayTraDuKien      DATETIME,
     IN  p_SoNguoiDuKien      INT,
     IN  p_TienCocDuKien      DECIMAL(15,2),
-    IN  p_GhiChu             VARCHAR(255),
+    IN  p_GhiChu             VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
     IN  p_DanhSachPhong      JSON,
-    OUT p_MaDatPhong         VARCHAR(20),
-    OUT p_MaBookingCode      VARCHAR(30),
-    OUT p_KetQua             VARCHAR(255)
+    OUT p_MaDatPhong         VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+    OUT p_MaBookingCode      VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+    OUT p_KetQua             VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
 )
 main_block: BEGIN
     DECLARE v_SoLuongPhong  INT DEFAULT 0;
@@ -62,11 +47,14 @@ main_block: BEGIN
     DECLARE v_SoLuongTrung  INT DEFAULT 0;
     DECLARE v_MaxSuffix     INT DEFAULT 0;
     DECLARE v_STT           INT DEFAULT 0;
+    DECLARE v_err_no        INT;
+    DECLARE v_err_msg       VARCHAR(255);
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
+        GET DIAGNOSTICS CONDITION 1 v_err_no = MYSQL_ERRNO, v_err_msg = MESSAGE_TEXT;
         ROLLBACK;
-        SET p_KetQua = 'LOI: Da xay ra loi he thong khi xu ly dat phong, giao dich da duoc rollback.';
+        SET p_KetQua = CONCAT('LOI SQL [', IFNULL(v_err_no, 0), ']: ', IFNULL(v_err_msg, 'Da xay ra loi he thong'));
     END;
 
     SET p_KetQua = 'OK';
@@ -82,7 +70,7 @@ main_block: BEGIN
       INTO v_SoLuongPhong, v_TongSucChua
       FROM JSON_TABLE(
              p_DanhSachPhong, '$[*]'
-             COLUMNS (MaPhong VARCHAR(20) PATH '$.MaPhong')
+             COLUMNS (MaPhong VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci PATH '$.MaPhong')
            ) AS jt
       JOIN PHONG p       ON p.MaPhong = jt.MaPhong
       JOIN LOAI_PHONG lp ON lp.MaLoaiPhong = p.MaLoaiPhong;
@@ -103,14 +91,14 @@ main_block: BEGIN
     SELECT COUNT(*) INTO v_SoLuongTrung
       FROM JSON_TABLE(
              p_DanhSachPhong, '$[*]'
-             COLUMNS (MaPhong VARCHAR(20) PATH '$.MaPhong')
+             COLUMNS (MaPhong VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci PATH '$.MaPhong')
            ) AS jt
       JOIN CHI_TIET_DAT_PHONG ctp ON ctp.MaPhong = jt.MaPhong
       JOIN DAT_PHONG dp           ON dp.MaDatPhong = ctp.MaDatPhong
      WHERE dp.TrangThai NOT IN ('CANCELLED', 'NO_SHOW')
        AND dp.NgayNhanDuKien < p_NgayTraDuKien
        AND dp.NgayTraDuKien  > p_NgayNhanDuKien
-     FOR UPDATE;
+     FOR UPDATE OF dp, ctp;
 
     IF v_SoLuongTrung > 0 THEN
         ROLLBACK;
@@ -153,9 +141,9 @@ main_block: BEGIN
       FROM JSON_TABLE(
              p_DanhSachPhong, '$[*]'
              COLUMNS (
-                 MaPhong        VARCHAR(20)    PATH '$.MaPhong',
+                 MaPhong        VARCHAR(20)    CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci PATH '$.MaPhong',
                  DonGia         DECIMAL(15,2)  PATH '$.DonGia',
-                 GhiChuChiTiet  VARCHAR(255)   PATH '$.GhiChu'
+                 GhiChuChiTiet  VARCHAR(255)   CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci PATH '$.GhiChu'
              )
            ) AS jt
       JOIN PHONG p       ON p.MaPhong = jt.MaPhong
@@ -167,16 +155,3 @@ main_block: BEGIN
 END main_block $$
 
 DELIMITER ;
-
-
--- ============================================================
--- Vi du goi thu
--- ============================================================
--- CALL SP_TAO_DAT_PHONG(
---     'KH001', NULL,
---     '2026-09-01 14:00:00', '2026-09-03 12:00:00',
---     2, 500000, 'Dat online',
---     '[{"MaPhong":"P201","DonGia":900000,"GhiChu":"Phong Deluxe"}]',
---     @maDatPhong, @maBookingCode, @ketQua
--- );
--- SELECT @maDatPhong, @maBookingCode, @ketQua;

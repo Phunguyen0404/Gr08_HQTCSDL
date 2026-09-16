@@ -40,8 +40,41 @@ async function createAccount({ maTaiKhoan, username, passwordHash, role, status 
     return result;
 }
 
+async function getOrCreateCustomerForAccount(maTaiKhoan, username, hoTen, soDienThoai) {
+    const [rows] = await pool.query(
+        `SELECT MaKH, HoTen, SoDienThoai, CCCD, Email
+           FROM KHACH_HANG
+          WHERE MaTaiKhoan = ?
+          LIMIT 1`,
+        [maTaiKhoan]
+    );
+
+    if (rows.length > 0) {
+        return rows[0];
+    }
+
+    const [[maxRow]] = await pool.query(
+        `SELECT IFNULL(MAX(CAST(SUBSTRING(MaKH, 3) AS UNSIGNED)), 0) + 1 AS nextId
+           FROM KHACH_HANG`
+    );
+    const maKH = 'KH' + String(maxRow.nextId).padStart(3, '0');
+    const customerName = hoTen || username;
+    const phone = soDienThoai || `090${String(maxRow.nextId).padStart(7, '0')}`;
+    const cccd = `001203${String(maxRow.nextId).padStart(6, '0')}`;
+
+    await pool.query(
+        `INSERT INTO KHACH_HANG
+            (MaKH, MaTaiKhoan, CCCD, HoTen, SoDienThoai, Email)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [maKH, maTaiKhoan, cccd, customerName, phone, `${username}@customer.hotel.vn`]
+    );
+
+    return { MaKH: maKH, HoTen: customerName, SoDienThoai: phone, CCCD: cccd };
+}
+
 module.exports = {
     findByUsername,
     generateAccountId,
-    createAccount
+    createAccount,
+    getOrCreateCustomerForAccount
 };

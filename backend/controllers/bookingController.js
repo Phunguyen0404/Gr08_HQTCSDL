@@ -1,12 +1,12 @@
 const bookingService = require('../services/bookingService');
 
 function sendError(res, err) {
-    console.error(err);
+    console.error('Booking Controller Error:', err);
     const status = err.status || 500;
     res.status(status).json({
         success: false,
         data: null,
-        message: status === 500 ? 'Lỗi server' : err.message
+        message: status === 500 ? (err.message || 'Lỗi server') : err.message
     });
 }
 
@@ -49,8 +49,28 @@ async function getBooking(req, res) {
 
 async function cancelBooking(req, res) {
     try {
-        await bookingService.cancelBooking(req.params.id, req.body.customerId);
+        await bookingService.cancelBooking(req.params.id, req.body?.customerId);
         res.status(200).json({ success: true, data: null, message: 'Hủy đặt phòng thành công' });
+    } catch (err) {
+        sendError(res, err);
+    }
+}
+
+async function checkInBooking(req, res) {
+    try {
+        const staffId = req.body?.staffId || 'NV001';
+        const result = await bookingService.checkIn(req.params.id, staffId);
+        res.status(200).json({ success: true, data: result, message: 'Nhận phòng (Check-in) thành công' });
+    } catch (err) {
+        sendError(res, err);
+    }
+}
+
+async function checkOutBooking(req, res) {
+    try {
+        const staffId = req.body?.staffId || 'NV001';
+        const result = await bookingService.checkOut(req.params.id, staffId);
+        res.status(200).json({ success: true, data: result, message: 'Trả phòng (Check-out) thành công' });
     } catch (err) {
         sendError(res, err);
     }
@@ -61,5 +81,7 @@ module.exports = {
     createBooking,
     listBookings,
     getBooking,
-    cancelBooking
+    cancelBooking,
+    checkInBooking,
+    checkOutBooking
 };

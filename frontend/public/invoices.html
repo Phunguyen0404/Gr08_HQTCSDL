@@ -1100,7 +1100,23 @@
 
 
             <a
-                href="#"
+                href="walkin-booking.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    📝
+                </span>
+
+                <span>
+                    Đặt phòng tại quầy
+                </span>
+
+            </a>
+
+
+            <a
+                href="rooms.html"
                 class="menu-item"
             >
 
@@ -1110,6 +1126,22 @@
 
                 <span>
                     Phòng
+                </span>
+
+            </a>
+
+
+            <a
+                href="room-types.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    🏷️
+                </span>
+
+                <span>
+                    Loại phòng
                 </span>
 
             </a>
@@ -1147,59 +1179,20 @@
             </a>
 
 
-            <a
-                href="#"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    💰
-                </span>
-
-                <span>
-                    Thu chi
-                </span>
-
-                <span style="margin-left:auto;">
-                    ▾
-                </span>
-
+            <a href="payments.html" class="menu-item">
+                <span class="menu-icon">💳</span>
+                <span>Thu chi</span>
             </a>
 
-
-
-            <a
-                href="#"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    📊
-                </span>
-
-                <span>
-                    Báo cáo
-                </span>
-
+            <a href="reports.html" class="menu-item">
+                <span class="menu-icon">📊</span>
+                <span>Báo cáo</span>
             </a>
 
-
-            <a
-                href="#"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    ⚙
-                </span>
-
-                <span>
-                    Cài đặt
-                </span>
-
+            <a href="settings.html" class="menu-item">
+                <span class="menu-icon">⚙️</span>
+                <span>Cài đặt</span>
             </a>
-
-
         </nav>
 
 
@@ -1210,17 +1203,17 @@
 
             <div class="admin-mini">
 
-                <div class="avatar">
+                <div class="avatar" data-auth-initials>
                     AD
                 </div>
 
                 <div>
 
-                    <strong>
+                    <strong data-auth-username>
                         Admin
                     </strong>
 
-                    <small>
+                    <small data-auth-role>
                         Quản trị viên
                     </small>
 
@@ -1230,8 +1223,9 @@
 
 
             <button
+                id="logoutBtn"
                 class="logout-btn"
-                onclick="logout()"
+                onclick="authGuard.logout()"
             >
                 Đăng xuất
             </button>
@@ -1597,421 +1591,15 @@
                                 </th>
 
                                 <th>
-                                    Ghi chú
+                                    Thao tác
                                 </th>
-
                             </tr>
-
                         </thead>
 
 
 
                         <tbody id="invoiceTableBody">
-
-
-                            <!-- =================================================
-                                 HD001
-                            ================================================= -->
-
-                            <tr
-                                data-status="PAID"
-                                data-search="
-                                    HD001
-                                    Nguyen Van An
-                                    KH001
-                                    BK20260820001
-                                    23/08/2026
-                                    Hoa don booking DP001
-                                "
-                            >
-
-
-                                <td>
-
-                                    <span class="invoice-code">
-                                        HD001
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="customer-info">
-
-
-                                        <div class="customer-avatar">
-                                            NA
-                                        </div>
-
-
-                                        <div>
-
-                                            <span class="customer-name">
-                                                Nguyen Van An
-                                            </span>
-
-                                            <span class="customer-id">
-                                                KH001
-                                            </span>
-
-                                        </div>
-
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="booking-code">
-                                        BK20260820001
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="date">
-                                        23/08/2026 11:30
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="amount">
-                                        1.800.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="amount">
-                                        180.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="discount">
-                                        0 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="total">
-                                        1.980.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="status paid">
-
-                                        <span class="status-dot">
-                                        </span>
-
-                                        Đã thanh toán
-
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="note">
-                                        Hóa đơn booking DP001
-                                    </span>
-
-                                </td>
-
-
-                            </tr>
-
-
-
-                            <!-- =================================================
-                                 HD002
-                            ================================================= -->
-
-                            <tr
-                                data-status="PAID"
-                                data-search="
-                                    HD002
-                                    Tran Thi Binh
-                                    KH002
-                                    BK20260821001
-                                    23/08/2026
-                                    Hoa don booking DP002
-                                "
-                            >
-
-
-                                <td>
-
-                                    <span class="invoice-code">
-                                        HD002
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="customer-info">
-
-
-                                        <div class="customer-avatar">
-                                            TB
-                                        </div>
-
-
-                                        <div>
-
-                                            <span class="customer-name">
-                                                Tran Thi Binh
-                                            </span>
-
-                                            <span class="customer-id">
-                                                KH002
-                                            </span>
-
-                                        </div>
-
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="booking-code">
-                                        BK20260821001
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="date">
-                                        23/08/2026 11:15
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="amount">
-                                        4.200.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="amount">
-                                        420.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="discount">
-                                        200.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="total">
-                                        4.420.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="status paid">
-
-                                        <span class="status-dot">
-                                        </span>
-
-                                        Đã thanh toán
-
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="note">
-                                        Hóa đơn booking DP002
-                                    </span>
-
-                                </td>
-
-
-                            </tr>
-
-
-
-                            <!-- =================================================
-                                 HD003
-                            ================================================= -->
-
-                            <tr
-                                data-status="ISSUED"
-                                data-search="
-                                    HD003
-                                    Pham Duc Long
-                                    KH004
-                                    23/08/2026
-                                    Hoa don WALK-IN
-                                "
-                            >
-
-
-                                <td>
-
-                                    <span class="invoice-code">
-                                        HD003
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <div class="customer-info">
-
-
-                                        <div class="customer-avatar">
-                                            PL
-                                        </div>
-
-
-                                        <div>
-
-                                            <span class="customer-name">
-                                                Pham Duc Long
-                                            </span>
-
-                                            <span class="customer-id">
-                                                KH004
-                                            </span>
-
-                                        </div>
-
-
-                                    </div>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="booking-code">
-                                        -
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="date">
-                                        23/08/2026 18:00
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="amount">
-                                        1.200.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="amount">
-                                        120.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="discount">
-                                        0 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="total">
-                                        1.320.000 đ
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="status issued">
-
-                                        <span class="status-dot">
-                                        </span>
-
-                                        Chưa thanh toán
-
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span class="note">
-                                        Hóa đơn WALK-IN
-                                    </span>
-
-                                </td>
-
-
-                            </tr>
-
-
+                            <!-- Data loaded dynamically by invoices.js -->
                         </tbody>
 
 
@@ -2061,158 +1649,32 @@
 
 
 
+<!-- MODAL CHI TIẾT HÓA ĐƠN -->
+<div id="invoiceDetailModal" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(3px); z-index:9999; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:#fff; border-radius:16px; width:100%; max-width:600px; max-height:85vh; overflow-y:auto; box-shadow:0 20px 40px rgba(0,0,0,0.2);">
+        <div style="padding:18px 24px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; background:#f8fafc;">
+            <h3 style="margin:0; font-size:18px; color:#0f172a;" id="modalInvTitle">Chi tiết hóa đơn</h3>
+            <button type="button" onclick="closeInvoiceModal()" style="background:none; border:none; font-size:22px; cursor:pointer; color:#64748b;">&times;</button>
+        </div>
+        <div style="padding:24px;" id="modalInvContent">
+            Đang tải dữ liệu...
+        </div>
+        <div style="padding:16px 24px; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:10px; background:#f8fafc;" id="modalInvActions">
+            <button type="button" onclick="closeInvoiceModal()" style="padding:8px 16px; border:1px solid #cbd5e1; background:#fff; border-radius:8px; cursor:pointer; font-weight:600;">Đóng</button>
+        </div>
+    </div>
+</div>
+
 <!-- =========================================================
      JAVASCRIPT
 ========================================================= -->
 
-<script>
-
-
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
-
-    const searchInput =
-        document.getElementById("invoiceSearch");
-
-    const statusFilter =
-        document.getElementById("statusFilter");
-
-    const tableBody =
-        document.getElementById("invoiceTableBody");
-
-    const invoiceCount =
-        document.getElementById("invoiceCount");
-
-    const emptyMessage =
-        document.getElementById("emptyMessage");
-
-
-
-    /* =========================================================
-       FILTER INVOICES
-    ========================================================= */
-
-    function filterInvoices() {
-
-        const keyword =
-            searchInput.value
-                .trim()
-                .toLowerCase();
-
-        const selectedStatus =
-            statusFilter.value;
-
-
-        const rows =
-            tableBody.querySelectorAll("tr");
-
-
-        let visibleCount = 0;
-
-
-        rows.forEach(function(row) {
-
-            const searchText =
-                row.dataset.search
-                    .replace(/\s+/g, " ")
-                    .trim()
-                    .toLowerCase();
-
-
-            const rowStatus =
-                row.dataset.status;
-
-
-            const matchKeyword =
-                searchText.includes(keyword);
-
-
-            const matchStatus =
-                selectedStatus === "ALL" ||
-                rowStatus === selectedStatus;
-
-
-            if (
-                matchKeyword &&
-                matchStatus
-            ) {
-
-                row.style.display = "";
-
-                visibleCount++;
-
-            } else {
-
-                row.style.display = "none";
-
-            }
-
-        });
-
-
-        /* Cập nhật số lượng */
-
-        invoiceCount.textContent =
-            visibleCount + " hóa đơn";
-
-
-        /* Hiện thông báo nếu không có */
-
-        if (visibleCount === 0) {
-
-            emptyMessage.style.display =
-                "block";
-
-        } else {
-
-            emptyMessage.style.display =
-                "none";
-
-        }
-
-    }
-
-
-
-    /* =========================================================
-       SEARCH
-    ========================================================= */
-
-    searchInput.addEventListener(
-        "input",
-        filterInvoices
-    );
-
-
-
-    /* =========================================================
-       STATUS FILTER
-    ========================================================= */
-
-    statusFilter.addEventListener(
-        "change",
-        filterInvoices
-    );
-
-
-
-    /* =========================================================
-       LOGOUT
-    ========================================================= */
-
-    function logout() {
-
-        window.location.href =
-            "login.html";
-
-    }
-
-
-</script>
-
+    <script src="../js/authGuard.js"></script>
+    <script>
+        authGuard.requireAuth(["ADMIN"]);
+    </script>
+    <script src="../js/invoices.js"></script>
 
 </body>
 
 </html>
-

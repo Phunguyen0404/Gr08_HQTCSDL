@@ -9,60 +9,76 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/walkin.css">
 </head>
 
 <body>
   <aside class="sidebar">
     <div class="logo">
-      <span>🏨</span>
-      <strong>HOTEL<br>MANAGEMENT</strong>
+      <div class="logo-icon">H</div>
+      <div class="logo-name">
+        <h2>HOTEL</h2>
+        <span>Management</span>
+      </div>
     </div>
 
     <nav class="menu">
       <a href="dashboard.html" class="menu-item">
-        <span>▣</span>
+        <span class="menu-icon">▣</span>
         <span>Dashboard</span>
       </a>
-      <a href="staff.html" class="menu-item">
-        <span>👥</span>
-        <span>Tài khoản nhân viên</span>
-      </a>
-      <a href="rooms.html" class="menu-item">
-        <span>🏨</span>
-        <span>Phòng</span>
-      </a>
-      <a href="room-types.html" class="menu-item">
-        <span>🧩</span>
-        <span>Loại phòng</span>
-      </a>
       <a href="bookings.html" class="menu-item">
-        <span>📅</span>
+        <span class="menu-icon">🛏</span>
         <span>Đặt phòng</span>
       </a>
       <a href="walkin-booking.html" class="menu-item active">
-        <span>🧳</span>
-        <span>Đặt phòng hộ (vãng lai)</span>
+        <span class="menu-icon">📝</span>
+        <span>Đặt phòng tại quầy</span>
+      </a>
+      <a href="rooms.html" class="menu-item">
+        <span class="menu-icon">🏨</span>
+        <span>Phòng</span>
+      </a>
+      <a href="room-types.html" class="menu-item">
+        <span class="menu-icon">🏷️</span>
+        <span>Loại phòng</span>
       </a>
       <a href="customers.html" class="menu-item">
-        <span>👥</span>
+        <span class="menu-icon">👤</span>
         <span>Khách hàng</span>
       </a>
       <a href="invoices.html" class="menu-item">
-        <span>💰</span>
+        <span class="menu-icon">🧾</span>
         <span>Hóa đơn</span>
+      </a>
+      <a href="payments.html" class="menu-item">
+        <span class="menu-icon">💳</span>
+        <span>Thu chi</span>
+      </a>
+      <a href="reports.html" class="menu-item">
+        <span class="menu-icon">📊</span>
+        <span>Báo cáo</span>
+      </a>
+      <a href="settings.html" class="menu-item">
+        <span class="menu-icon">⚙️</span>
+        <span>Cài đặt</span>
       </a>
     </nav>
 
     <div class="sidebar-bottom">
-      <a href="#" class="menu-item">
-        <span>⚙️</span>
-        <span>Cài đặt</span>
-      </a>
-      <a href="#" class="menu-item">
+      <div class="admin-mini">
+        <div class="avatar" data-auth-initials>AD</div>
+        <div class="admin-info">
+          <strong data-auth-username>Admin</strong>
+          <small data-auth-role>Quản trị viên</small>
+        </div>
+      </div>
+
+      <button class="logout-btn" id="logoutBtn" type="button">
         <span>🚪</span>
         <span>Đăng xuất</span>
-      </a>
+      </button>
     </div>
   </aside>
 
@@ -70,27 +86,24 @@
     <header class="top-header">
       <div>
         <h1>Đặt phòng hộ cho khách vãng lai</h1>
-        <p>Dành cho lễ tân: đăng ký nhanh khách chưa có trong hệ thống rồi đặt phòng ngay tại quầy.</p>
+        <p>Dành cho Quản trị viên: đặt phòng trực tiếp tại quầy cho khách lưu trú.</p>
       </div>
 
       <div class="admin-info">
-        <div class="admin-avatar">NV</div>
+        <div class="admin-avatar">AD</div>
         <div>
-          <strong>Lễ tân</strong>
-          <small>Staff</small>
+          <strong>Admin</strong>
+          <small>Quản trị viên</small>
         </div>
         <span>▼</span>
       </div>
     </header>
 
-    <div class="search-ticket" style="grid-template-columns: repeat(2, 1fr) auto;">
-      <div class="field">
-        <label for="staffIdInput">Mã nhân viên lập phiếu</label>
-        <input type="text" id="staffIdInput" class="input-field" placeholder="VD: NV001">
-      </div>
+    <div class="search-ticket" style="grid-template-columns: 1fr;">
+      <input type="hidden" id="staffIdInput" value="NV001">
       <div class="field">
         <label for="noteInput">Ghi chú đặt phòng</label>
-        <input type="text" id="noteInput" class="input-field" placeholder="VD: Khách vãng lai, thanh toán tiền mặt">
+        <input type="text" id="noteInput" class="input-field" placeholder="VD: Khách vãng lai tại quầy, thanh toán tiền mặt">
       </div>
     </div>
 
@@ -227,6 +240,14 @@
     </footer>
   </main>
 
+  <script src="../js/authGuard.js"></script>
+  <script>
+    authGuard.requireAuth(['ADMIN']);
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      authGuard.logout();
+    });
+  </script>
   <script src="../js/walkin-booking.js"></script>
 </body>
 

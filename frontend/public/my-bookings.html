@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn đặt phòng của tôi - Khách Sạn &amp; Nghỉ Dưỡng</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/home.css">
+    <style>
+        .my-bookings-section {
+            max-width: 1100px;
+            margin: 40px auto 80px;
+            padding: 0 24px;
+        }
+
+        .section-intro {
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-intro h1 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--ink);
+            margin: 0 0 8px;
+        }
+
+        .section-intro p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .booking-card {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 24px 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(18, 22, 27, 0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(18, 22, 27, 0.08);
+            border-color: #d1cbc1;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid #f1ece4;
+            padding-bottom: 14px;
+        }
+
+        .booking-code {
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            background: var(--sand);
+            color: var(--ink);
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--line);
+        }
+
+        .booking-status {
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .status-confirmed {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .status-checked-in {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-completed {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .booking-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            background: var(--sand);
+            padding: 18px 20px;
+            border-radius: 6px;
+        }
+
+        .detail-item label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-item strong {
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .booking-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            background: #fff;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .empty-state {
+            background: var(--sand);
+            border: 1px dashed var(--line);
+            border-radius: 8px;
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .empty-state h3 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 24px;
+            color: var(--ink);
+            margin: 12px 0 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+         HEADER (Đồng bộ chuẩn từ home.html)
+         ============================================================ -->
+    <header class="site-header" id="siteHeader">
+        <div class="utility-bar" id="utilityBar">
+            <span id="userGreeting" style="font-size:13px; color:#475569; font-weight:500;">
+                Đang tải thông tin...
+            </span>
+            <span class="utility-sep">/</span>
+            <a href="customer-rooms.html" class="utility-link" style="color:var(--amber-dark); font-weight:600;">🏨 Đặt phòng</a>
+            <span class="utility-sep">/</span>
+            <a href="#" id="logoutBtn" class="utility-link" style="color:#dc2626; font-weight:600;">Đăng xuất</a>
+        </div>
+
+        <nav class="main-nav">
+            <ul class="nav-group nav-left">
+                <li><a href="home.html#phong">Khách sạn</a></li>
+                <li><a href="home.html#tien-ich">Trải nghiệm</a></li>
+                <li><a href="home.html#uu-dai">Ưu đãi</a></li>
+            </ul>
+
+            <a href="home.html" class="brand">
+                <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                    <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                </svg>
+                <span class="brand-name">KHÁCH SẠN</span>
+            </a>
+
+            <ul class="nav-group nav-right">
+                <li><a href="customer-rooms.html">Tìm phòng</a></li>
+                <li><a href="my-bookings.html" style="color: var(--amber-dark); font-weight: 600;">Đơn của tôi</a></li>
+                <li><a href="home.html#lien-he">Liên hệ</a></li>
+            </ul>
+
+            <a href="customer-rooms.html" class="btn btn-amber btn-book">+ Đặt phòng</a>
+        </nav>
+    </header>
+
+    <!-- ============================================================
+         MAIN CONTENT
+         ============================================================ -->
+    <main class="my-bookings-section">
+        <div class="section-intro">
+            <div>
+                <h1>Đơn đặt phòng của tôi</h1>
+                <p>Theo dõi chi tiết các kỳ lưu trú, mã đặt phòng và lịch sử thanh toán</p>
+            </div>
+            <a href="customer-rooms.html" class="btn btn-amber" style="padding: 10px 22px; font-size: 14px;">+ Đặt phòng mới</a>
+        </div>
+
+        <div id="bookingsList">
+            <div class="empty-state">
+                <p>Đang tải danh sách kỳ lưu trú của bạn...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================================
+         FOOTER (Đồng bộ chuẩn từ home.html)
+         ============================================================ -->
+    <footer class="site-footer" id="lien-he">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                    <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                </svg>
+                <span class="brand-name">KHÁCH SẠN</span>
+                <p>Nhóm 08 - Đồ án Hệ quản trị cơ sở dữ liệu.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Liên hệ</h4>
+                <p>Hotline: 1900 0000</p>
+                <p>Email: datphong@khachsan.vn</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Giờ làm việc</h4>
+                <p>Nhận phòng từ 14:00</p>
+                <p>Trả phòng trước 12:00</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Hỗ trợ khách hàng</h4>
+                <p><a href="customer-rooms.html">Tìm phòng trống</a></p>
+                <p><a href="my-bookings.html">Đơn đặt của tôi</a></p>
+            </div>
+        </div>
+
+        <p class="footer-note">© 2026 - Đồ án môn học, không sử dụng cho mục đích thương mại.</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/authGuard.js"></script>
+    <script src="../js/my-bookings.js"></script>
+</body>
+
+</html>

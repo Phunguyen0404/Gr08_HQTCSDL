@@ -64,8 +64,14 @@ function nightsBetween(checkIn, checkOut) {
     return Math.max(1, Math.round(ms / (1000 * 60 * 60 * 24)));
 }
 
-async function apiRequest(url, options) {
-    const res = await fetch(url, options);
+async function apiRequest(url, options = {}) {
+    const token = localStorage.getItem('authToken') || localStorage.getItem('token') || sessionStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        ...(options.headers || {})
+    };
+    const res = await fetch(url, { ...options, headers });
     const body = await res.json();
     if (!res.ok || !body.success) {
         throw new Error(body.message || 'Đã có lỗi xảy ra');
@@ -276,11 +282,11 @@ async function handleConfirm() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 customerId: state.customer.MaKH,
-                staffId: staffIdInput.value.trim() || undefined,
-                checkIn: state.checkIn,
-                checkOut: state.checkOut,
+                staffId: staffIdInput.value.trim() || 'NV001',
+                checkIn: state.checkIn.includes(' ') ? state.checkIn : `${state.checkIn} 14:00:00`,
+                checkOut: state.checkOut.includes(' ') ? state.checkOut : `${state.checkOut} 12:00:00`,
                 guests: state.guests,
-                deposit: state.deposit || undefined,
+                deposit: state.deposit || 0,
                 note: noteInput.value.trim() || undefined,
                 rooms: [{ MaPhong: state.selectedRoom.MaPhong, DonGia: state.selectedRoom.GiaCoBan }]
             })

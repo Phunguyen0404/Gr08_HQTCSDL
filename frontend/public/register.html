@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Khách Sạn & Nghỉ Dưỡng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <main class="auth-card" role="main">
+            <header class="auth-header">
+                <a href="home.html" class="auth-brand" title="Quay về Trang chủ">
+                    <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                        <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                    </svg>
+                    <span class="brand-title-text">KHÁCH SẠN</span>
+                </a>
+                <div><span class="auth-eyebrow">Thành viên mới</span></div>
+                <h1 class="auth-title">Đăng ký tài khoản</h1>
+            </header>
+
+            <div id="authAlert" class="auth-alert" role="alert" aria-live="polite">
+                <span class="auth-alert-icon">⚠️</span>
+                <span id="authAlertText" class="auth-alert-text"></span>
+            </div>
+
+            <form id="registerForm" class="auth-form" novalidate>
+                <div class="auth-field" id="field-registerUsername">
+                    <label class="auth-label" for="registerUsername">Tên đăng nhập</label>
+                    <div class="auth-input-wrapper">
+                        <input
+                            type="text"
+                            id="registerUsername"
+                            name="username"
+                            class="auth-input"
+                            placeholder="8–30 ký tự, có ít nhất 1 chữ cái"
+                            autocomplete="username"
+                            spellcheck="false"
+                            minlength="8"
+                            maxlength="30"
+                            required
+                        >
+                    </div>
+                    <span class="auth-field-error" id="error-registerUsername"></span>
+                </div>
+
+                <div class="auth-field" id="field-registerPassword">
+                    <label class="auth-label" for="registerPassword">Mật khẩu</label>
+                    <div class="auth-input-wrapper">
+                        <input
+                            type="password"
+                            id="registerPassword"
+                            name="password"
+                            class="auth-input"
+                            placeholder="8–30 ký tự"
+                            autocomplete="new-password"
+                            minlength="8"
+                            maxlength="30"
+                            required
+                        >
+                    </div>
+                    <span class="auth-field-error" id="error-registerPassword"></span>
+                </div>
+
+                <div class="auth-field" id="field-registerConfirmPassword">
+                    <label class="auth-label" for="registerConfirmPassword">Xác nhận mật khẩu</label>
+                    <div class="auth-input-wrapper">
+                        <input
+                            type="password"
+                            id="registerConfirmPassword"
+                            name="confirmPassword"
+                            class="auth-input"
+                            placeholder="Nhập lại mật khẩu"
+                            autocomplete="new-password"
+                            minlength="8"
+                            maxlength="30"
+                            required
+                        >
+                    </div>
+                    <span class="auth-field-error" id="error-registerConfirmPassword"></span>
+                </div>
+
+                <button type="submit" id="registerSubmitBtn" class="auth-submit-btn">
+                    <span class="auth-spinner"></span>
+                    <span class="auth-btn-text">Đăng ký ngay</span>
+                </button>
+            </form>
+
+            <footer class="auth-footer">
+                <span>Đã có tài khoản?</span>
+                <a href="/login" id="toLoginLink" class="auth-switch-link">Đăng nhập</a>
+            </footer>
+
+            <div class="auth-role-hint">
+                <strong style="color: #12161b; display: block; margin-bottom: 4px;">ℹ️ Tài khoản thành viên:</strong>
+                <div>Tài khoản đăng ký mới sẽ tự động được kích hoạt vai trò <strong>Khách hàng (CUSTOMER)</strong> để tìm phòng, đặt phòng và quản lý kỳ nghỉ dưỡng của bạn.</div>
+            </div>
+        </main>
+        <a href="home.html" class="back-home-link">← Quay về Trang chủ khách sạn</a>
+    </div>
+
+    <script src="/js/auth.js"></script>
+</body>
+</html>

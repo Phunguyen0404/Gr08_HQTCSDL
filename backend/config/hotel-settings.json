@@ -1,0 +1,14 @@
+{
+  "hotelName": "Khách Sạn Grand Resort & Spa",
+  "hotline": "1900 8888",
+  "email": "info@grandresort.vn",
+  "address": "123 Vo Nguyen Giap, Da Nang",
+  "checkInTime": "14:00",
+  "checkOutTime": "12:00",
+  "vatRate": 10,
+  "depositRate": 30,
+  "cancellationHours": 24,
+  "bankName": "Vietcombank",
+  "bankAccount": "1234567890",
+  "bankOwner": "CTY CP GRAND RESORT"
+}

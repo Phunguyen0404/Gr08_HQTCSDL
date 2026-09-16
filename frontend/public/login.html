@@ -3,17 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - Hotel Management</title>
+    <title>Đăng nhập - Khách Sạn & Nghỉ Dưỡng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/auth.css">
-    <!-- Fallback for relative paths -->
-    <link rel="stylesheet" href="../css/auth.css">
 </head>
 <body class="auth-body">
     <div class="auth-container">
         <main class="auth-card" role="main">
             <header class="auth-header">
-                <span class="auth-eyebrow">Hotel Management</span>
-                <h1 class="auth-title">Đăng nhập</h1>
+                <a href="home.html" class="auth-brand" title="Quay về Trang chủ">
+                    <svg viewBox="0 0 32 32" class="brand-mark" aria-hidden="true">
+                        <path d="M16 3 L28 16 L16 29 L4 16 Z" />
+                    </svg>
+                    <span class="brand-title-text">KHÁCH SẠN</span>
+                </a>
+                <div><span class="auth-eyebrow">Hotel Management</span></div>
+                <h1 class="auth-title">Đăng nhập tài khoản</h1>
             </header>
 
             <div id="authAlert" class="auth-alert" role="alert" aria-live="polite">
@@ -63,18 +70,18 @@
 
             <footer class="auth-footer">
                 <span>Chưa có tài khoản?</span>
-                <a href="/register" id="toRegisterLink" class="auth-switch-link">Đăng ký</a>
+                <a href="/register" id="toRegisterLink" class="auth-switch-link">Đăng ký ngay</a>
             </footer>
 
-            <div class="auth-role-hint" style="margin-top: 20px; padding: 12px 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; font-size: 12px; color: #64748b; line-height: 1.6;">
-                <strong style="color: #334155; display: block; margin-bottom: 4px;">💡 Hướng dẫn đăng nhập theo vai trò:</strong>
-                <div>• <strong>Quản trị viên (ADMIN):</strong> <code>admin001</code> / <code>admin123</code> (Vào bảng điều khiển quản trị).</div>
-                <div>• <strong>Khách hàng (CUSTOMER):</strong> Tạo tài khoản tại mục Đăng ký hoặc dùng <code>customer01</code> / <code>admin123</code> (Xem & đặt phòng).</div>
+            <div class="auth-role-hint">
+                <strong style="color: #12161b; display: block; margin-bottom: 6px;">💡 Gợi ý tài khoản demo:</strong>
+                <div>• <strong>Quản trị viên (ADMIN):</strong> <code>admin001</code> / <code>admin123</code></div>
+                <div>• <strong>Khách hàng (CUSTOMER):</strong> <code>customer01</code> / <code>admin123</code> (hoặc đăng ký mới)</div>
             </div>
         </main>
+        <a href="home.html" class="back-home-link">← Quay về Trang chủ khách sạn</a>
     </div>
 
     <script src="/js/auth.js"></script>
-    <script src="../js/auth.js"></script>
 </body>
 </html>

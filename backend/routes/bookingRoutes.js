@@ -7,5 +7,8 @@ router.get('/', bookingController.listBookings);
 router.get('/:id', bookingController.getBooking);
 router.post('/', bookingController.createBooking);
 router.patch('/:id/cancel', bookingController.cancelBooking);
+router.post('/:id/cancel', bookingController.cancelBooking);
+router.post('/:id/check-in', bookingController.checkInBooking);
+router.post('/:id/check-out', bookingController.checkOutBooking);
 
 module.exports = router;

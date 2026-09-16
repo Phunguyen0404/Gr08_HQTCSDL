@@ -73,15 +73,15 @@
     // ─── Redirect helpers ────────────────────────────────────────────────────────
 
     function redirectToLogin() {
-        window.location.replace('/index.html');
+        window.location.replace('/login');
     }
 
     function redirectByRole(role) {
         const map = {
             ADMIN: '/dashboard.html',
-            CUSTOMER: '/bookings.html'
+            CUSTOMER: '/customer-rooms.html'
         };
-        window.location.replace(map[role] || '/index.html');
+        window.location.replace(map[role] || '/login');
     }
 
     // ─── Public API ──────────────────────────────────────────────────────────────

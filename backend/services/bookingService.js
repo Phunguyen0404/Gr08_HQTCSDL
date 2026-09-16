@@ -21,7 +21,11 @@ async function findAvailableRooms({ checkIn, checkOut, guests }) {
 }
 
 async function createBooking(payload) {
-    const { customerId, checkIn, checkOut, guests, rooms } = payload;
+    const customerId = payload.customerId || payload.maKH;
+    const checkIn = payload.checkIn || payload.checkInDate || payload.ngayNhanDuKien;
+    const checkOut = payload.checkOut || payload.checkOutDate || payload.ngayTraDuKien;
+    const guests = payload.guests || payload.soNguoiDuKien || 1;
+    const rooms = payload.rooms || payload.danhSachPhong || [];
 
     if (!customerId) {
         const error = new Error('Thiếu mã khách hàng');
@@ -45,8 +49,8 @@ async function createBooking(payload) {
         checkIn,
         checkOut,
         guests: Number(guests) || 1,
-        deposit: payload.deposit,
-        note: payload.note,
+        deposit: payload.deposit || payload.tienCoc,
+        note: payload.note || payload.ghiChu,
         rooms
     });
 
@@ -74,16 +78,10 @@ async function getBooking(bookingId) {
 }
 
 async function cancelBooking(bookingId, customerId) {
-    if (!customerId) {
-        const error = new Error('Thiếu mã khách hàng');
-        error.status = 400;
-        throw error;
-    }
-
     try {
         const cancelled = await Booking.cancelBooking(bookingId, customerId);
         if (!cancelled) {
-            const error = new Error('Không tìm thấy đơn đặt phòng của khách hàng này');
+            const error = new Error('Không thể hủy đơn đặt phòng này.');
             error.status = 404;
             throw error;
         }
@@ -98,10 +96,20 @@ async function cancelBooking(bookingId, customerId) {
     }
 }
 
+async function checkIn(bookingId, staffId) {
+    return Booking.checkInBooking(bookingId, staffId);
+}
+
+async function checkOut(bookingId, staffId) {
+    return Booking.checkOutBooking(bookingId, staffId);
+}
+
 module.exports = {
     findAvailableRooms,
     createBooking,
     listBookings,
     getBooking,
-    cancelBooking
+    cancelBooking,
+    checkIn,
+    checkOut
 };
