@@ -159,56 +159,25 @@ async function cancelBooking(bookingId, customerId) {
 async function checkInBooking(bookingId, staffId) {
     const conn = await pool.getConnection();
     try {
-        await conn.beginTransaction();
-
         const booking = await getBookingById(bookingId);
         if (!booking) {
             throw new Error('Không tìm thấy đơn đặt phòng');
         }
+        const maDatPhong = booking.MaDatPhong;
 
-        if (booking.TrangThai === 'CHECKED_IN' || booking.TrangThai === 'COMPLETED') {
-            throw new Error('Đơn đặt phòng đã được check-in trước đó.');
+        // Gọi Stored Procedure SP_CHECK_IN với Transaction & Khóa bi quan trong Database
+        await conn.query('CALL SP_CHECK_IN(?, ?, @p_MaLuuTru, @p_KetQua)', [maDatPhong, staffId || null]);
+        const [[outRows]] = await conn.query('SELECT @p_MaLuuTru AS maLuuTru, @p_KetQua AS ketQua');
+
+        if (!outRows || outRows.ketQua !== 'OK') {
+            throw new Error(outRows ? outRows.ketQua : 'Lỗi khi thực hiện Check-in');
         }
 
-        // Sinh MaLuuTru
-        const [[maxRow]] = await conn.query(
-            `SELECT IFNULL(MAX(CAST(SUBSTRING(MaLuuTru, 3) AS UNSIGNED)), 0) + 1 AS nextId FROM LUU_TRU`
-        );
-        const maLuuTru = 'LT' + String(maxRow.nextId).padStart(3, '0');
-
-        await conn.query(
-            `INSERT INTO LUU_TRU (MaLuuTru, MaDatPhong, CheckInAt, CheckOutDuKien, TrangThai, GhiChuLuuTru)
-             VALUES (?, ?, NOW(), ?, 'IN_HOUSE', ?)`,
-            [maLuuTru, booking.MaDatPhong, booking.NgayTraDuKien, `Check-in theo đơn ${booking.MaBookingCode}`]
-        );
-
-        // Ghi nhận khách lưu trú
-        await conn.query(
-            `INSERT INTO KHACH_LUU_TRU (MaLuuTru, MaKH, VaiTro)
-             VALUES (?, ?, 'BOOKER')
-             ON DUPLICATE KEY UPDATE VaiTro = VALUES(VaiTro)`,
-            [maLuuTru, booking.MaKH]
-        );
-
-        // Đổi trạng thái đơn đặt sang CHECKED_IN
-        await conn.query(
-            `UPDATE DAT_PHONG SET TrangThai = 'CHECKED_IN' WHERE MaDatPhong = ?`,
-            [booking.MaDatPhong]
-        );
-
-        // Cập nhật trạng thái các phòng sang OCCUPIED (Đang thuê)
-        for (const room of booking.rooms) {
-            await conn.query(
-                `UPDATE PHONG SET TrangThai = 'OCCUPIED' WHERE MaPhong = ?`,
-                [room.MaPhong]
-            );
-        }
-
-        await conn.commit();
-        return { success: true, maLuuTru, message: 'Nhận phòng (Check-in) thành công!' };
-    } catch (err) {
-        await conn.rollback();
-        throw err;
+        return {
+            success: true,
+            maLuuTru: outRows.maLuuTru,
+            message: 'Nhận phòng (Check-in) thành công!'
+        };
     } finally {
         conn.release();
     }
@@ -217,90 +186,26 @@ async function checkInBooking(bookingId, staffId) {
 async function checkOutBooking(bookingId, staffId) {
     const conn = await pool.getConnection();
     try {
-        await conn.beginTransaction();
-
         const booking = await getBookingById(bookingId);
         if (!booking) {
             throw new Error('Không tìm thấy đơn đặt phòng');
         }
+        const maDatPhong = booking.MaDatPhong;
 
-        const [[stay]] = await conn.query(
-            `SELECT * FROM LUU_TRU WHERE MaDatPhong = ? LIMIT 1`,
-            [booking.MaDatPhong]
-        );
+        // Gọi Stored Procedure SP_CHECK_OUT tự động tính tiền, xuất hóa đơn & thanh toán
+        await conn.query('CALL SP_CHECK_OUT(?, ?, @p_MaHoaDon, @p_TongTien, @p_KetQua)', [maDatPhong, 'CASH']);
+        const [[outRows]] = await conn.query('SELECT @p_MaHoaDon AS maHoaDon, @p_TongTien AS tongTien, @p_KetQua AS ketQua');
 
-        if (!stay) {
-            throw new Error('Chưa có thông tin nhận phòng (Lưu trú) cho đơn này.');
+        if (!outRows || outRows.ketQua !== 'OK') {
+            throw new Error(outRows ? outRows.ketQua : 'Lỗi khi thực hiện Check-out');
         }
 
-        // 1. Cập nhật Lưu trú
-        await conn.query(
-            `UPDATE LUU_TRU SET TrangThai = 'CHECKED_OUT', CheckOutAt = NOW() WHERE MaLuuTru = ?`,
-            [stay.MaLuuTru]
-        );
-
-        // 2. Cập nhật đơn đặt phòng sang COMPLETED
-        await conn.query(
-            `UPDATE DAT_PHONG SET TrangThai = 'COMPLETED' WHERE MaDatPhong = ?`,
-            [booking.MaDatPhong]
-        );
-
-        // 3. Đổi trạng thái các phòng sang CLEANING (Đang dọn dẹp)
-        for (const room of booking.rooms) {
-            await conn.query(
-                `UPDATE PHONG SET TrangThai = 'CLEANING' WHERE MaPhong = ?`,
-                [room.MaPhong]
-            );
-        }
-
-        // 4. Tính toán số tiền & Sinh Hóa đơn
-        const checkInTime = new Date(stay.CheckInAt || booking.NgayNhanDuKien);
-        const checkOutTime = new Date();
-        const diffDays = Math.max(1, Math.ceil((checkOutTime - checkInTime) / (1000 * 60 * 60 * 24)));
-
-        let roomTotal = 0;
-        for (const room of booking.rooms) {
-            roomTotal += Number(room.DonGiaDat || room.GiaCoBan || 500000) * diffDays;
-        }
-
-        const vat = Math.round(roomTotal * 0.1);
-        const deposit = Number(booking.TienCocDuKien || 0);
-        const totalAmount = roomTotal + vat;
-
-        // Sinh MaHoaDon
-        const [[maxHdRow]] = await conn.query(
-            `SELECT IFNULL(MAX(CAST(SUBSTRING(MaHoaDon, 3) AS UNSIGNED)), 0) + 1 AS nextId FROM HOA_DON`
-        );
-        const maHoaDon = 'HD' + String(maxHdRow.nextId).padStart(3, '0');
-
-        await conn.query(
-            `INSERT INTO HOA_DON (MaHoaDon, MaLuuTru, NgayLap, TongTienPhong, Thue, GiamGia, TongTien, TrangThai, GhiChuHoaDon)
-             VALUES (?, ?, NOW(), ?, ?, 0, ?, 'PAID', ?)`,
-            [maHoaDon, stay.MaLuuTru, roomTotal, vat, totalAmount, `Hóa đơn thanh toán khi trả phòng ${booking.MaBookingCode}`]
-        );
-
-        // Ghi nhận thanh toán
-        const [[maxTtRow]] = await conn.query(
-            `SELECT IFNULL(MAX(CAST(SUBSTRING(MaThanhToan, 3) AS UNSIGNED)), 0) + 1 AS nextId FROM THANH_TOAN`
-        );
-        const maThanhToan = 'TT' + String(maxTtRow.nextId).padStart(3, '0');
-
-        await conn.query(
-            `INSERT INTO THANH_TOAN (MaThanhToan, MaDatPhong, MaHoaDon, NgayThanhToan, PhuongThuc, SoTien, TrangThai)
-             VALUES (?, ?, ?, NOW(), 'CASH', ?, 'COMPLETED')`,
-            [maThanhToan, bookingId, maHoaDon, totalAmount]
-        );
-
-        await conn.commit();
         return {
             success: true,
-            maHoaDon,
-            totalAmount,
+            maHoaDon: outRows.maHoaDon,
+            totalAmount: Number(outRows.tongTien || 0),
             message: 'Trả phòng (Check-out) và xuất hóa đơn thành công!'
         };
-    } catch (err) {
-        await conn.rollback();
-        throw err;
     } finally {
         conn.release();
     }

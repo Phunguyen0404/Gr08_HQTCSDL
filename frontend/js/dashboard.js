@@ -23,62 +23,45 @@ async function loadDashboard() {
         console.log("DỮ LIỆU DASHBOARD:", data);
 
         // ==========================================
-        // 1. THẺ THỐNG KÊ (3 thẻ: Hôm nay, Tháng, Tỷ lệ lấp đầy)
+        // 1. THẺ THỐNG KÊ (4 thẻ: Tổng doanh thu, Tháng, Hôm nay, Tỷ lệ lấp đầy)
         // ==========================================
-
-        const statCards = document.querySelectorAll(".stat-card");
 
         const revenue = data.revenue || {};
         const occupancy = data.occupancy || {};
 
-        if (statCards[0]) {
-            const title = statCards[0].querySelector("h2");
-
-            if (title) {
-                title.textContent = formatMoney(
-                    Number(revenue.today ?? revenue.doanhThuHomNay ?? 0)
-                );
-            }
-
-            const text = statCards[0].querySelector("p");
-
-            if (text) {
-                text.innerHTML =
-                    '<span>Dữ liệu thực tế từ hệ thống</span>';
-            }
+        // Tổng doanh thu thực thu (Đồng bộ Báo cáo & Thu chi)
+        const totalRevEl = document.getElementById("totalRevenueValue");
+        if (totalRevEl) {
+            totalRevEl.textContent = formatMoney(
+                Number(revenue.total ?? revenue.tongDoanhThu ?? 0)
+            );
+        }
+        const totalTransEl = document.getElementById("totalTransactionsValue");
+        if (totalTransEl && revenue.totalTransactions !== undefined) {
+            totalTransEl.textContent = `${revenue.totalTransactions} giao dịch đã hoàn tất`;
         }
 
-        if (statCards[1]) {
-            const title = statCards[1].querySelector("h2");
-
-            if (title) {
-                title.textContent = formatMoney(
-                    Number(revenue.month ?? revenue.doanhThuThang ?? 0)
-                );
-            }
-
-            const text = statCards[1].querySelector("p");
-
-            if (text) {
-                text.innerHTML =
-                    '<span>Dữ liệu thực tế từ hệ thống</span>';
-            }
+        // Doanh thu tháng này
+        const revMonthEl = document.getElementById("revenueMonthValue");
+        if (revMonthEl) {
+            revMonthEl.textContent = formatMoney(
+                Number(revenue.month ?? revenue.doanhThuThang ?? 0)
+            );
         }
 
-        if (statCards[2]) {
-            const title = statCards[2].querySelector("h2");
-            const occupancyRateValue = Number(occupancy.tyLeLapDay ?? 0);
+        // Doanh thu hôm nay
+        const revTodayEl = document.getElementById("revenueTodayValue");
+        if (revTodayEl) {
+            revTodayEl.textContent = formatMoney(
+                Number(revenue.today ?? revenue.doanhThuHomNay ?? 0)
+            );
+        }
 
-            if (title) {
-                title.textContent = `${occupancyRateValue.toFixed(2)}%`;
-            }
-
-            const text = statCards[2].querySelector("p");
-
-            if (text) {
-                text.innerHTML =
-                    '<span>Dữ liệu thực tế từ hệ thống</span>';
-            }
+        // Tỷ lệ lấp đầy
+        const occupancyEl = document.getElementById("occupancyRate");
+        const occupancyRateValue = Number(occupancy.tyLeLapDay ?? 0);
+        if (occupancyEl) {
+            occupancyEl.textContent = `${occupancyRateValue.toFixed(2)}%`;
         }
 
 

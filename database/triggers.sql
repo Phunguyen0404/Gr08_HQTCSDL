@@ -6,7 +6,6 @@
 
 USE hotel_management;
 
-
 -- ============================================================
 -- 1. trg_TAI_KHOAN_ValidateInsert
 -- Muc dich: Kiem tra rang buoc nghiep vu khi them tai khoan moi:
@@ -105,6 +104,153 @@ BEGIN
            SET TrangThai = 'CANCELLED'
          WHERE MaDatPhong = NEW.MaDatPhong
            AND TrangThai = 'IN_HOUSE';
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+-- ============================================================
+-- 4. TRG_PHAN_PHONG_AFTER_INSERT
+-- Muc dich: Khi mot phong duoc phan bo cho khach luu tru (Check-in),
+--           tu dong cap nhat trang thai phong do thanh 'OCCUPIED' (Dang thue).
+-- ============================================================
+
+DROP TRIGGER IF EXISTS TRG_PHAN_PHONG_AFTER_INSERT;
+
+DELIMITER $$
+
+CREATE TRIGGER TRG_PHAN_PHONG_AFTER_INSERT
+AFTER INSERT ON PHAN_PHONG
+FOR EACH ROW
+BEGIN
+    UPDATE PHONG
+       SET TrangThai = 'OCCUPIED'
+     WHERE MaPhong = NEW.MaPhong;
+END$$
+
+DELIMITER ;
+
+
+-- ============================================================
+-- 5. TRG_LUU_TRU_AFTER_UPDATE
+-- Muc dich: Dong bo trang thai Phong theo chu ky song cua Luu tru:
+--   - Khi CHECKED_OUT: Chuyen tat ca phong thuoc luu tru sang 'CLEANING'.
+--   - Khi CANCELLED: Chuyen cac phong dang 'OCCUPIED' ve 'AVAILABLE'.
+-- ============================================================
+
+DROP TRIGGER IF EXISTS TRG_LUU_TRU_AFTER_UPDATE;
+
+DELIMITER $$
+
+CREATE TRIGGER TRG_LUU_TRU_AFTER_UPDATE
+AFTER UPDATE ON LUU_TRU
+FOR EACH ROW
+BEGIN
+    IF NEW.TrangThai = 'CHECKED_OUT' AND OLD.TrangThai <> 'CHECKED_OUT' THEN
+        -- Chuyen phong sang trang thai don dep
+        UPDATE PHONG
+           SET TrangThai = 'CLEANING'
+         WHERE MaPhong IN (
+             SELECT DISTINCT MaPhong
+               FROM PHAN_PHONG
+              WHERE MaLuuTru = NEW.MaLuuTru
+         );
+    ELSEIF NEW.TrangThai = 'CANCELLED' AND OLD.TrangThai <> 'CANCELLED' THEN
+        -- Neu huy luu tru, tra phong ve trang thai trong (AVAILABLE)
+        UPDATE PHONG
+           SET TrangThai = 'AVAILABLE'
+         WHERE MaPhong IN (
+             SELECT DISTINCT MaPhong
+               FROM PHAN_PHONG
+              WHERE MaLuuTru = NEW.MaLuuTru
+         ) AND TrangThai = 'OCCUPIED';
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+-- ============================================================
+-- 6. TRG_THANH_TOAN_AFTER_INSERT
+-- Muc dich: Khi co giao dich thanh toan COMPLETED gan voi Hoa Don,
+--           kiem tra tong so tien da tra. Neu >= TongTien hoa don thi
+--           tu dong cap nhat HOA_DON.TrangThai = 'PAID'.
+-- ============================================================
+
+DROP TRIGGER IF EXISTS TRG_THANH_TOAN_AFTER_INSERT;
+
+DELIMITER $$
+
+CREATE TRIGGER TRG_THANH_TOAN_AFTER_INSERT
+AFTER INSERT ON THANH_TOAN
+FOR EACH ROW
+BEGIN
+    DECLARE v_TongDaTra   DECIMAL(15,2) DEFAULT 0;
+    DECLARE v_TongTienHD  DECIMAL(15,2) DEFAULT 0;
+
+    IF NEW.TrangThai = 'COMPLETED' AND NEW.MaHoaDon IS NOT NULL THEN
+        -- Tinh tong cac khoan da thanh toan thanh cong cho hoa don nay
+        SELECT IFNULL(SUM(SoTien), 0)
+          INTO v_TongDaTra
+          FROM THANH_TOAN
+         WHERE MaHoaDon = NEW.MaHoaDon
+           AND TrangThai = 'COMPLETED';
+
+        -- Lay tong tien phai thanh toan cua hoa don
+        SELECT TongTien
+          INTO v_TongTienHD
+          FROM HOA_DON
+         WHERE MaHoaDon = NEW.MaHoaDon;
+
+        -- Neu da tra du hoac du thua tien, danh dau hoa don da thanh toan (PAID)
+        IF v_TongDaTra >= v_TongTienHD THEN
+            UPDATE HOA_DON
+               SET TrangThai = 'PAID'
+             WHERE MaHoaDon = NEW.MaHoaDon
+               AND TrangThai <> 'PAID';
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;
+
+
+-- ============================================================
+-- 7. TRG_THANH_TOAN_AFTER_UPDATE
+-- Muc dich: Tuong tu khi mot giao dich thanh toan chuyen tu
+--           PENDING -> COMPLETED.
+-- ============================================================
+
+DROP TRIGGER IF EXISTS TRG_THANH_TOAN_AFTER_UPDATE;
+
+DELIMITER $$
+
+CREATE TRIGGER TRG_THANH_TOAN_AFTER_UPDATE
+AFTER UPDATE ON THANH_TOAN
+FOR EACH ROW
+BEGIN
+    DECLARE v_TongDaTra   DECIMAL(15,2) DEFAULT 0;
+    DECLARE v_TongTienHD  DECIMAL(15,2) DEFAULT 0;
+
+    IF NEW.TrangThai = 'COMPLETED' AND OLD.TrangThai <> 'COMPLETED' AND NEW.MaHoaDon IS NOT NULL THEN
+        SELECT IFNULL(SUM(SoTien), 0)
+          INTO v_TongDaTra
+          FROM THANH_TOAN
+         WHERE MaHoaDon = NEW.MaHoaDon
+           AND TrangThai = 'COMPLETED';
+
+        SELECT TongTien
+          INTO v_TongTienHD
+          FROM HOA_DON
+         WHERE MaHoaDon = NEW.MaHoaDon;
+
+        IF v_TongDaTra >= v_TongTienHD THEN
+            UPDATE HOA_DON
+               SET TrangThai = 'PAID'
+             WHERE MaHoaDon = NEW.MaHoaDon
+               AND TrangThai <> 'PAID';
+        END IF;
     END IF;
 END$$
 

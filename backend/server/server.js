@@ -106,10 +106,12 @@ app.get('/api/payments', async (req, res) => {
             ORDER BY tt.NgayThanhToan DESC
         `);
 
-        const totalRevenue = rows.reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
-        const cashTotal = rows.filter(r => r.PhuongThuc === 'CASH').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
-        const transferTotal = rows.filter(r => r.PhuongThuc === 'TRANSFER').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
-        const cardTotal = rows.filter(r => r.PhuongThuc === 'CARD' || r.PhuongThuc === 'E_WALLET').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+        // Đồng bộ chuẩn: Chỉ tính các giao dịch COMPLETED vào tổng doanh thu thực thu
+        const completedRows = rows.filter(r => r.TrangThai === 'COMPLETED');
+        const totalRevenue = completedRows.reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+        const cashTotal = completedRows.filter(r => r.PhuongThuc === 'CASH').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+        const transferTotal = completedRows.filter(r => r.PhuongThuc === 'TRANSFER').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
+        const cardTotal = completedRows.filter(r => r.PhuongThuc === 'CARD' || r.PhuongThuc === 'E_WALLET').reduce((sum, r) => sum + Number(r.SoTien || 0), 0);
 
         res.json({
             success: true,
@@ -119,7 +121,8 @@ app.get('/api/payments', async (req, res) => {
                 cashTotal,
                 transferTotal,
                 cardTotal,
-                totalTransactions: rows.length
+                totalTransactions: completedRows.length,
+                allTransactionsCount: rows.length
             }
         });
     } catch (err) {
@@ -248,21 +251,30 @@ app.post('/api/settings', (req, res) => {
 // ============================================================
 app.get('/api/dashboard', async (req, res) => {
     try {
+        // Tổng doanh thu & tổng giao dịch thu chi (Đồng bộ chuẩn với Báo cáo & Thu chi)
+        const [revSummary] = await pool.query(`
+            SELECT 
+                IFNULL(SUM(SoTien), 0) AS tongDoanhThu,
+                COUNT(*) AS tongGiaoDich
+            FROM THANH_TOAN
+            WHERE TrangThai = 'COMPLETED'
+        `);
+
         // Doanh thu hôm nay
         const [revenueToday] = await pool.query(`
-            SELECT COALESCE(SUM(TongTien), 0) AS doanhThuHomNay
-            FROM HOA_DON
-            WHERE TrangThai = 'PAID'
-              AND DATE(NgayLap) = CURDATE()
+            SELECT IFNULL(SUM(SoTien), 0) AS doanhThuHomNay
+            FROM THANH_TOAN
+            WHERE TrangThai = 'COMPLETED'
+              AND DATE(NgayThanhToan) = CURDATE()
         `);
 
         // Doanh thu tháng này
         const [revenueMonth] = await pool.query(`
-            SELECT COALESCE(SUM(TongTien), 0) AS doanhThuThang
-            FROM HOA_DON
-            WHERE TrangThai = 'PAID'
-              AND YEAR(NgayLap) = YEAR(CURDATE())
-              AND MONTH(NgayLap) = MONTH(CURDATE())
+            SELECT IFNULL(SUM(SoTien), 0) AS doanhThuThang
+            FROM THANH_TOAN
+            WHERE TrangThai = 'COMPLETED'
+              AND YEAR(NgayThanhToan) = YEAR(CURDATE())
+              AND MONTH(NgayThanhToan) = MONTH(CURDATE())
         `);
 
         // Danh sách trạng thái phòng
@@ -285,21 +297,23 @@ app.get('/api/dashboard', async (req, res) => {
 
         // Số lượng booking
         const [bookingCount] = await pool.query(`
-            SELECT COUNT(*) AS soBooking
+            SELECT 
+                COUNT(*) AS tongDatPhong,
+                IFNULL(SUM(CASE WHEN TrangThai IN ('CONFIRMED', 'CHECKED_IN', 'Đã xác nhận', 'Đang sử dụng') THEN 1 ELSE 0 END), 0) AS soBooking
             FROM DAT_PHONG
-            WHERE TrangThai IN ('CONFIRMED', 'CHECKED_IN', 'Đã xác nhận', 'Đang sử dụng')
         `);
 
-        // Biểu đồ doanh thu 7 ngày gần nhất
+        // Biểu đồ doanh thu 7 ngày phát sinh gần nhất (Đồng bộ với Thu chi & Báo cáo)
         const [revenueChart] = await pool.query(`
             SELECT 
-                DATE(NgayLap) AS ngay,
-                COALESCE(SUM(TongTien), 0) AS doanhThu
-            FROM HOA_DON
-            WHERE TrangThai = 'PAID'
-              AND NgayLap >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
-            GROUP BY DATE(NgayLap)
-            ORDER BY ngay ASC
+                DATE(NgayThanhToan) AS ngay,
+                IFNULL(SUM(SoTien), 0) AS doanhThu,
+                COUNT(*) AS soGiaoDich
+            FROM THANH_TOAN
+            WHERE TrangThai = 'COMPLETED'
+            GROUP BY DATE(NgayThanhToan)
+            ORDER BY ngay DESC
+            LIMIT 7
         `);
 
         // Số lượng nhân viên
@@ -324,10 +338,13 @@ app.get('/api/dashboard', async (req, res) => {
         res.json({
             success: true,
             revenue: {
+                total: Number(revSummary[0]?.tongDoanhThu || 0),
+                tongDoanhThu: Number(revSummary[0]?.tongDoanhThu || 0),
                 today: Number(revenueToday[0]?.doanhThuHomNay || 0),
                 month: Number(revenueMonth[0]?.doanhThuThang || 0),
                 doanhThuHomNay: Number(revenueToday[0]?.doanhThuHomNay || 0),
-                doanhThuThang: Number(revenueMonth[0]?.doanhThuThang || 0)
+                doanhThuThang: Number(revenueMonth[0]?.doanhThuThang || 0),
+                totalTransactions: Number(revSummary[0]?.tongGiaoDich || 0)
             },
             rooms,
             occupancy: {
@@ -343,9 +360,10 @@ app.get('/api/dashboard', async (req, res) => {
             },
             staffList,
             bookings: {
-                soBooking: Number(bookingCount[0]?.soBooking || 0)
+                soBooking: Number(bookingCount[0]?.soBooking || 0),
+                tongDatPhong: Number(bookingCount[0]?.tongDatPhong || 0)
             },
-            revenueChart
+            revenueChart: (revenueChart || []).reverse()
         });
     } catch (error) {
         console.warn('MySQL chưa kết nối, sử dụng dữ liệu mẫu cho Dashboard:', error.message);
