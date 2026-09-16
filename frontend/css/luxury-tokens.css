@@ -1,0 +1,193 @@
+/* ==========================================================================
+   LUXURY / EDITORIAL DESIGN SYSTEM TOKENS
+   Inspired by high-end magazines (Kinfolk, Vogue) & luxury brands (Aman, Chanel)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap');
+
+:root {
+    /* --- COLOR PALETTE (Sophisticated Monochrome + Metallic Gold) --- */
+    --lux-bg: #F9F8F6;              /* Warm Alabaster - Linen paper warmth */
+    --lux-bg-elevated: #FFFFFF;     /* Pure surface layer */
+    --lux-fg: #1A1A1A;              /* Rich Charcoal - Softer than pure black */
+    --lux-muted-bg: #EBE5DE;        /* Pale Taupe - Subdued elevated background */
+    --lux-muted-fg: #6C6863;        /* Warm Grey - Captions, metadata, secondary */
+    --lux-accent: #D4AF37;          /* Metallic Gold - Refined accent */
+    --lux-accent-hover: #b89324;    /* Deeper Metallic Gold */
+    --lux-accent-fg: #FFFFFF;       /* High-contrast text on gold/dark */
+    
+    /* Subtle Dividers & Architectural Borders */
+    --lux-border: rgba(26, 26, 26, 0.12);
+    --lux-border-strong: #1A1A1A;
+    --lux-border-gold: #D4AF37;
+
+    /* --- TYPOGRAPHY (Editorial Pairings) --- */
+    --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* --- RADII & BORDERS (Strictly Architectural Precision) --- */
+    --lux-radius: 0px !important;    /* Absolute 0px - Crisp, razor-sharp edges */
+
+    /* --- DEPTH & LAYERED SHADOWS (Subtle, never harsh) --- */
+    --lux-shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.02);
+    --lux-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.03);
+    --lux-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --lux-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+    /* --- CINEMATIC TIMING & EASING --- */
+    --lux-trans-fast: 300ms ease;
+    --lux-trans-normal: 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --lux-trans-slow: 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --lux-trans-cinema: 1500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ==========================================================================
+   GLOBAL EDITORIAL UTILITY CLASSES
+   ========================================================================== */
+
+/* Typography Helpers */
+.lux-serif {
+    font-family: var(--font-heading);
+}
+
+.lux-sans {
+    font-family: var(--font-body);
+}
+
+.lux-tracking-wide {
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+}
+
+.lux-tracking-btn {
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.lux-italic-gold {
+    font-style: italic;
+    color: var(--lux-accent);
+}
+
+/* Architectural Card (Single top/bottom border pattern) */
+.lux-card {
+    background: var(--lux-bg-elevated);
+    border: 1px solid var(--lux-border);
+    border-top: 2px solid var(--lux-fg);
+    border-radius: 0 !important;
+    box-shadow: var(--lux-shadow-sm);
+    transition: box-shadow var(--lux-trans-normal), border-color var(--lux-trans-normal);
+}
+
+.lux-card:hover {
+    box-shadow: var(--lux-shadow-md);
+    border-top-color: var(--lux-accent);
+}
+
+/* Cinematic Grayscale Images */
+.lux-img-cinematic {
+    filter: grayscale(100%);
+    transition: filter var(--lux-trans-cinema), transform var(--lux-trans-cinema);
+    border-radius: 0 !important;
+}
+
+.lux-img-cinematic:hover,
+.lux-card:hover .lux-img-cinematic {
+    filter: grayscale(0%);
+    transform: scale(1.02);
+}
+
+/* Underline-only Input (Editorial Form) */
+.lux-input-underline {
+    border: none;
+    border-bottom: 1px solid var(--lux-border-strong);
+    background: transparent;
+    border-radius: 0 !important;
+    padding: 10px 0;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--lux-fg);
+    outline: none;
+    transition: border-color var(--lux-trans-fast);
+}
+
+.lux-input-underline::placeholder {
+    font-family: var(--font-heading);
+    font-style: italic;
+    color: var(--lux-muted-fg);
+}
+
+.lux-input-underline:focus {
+    border-bottom-color: var(--lux-accent);
+}
+
+/* Minimalist Button with Gold Slide Animation */
+.lux-btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 28px;
+    background: var(--lux-fg);
+    color: var(--lux-accent-fg);
+    border: 1px solid var(--lux-fg);
+    border-radius: 0 !important;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    overflow: hidden;
+    transition: color var(--lux-trans-normal), border-color var(--lux-trans-normal);
+    z-index: 1;
+}
+
+.lux-btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--lux-accent);
+    transform: translateX(-100%);
+    transition: transform var(--lux-trans-normal);
+    z-index: -1;
+}
+
+.lux-btn-primary:hover::before {
+    transform: translateX(0);
+}
+
+.lux-btn-primary:hover {
+    border-color: var(--lux-accent);
+}
+
+/* Secondary Button: Outlined Architectural */
+.lux-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 26px;
+    background: transparent;
+    color: var(--lux-fg);
+    border: 1px solid var(--lux-fg);
+    border-radius: 0 !important;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background var(--lux-trans-normal), color var(--lux-trans-normal), border-color var(--lux-trans-normal);
+}
+
+.lux-btn-secondary:hover {
+    background: var(--lux-fg);
+    color: var(--lux-accent-fg);
+}

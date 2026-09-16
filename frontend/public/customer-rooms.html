@@ -8,24 +8,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/luxury-tokens.css" />
     <style>
         * {
             box-sizing: border-box;
-            font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: var(--font-body);
         }
 
         body {
-            background: #f8fafc;
-            color: #1e293b;
+            background: var(--lux-bg);
+            color: var(--lux-fg);
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
         }
 
         .customer-shell {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px 60px;
+            max-width: 1240px;
+            margin: 32px auto;
+            padding: 0 24px 80px;
         }
 
         .topbar {
@@ -33,58 +34,69 @@
             justify-content: space-between;
             align-items: center;
             gap: 16px;
-            margin-bottom: 24px;
-            background: #fff;
-            padding: 16px 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            border: 1px solid #e2e8f0;
+            margin-bottom: 28px;
+            background: var(--lux-bg-elevated);
+            padding: 18px 28px;
+            border-radius: 0 !important;
+            border: 1px solid var(--lux-border);
+            border-top: 2px solid var(--lux-fg);
+            box-shadow: var(--lux-shadow-sm);
         }
 
         .brand-link {
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: #0f172a;
-            font-weight: 700;
-            font-size: 18px;
+            gap: 12px;
+            color: var(--lux-fg);
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 20px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .brand-link svg {
+            stroke: var(--lux-accent);
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 20px;
         }
 
         .nav-link {
-            color: #475569;
+            color: var(--lux-muted-fg);
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: color 0.2s;
+            transition: color var(--lux-trans-fast);
         }
 
         .nav-link:hover {
-            color: #2563eb;
+            color: var(--lux-accent);
         }
 
         .search-panel {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
-            padding: 24px;
-            margin-bottom: 28px;
+            background: var(--lux-bg-elevated);
+            border: 1px solid var(--lux-border);
+            border-top: 2px solid var(--lux-fg);
+            border-radius: 0 !important;
+            box-shadow: var(--lux-shadow-sm);
+            padding: 26px 28px;
+            margin-bottom: 32px;
         }
 
         .search-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 160px;
-            gap: 16px;
+            gap: 18px;
             align-items: end;
         }
 
@@ -95,64 +107,73 @@
         }
 
         .form-group label {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
-            color: #334155;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--lux-muted-fg);
         }
 
         .form-control {
             padding: 10px 14px;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            font-size: 14px;
+            border: 1px solid var(--lux-border);
+            border-radius: 0 !important;
+            font-size: 13.5px;
+            font-family: var(--font-body);
+            color: var(--lux-fg);
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background: #fff;
+            transition: border-color var(--lux-trans-fast);
+            background: var(--lux-bg-elevated);
         }
 
         .form-control:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            border-color: var(--lux-accent);
         }
 
         .btn-search {
-            background: #2563eb;
-            color: #fff;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
+            background: var(--lux-fg);
+            color: var(--lux-accent-fg);
+            border: 1px solid var(--lux-fg);
+            padding: 11px 20px;
+            border-radius: 0 !important;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background var(--lux-trans-fast), border-color var(--lux-trans-fast);
             height: 42px;
         }
 
         .btn-search:hover {
-            background: #1d4ed8;
+            background: var(--lux-accent);
+            border-color: var(--lux-accent);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--lux-border);
         }
 
         .section-title {
-            font-size: 22px;
-            font-weight: 700;
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 500;
             margin: 0;
-            color: #0f172a;
+            color: var(--lux-fg);
         }
 
         .stay-banner {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 10px;
-            padding: 10px 16px;
-            font-size: 13px;
-            color: #1e40af;
+            background: var(--lux-muted-bg);
+            border: 1px solid var(--lux-border);
+            border-radius: 0 !important;
+            padding: 8px 16px;
+            font-size: 12.5px;
+            color: var(--lux-fg);
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -161,29 +182,30 @@
 
         .room-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
         }
 
         .room-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
+            background: var(--lux-bg-elevated);
+            border: 1px solid var(--lux-border);
+            border-top: 2px solid var(--lux-fg);
+            border-radius: 0 !important;
             overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            box-shadow: var(--lux-shadow-sm);
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: border-top-color var(--lux-trans-normal), box-shadow var(--lux-trans-normal);
         }
 
         .room-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            border-top-color: var(--lux-accent);
+            box-shadow: var(--lux-shadow-md);
         }
 
         .room-img-wrap {
             position: relative;
-            height: 190px;
+            height: 210px;
             background: #e2e8f0;
             overflow: hidden;
         }
@@ -192,28 +214,32 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            filter: grayscale(100%);
+            transition: filter var(--lux-trans-cinema), transform var(--lux-trans-cinema);
+            border-radius: 0 !important;
         }
 
         .room-card:hover .room-img {
-            transform: scale(1.05);
+            filter: grayscale(0%);
+            transform: scale(1.03);
         }
 
         .room-type-badge {
             position: absolute;
             top: 12px;
             left: 12px;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(4px);
-            color: #fff;
+            background: var(--lux-fg);
+            color: var(--lux-accent-fg);
             padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
+            border-radius: 0 !important;
+            font-size: 11px;
             font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
 
         .room-body {
-            padding: 20px;
+            padding: 22px 24px 26px;
             display: flex;
             flex-direction: column;
             flex: 1;
@@ -227,44 +253,48 @@
         }
 
         .room-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: #0f172a;
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--lux-fg);
             margin: 0;
         }
 
         .room-features {
             display: flex;
-            gap: 12px;
-            margin: 12px 0 16px;
-            color: #64748b;
-            font-size: 13px;
+            gap: 14px;
+            margin: 10px 0 18px;
+            color: var(--lux-muted-fg);
+            font-size: 12.5px;
         }
 
         .room-feature {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
         }
 
         .price-section {
             margin-top: auto;
-            padding-top: 16px;
-            border-top: 1px solid #f1f5f9;
+            padding-top: 18px;
+            border-top: 1px solid var(--lux-border);
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
         }
 
         .price-per-night {
-            font-size: 12px;
-            color: #64748b;
+            font-size: 11.5px;
+            color: var(--lux-muted-fg);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         .price-val {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2563eb;
+            font-size: 22px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--lux-fg);
         }
 
         .total-est {
@@ -274,26 +304,29 @@
         }
 
         .btn-book {
-            background: #2563eb;
-            color: #fff;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
+            background: var(--lux-fg);
+            color: var(--lux-accent-fg);
+            border: 1px solid var(--lux-fg);
+            padding: 10px 20px;
+            border-radius: 0 !important;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 11.5px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background var(--lux-trans-fast), border-color var(--lux-trans-fast);
         }
 
         .btn-book:hover {
-            background: #1d4ed8;
+            background: var(--lux-accent);
+            border-color: var(--lux-accent);
         }
 
         /* Modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(26, 26, 26, 0.65);
             backdrop-filter: blur(4px);
             display: none;
             justify-content: center;
@@ -303,11 +336,13 @@
         }
 
         .modal-card {
-            background: #ffffff;
-            border-radius: 18px;
+            background: var(--lux-bg-elevated);
+            border-radius: 0 !important;
+            border: 1px solid var(--lux-border);
+            border-top: 3px solid var(--lux-accent);
             width: 100%;
             max-width: 540px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--lux-shadow-lg);
             overflow: hidden;
             animation: modalFadeIn 0.2s ease-out;
         }
@@ -315,7 +350,7 @@
         @keyframes modalFadeIn {
             from {
                 opacity: 0;
-                transform: scale(0.96);
+                transform: scale(0.97);
             }
             to {
                 opacity: 1;
@@ -324,28 +359,34 @@
         }
 
         .modal-header {
-            background: #f8fafc;
+            background: var(--lux-muted-bg);
             padding: 18px 24px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--lux-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .modal-title {
+            font-family: var(--font-heading);
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 600;
             margin: 0;
-            color: #0f172a;
+            color: var(--lux-fg);
         }
 
         .modal-close {
             background: none;
             border: none;
             font-size: 22px;
-            color: #64748b;
+            color: var(--lux-muted-fg);
             cursor: pointer;
             line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--lux-fg);
         }
 
         .modal-body {

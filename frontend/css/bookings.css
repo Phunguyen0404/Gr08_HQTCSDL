@@ -1,3 +1,5 @@
+@import url("./luxury-tokens.css");
+
 * {
   margin: 0;
   padding: 0;
@@ -5,9 +7,10 @@
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f8fb;
-  color: #243746;
+  font-family: var(--font-body);
+  background: var(--lux-bg);
+  color: var(--lux-fg);
+  -webkit-font-smoothing: antialiased;
 }
 
 
@@ -500,103 +503,101 @@ body {
 }
 
 .summary-card {
-  background: #ffffff;
-
-  border: 1px solid #e4edf2;
-
-  border-radius: 10px;
-
+  background: var(--lux-bg-elevated);
+  border: 1px solid var(--lux-border);
+  border-top: 2px solid var(--lux-fg);
+  border-radius: 0 !important;
   min-height: 105px;
-
   padding: 20px;
-
   display: flex;
-
   align-items: center;
+  box-shadow: var(--lux-shadow-sm);
+  transition: transform var(--lux-trans-normal), border-top-color var(--lux-trans-normal);
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  border-top-color: var(--lux-accent);
 }
 
 .summary-icon {
   width: 48px;
   height: 48px;
-
-  border-radius: 9px;
-
+  border-radius: 0 !important;
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   font-size: 21px;
-
   margin-right: 15px;
+  background: var(--lux-muted-bg);
+  border: 1px solid var(--lux-border);
+  color: var(--lux-fg);
 }
 
 .summary-icon.blue {
-  background: #e6f4fb;
-  color: #1482b5;
+  background: var(--lux-muted-bg);
+  color: var(--lux-fg);
 }
 
 .summary-icon.green {
-  background: #e7f7ef;
-  color: #27a269;
+  background: #ecfdf5;
+  color: #059669;
 }
 
 .summary-icon.orange {
-  background: #fff3df;
-  color: #e39a25;
+  background: #fffbeb;
+  color: #d97706;
 }
 
 .summary-icon.red {
-  background: #fdeaea;
-  color: #dc5a5a;
+  background: #fef2f2;
+  color: #dc2626;
 }
 
 .summary-info span {
   display: block;
-
-  font-size: 12px;
-
-  color: #7e8f99;
-
-  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lux-muted-fg);
+  margin-bottom: 5px;
 }
 
 .summary-info strong {
   font-size: 25px;
-
-  color: #263b49;
+  font-family: var(--font-heading);
+  color: var(--lux-fg);
 }
-
 
 /* =========================
    BOOKING CARD
 ========================= */
 
 .booking-card {
-  background: #ffffff;
-
-  border: 1px solid #e4edf2;
-
-  border-radius: 10px;
-
+  background: var(--lux-bg-elevated);
+  border: 1px solid var(--lux-border);
+  border-top: 2px solid var(--lux-fg);
+  border-radius: 0 !important;
   overflow: hidden;
+  box-shadow: var(--lux-shadow-sm);
+  transition: border-top-color var(--lux-trans-normal), box-shadow var(--lux-trans-normal);
 }
 
+.booking-card:hover {
+  border-top-color: var(--lux-accent);
+  box-shadow: var(--lux-shadow-md);
+}
 
 /* CARD HEADER */
 
 .card-header {
-  min-height: 82px;
-
+  min-height: 80px;
   padding: 20px 25px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
-  border-bottom: 1px solid #e8eef2;
+  border-bottom: 1px solid var(--lux-border);
 }
 
 .card-header h2 {
