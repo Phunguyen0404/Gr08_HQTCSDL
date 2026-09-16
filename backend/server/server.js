@@ -984,6 +984,22 @@ async function startServer() {
     try {
         const connection = await pool.getConnection();
         await connection.ping();
+
+        // Tự động đồng bộ mật khẩu mẫu (admin123) cho toàn bộ tài khoản seed để cả nhóm chỉ cần git pull là đăng nhập được ngay
+        try {
+            await connection.query(`
+                UPDATE TAI_KHOAN 
+                SET MatKhauHash = '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS' 
+                WHERE MatKhauHash LIKE '$2a$10$%' OR TenDangNhap IN ('admin', 'admin001', 'staff001', 'customer01')
+            `);
+            await connection.query(`
+                INSERT IGNORE INTO TAI_KHOAN (MaTaiKhoan, TenDangNhap, MatKhauHash, VaiTro, TrangThai)
+                VALUES ('TK001', 'admin001', '$2b$10$WZ.4wQVV4K9MSpQLVqVcYu5LHQuBpXnuEcsSBXSn6Al6T8EX58rdS', 'ADMIN', 'ACTIVE')
+            `);
+        } catch (syncErr) {
+            // Không chặn khởi động nếu bảng chưa được tạo
+        }
+
         connection.release();
 
         app.listen(PORT, () => {
