@@ -4,6 +4,7 @@
    ========================================================================== */
 
 @import url("./luxury-tokens.css");
+@import url("./progress-indicators.css");
 
 * {
     margin: 0;
