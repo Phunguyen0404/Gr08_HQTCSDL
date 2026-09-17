@@ -5,7 +5,7 @@
 @import url("./luxury-tokens.css");
 
 :root {
-    --ink: var(--white);
+    --ink: var(--lux-fg);
     --ink-soft: #2e2e2e;
     --muted: var(--lux-muted-fg);
     --line: var(--lux-border);
