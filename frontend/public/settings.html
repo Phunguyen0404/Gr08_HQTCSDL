@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,12 +139,15 @@
         }
 
         @media (max-width: 768px) {
-            .form-grid-2, .form-grid-3 {
+
+            .form-grid-2,
+            .form-grid-3 {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -159,6 +163,10 @@
             <a href="dashboard.html" class="menu-item">
                 <span class="menu-icon">▣</span>
                 <span>Dashboard</span>
+            </a>
+            <a href="transaction-demo.html" class="menu-item">
+                <span class="menu-icon">⚗</span>
+                <span>Mô phỏng giao dịch</span>
             </a>
             <a href="bookings.html" class="menu-item">
                 <span class="menu-icon">🛏</span>
@@ -294,7 +302,8 @@
                         </div>
                         <div class="form-group-custom">
                             <label for="depositRate">Tỷ lệ đặt cọc tối thiểu (%)</label>
-                            <input type="number" id="depositRate" class="form-control-custom" min="0" max="100" required>
+                            <input type="number" id="depositRate" class="form-control-custom" min="0" max="100"
+                                required>
                         </div>
                         <div class="form-group-custom">
                             <label for="cancellationHours">Thời gian hủy phòng miễn phí (Giờ)</label>
@@ -411,4 +420,5 @@
         document.addEventListener('DOMContentLoaded', loadSettings);
     </script>
 </body>
+
 </html>

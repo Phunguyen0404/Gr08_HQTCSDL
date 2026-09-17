@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,10 +58,25 @@
             color: var(--lux-fg);
         }
 
-        .icon-emerald { background: #ecfdf5; color: #059669; }
-        .icon-blue { background: var(--lux-muted-bg); color: var(--lux-fg); }
-        .icon-amber { background: #fffbeb; color: #d97706; }
-        .icon-purple { background: #f5f3ff; color: #7c3aed; }
+        .icon-emerald {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .icon-blue {
+            background: var(--lux-muted-bg);
+            color: var(--lux-fg);
+        }
+
+        .icon-amber {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .icon-purple {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
 
         .stat-info span {
             display: block;
@@ -145,10 +161,21 @@
             transition: width 0.6s ease;
         }
 
-        .bar-blue { background: var(--lux-fg); }
-        .bar-green { background: #059669; }
-        .bar-amber { background: var(--lux-accent); }
-        .bar-red { background: #dc2626; }
+        .bar-blue {
+            background: var(--lux-fg);
+        }
+
+        .bar-green {
+            background: #059669;
+        }
+
+        .bar-amber {
+            background: var(--lux-accent);
+        }
+
+        .bar-red {
+            background: #dc2626;
+        }
 
         /* Report Table */
         .report-table {
@@ -187,9 +214,20 @@
             text-transform: uppercase;
         }
 
-        .pill-green { background: #dcfce7; color: #15803d; }
-        .pill-blue { background: #e0f2fe; color: #0369a1; }
-        .pill-red { background: #fee2e2; color: #b91c1c; }
+        .pill-green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .pill-blue {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .pill-red {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
 
         @media (max-width: 900px) {
             .reports-grid-2 {
@@ -198,6 +236,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -213,6 +252,10 @@
             <a href="dashboard.html" class="menu-item">
                 <span class="menu-icon">▣</span>
                 <span>Dashboard</span>
+            </a>
+            <a href="transaction-demo.html" class="menu-item">
+                <span class="menu-icon">⚗</span>
+                <span>Mô phỏng giao dịch</span>
             </a>
             <a href="bookings.html" class="menu-item">
                 <span class="menu-icon">🛏</span>
@@ -368,7 +411,9 @@
                             </tr>
                         </thead>
                         <tbody id="roomTypeReportBody">
-                            <tr><td colspan="7" style="text-align: center; padding: 20px;">Đang tải dữ liệu...</td></tr>
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 20px;">Đang tải dữ liệu...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -390,7 +435,9 @@
                             </tr>
                         </thead>
                         <tbody id="recentDaysBody">
-                            <tr><td colspan="3" style="text-align: center; padding: 20px;">Đang tải dữ liệu...</td></tr>
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: 20px;">Đang tải dữ liệu...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -551,4 +598,5 @@
         document.addEventListener('DOMContentLoaded', fetchReportData);
     </script>
 </body>
+
 </html>

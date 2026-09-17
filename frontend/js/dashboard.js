@@ -485,9 +485,25 @@ function showDashboardError(message) {
     }
 }
 
+
 function hideDashboardError() {
     const banner = document.getElementById("dashboardErrorBanner");
     if (banner) {
         banner.remove();
     }
+}
+// ==========================================
+// XỬ LÝ ĐĂNG XUẤT
+// ==========================================
+
+const logoutBtn = document.querySelector(".logout-btn");
+
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
+
+        window.location.href = "login.html";
+    });
 }

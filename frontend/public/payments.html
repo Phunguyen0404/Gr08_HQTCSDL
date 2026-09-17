@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,11 +51,30 @@
             color: var(--lux-fg);
         }
 
-        .icon-emerald { background: #ecfdf5; color: #059669; }
-        .icon-blue { background: var(--lux-muted-bg); color: var(--lux-fg); }
-        .icon-purple { background: #f5f3ff; color: #7c3aed; }
-        .icon-amber { background: #fffbeb; color: #d97706; }
-        .icon-teal { background: #f0fdfa; color: #0d9488; }
+        .icon-emerald {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .icon-blue {
+            background: var(--lux-muted-bg);
+            color: var(--lux-fg);
+        }
+
+        .icon-purple {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
+
+        .icon-amber {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .icon-teal {
+            background: #f0fdfa;
+            color: #0d9488;
+        }
 
         .stat-info span {
             display: block;
@@ -104,7 +124,8 @@
             align-items: center;
         }
 
-        .filter-select, .search-input {
+        .filter-select,
+        .search-input {
             height: 40px;
             padding: 0 14px;
             border: 1px solid var(--lux-border);
@@ -127,7 +148,8 @@
             color: #9ca3af;
         }
 
-        .filter-select:focus, .search-input:focus {
+        .filter-select:focus,
+        .search-input:focus {
             border-color: var(--lux-accent);
         }
 
@@ -202,10 +224,29 @@
             text-transform: uppercase;
         }
 
-        .method-cash { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
-        .method-transfer { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-        .method-card { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
-        .method-wallet { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .method-cash {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .method-transfer {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .method-card {
+            background: #f5f3ff;
+            color: #6d28d9;
+            border: 1px solid #ddd6fe;
+        }
+
+        .method-wallet {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
 
         .badge-status {
             display: inline-block;
@@ -243,6 +284,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -258,6 +300,10 @@
             <a href="dashboard.html" class="menu-item">
                 <span class="menu-icon">▣</span>
                 <span>Dashboard</span>
+            </a>
+            <a href="transaction-demo.html" class="menu-item">
+                <span class="menu-icon">⚗</span>
+                <span>Mô phỏng giao dịch</span>
             </a>
             <a href="bookings.html" class="menu-item">
                 <span class="menu-icon">🛏</span>
@@ -380,8 +426,9 @@
             <div class="table-card">
                 <div class="toolbar">
                     <div class="search-filter-group">
-                        <input type="text" id="searchInput" class="search-input" placeholder="Tìm theo mã GD, booking, khách hàng...">
-                        
+                        <input type="text" id="searchInput" class="search-input"
+                            placeholder="Tìm theo mã GD, booking, khách hàng...">
+
                         <select id="methodFilter" class="filter-select">
                             <option value="">Tất cả phương thức</option>
                             <option value="CASH">Tiền mặt</option>
@@ -414,7 +461,8 @@
                         </thead>
                         <tbody id="paymentsTableBody">
                             <tr>
-                                <td colspan="9" style="text-align: center; padding: 30px;">Đang tải danh sách giao dịch...</td>
+                                <td colspan="9" style="text-align: center; padding: 30px;">Đang tải danh sách giao
+                                    dịch...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -498,7 +546,7 @@
             const tbody = document.getElementById('paymentsTableBody');
 
             const filtered = allPayments.filter(item => {
-                const matchSearch = !search || 
+                const matchSearch = !search ||
                     (item.MaThanhToan && item.MaThanhToan.toLowerCase().includes(search)) ||
                     (item.MaBookingCode && item.MaBookingCode.toLowerCase().includes(search)) ||
                     (item.TenKhachHang && item.TenKhachHang.toLowerCase().includes(search)) ||
@@ -540,4 +588,5 @@
         document.addEventListener('DOMContentLoaded', fetchPayments);
     </script>
 </body>
+
 </html>

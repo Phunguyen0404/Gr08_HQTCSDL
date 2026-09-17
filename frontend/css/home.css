@@ -5,7 +5,7 @@
 @import url("./luxury-tokens.css");
 
 :root {
-    --ink: var(--lux-fg);
+    --ink: var(--white);
     --ink-soft: #2e2e2e;
     --muted: var(--lux-muted-fg);
     --line: var(--lux-border);
@@ -278,8 +278,13 @@ a {
 }
 
 @keyframes heroKenBurns {
-    0% { transform: scale(1) translate(0, 0); }
-    100% { transform: scale(1.08) translate(-1.5%, -1%); }
+    0% {
+        transform: scale(1) translate(0, 0);
+    }
+
+    100% {
+        transform: scale(1.08) translate(-1.5%, -1%);
+    }
 }
 
 .hero-scrim {
@@ -325,8 +330,15 @@ a {
 }
 
 @keyframes badgeFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
 }
 
 .hero-title {
@@ -425,8 +437,17 @@ a {
 }
 
 @keyframes scrollBounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.7; }
-    50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(8px);
+        opacity: 1;
+    }
 }
 
 /* ============================================================
@@ -463,7 +484,7 @@ a {
     color: var(--ink-soft);
 }
 
-.search-field + .search-field {
+.search-field+.search-field {
     border-left: 1px solid var(--line);
 }
 
@@ -555,7 +576,7 @@ a {
     color: var(--ink);
 }
 
-.guest-row + .guest-row {
+.guest-row+.guest-row {
     border-top: 1px solid var(--line);
 }
 
@@ -638,7 +659,7 @@ a {
     background: var(--sand);
 }
 
-.section-sand > * {
+.section-sand>* {
     max-width: var(--shell);
     margin-left: auto;
     margin-right: auto;
@@ -732,8 +753,13 @@ a {
 }
 
 @keyframes marqueeScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 /* --- Scroll reveal --- */
@@ -741,7 +767,7 @@ a {
     opacity: 0;
     transform: translateY(28px);
     transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .reveal.is-visible {
@@ -749,9 +775,17 @@ a {
     transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-1 {
+    transition-delay: 0.1s;
+}
+
+.reveal-delay-2 {
+    transition-delay: 0.2s;
+}
+
+.reveal-delay-3 {
+    transition-delay: 0.3s;
+}
 
 /* ============================================================
    LOẠI PHÒNG (EDITORIAL CARDS & CINEMATIC REVEAL)
@@ -778,8 +812,8 @@ a {
     overflow: hidden;
     background: var(--white);
     transition: border-top-color 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                box-shadow 500ms ease,
-                transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow 500ms ease,
+        transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
     opacity: 0;
     transform: translateY(24px);
 }
@@ -1054,8 +1088,15 @@ a {
 }
 
 @keyframes offerPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5); }
-    50% { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0); }
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(212, 175, 55, 0);
+    }
 }
 
 .offer-body h2 {
@@ -1188,8 +1229,15 @@ a {
 }
 
 @keyframes fabPulse {
-    0%, 100% { box-shadow: 0 8px 22px rgba(12, 16, 22, 0.28); }
-    50% { box-shadow: 0 8px 32px rgba(212, 175, 55, 0.45); }
+
+    0%,
+    100% {
+        box-shadow: 0 8px 22px rgba(12, 16, 22, 0.28);
+    }
+
+    50% {
+        box-shadow: 0 8px 32px rgba(212, 175, 55, 0.45);
+    }
 }
 
 .notify-fab .icon {
@@ -1233,7 +1281,7 @@ a {
         grid-template-columns: 1fr 1fr;
     }
 
-    .search-field + .search-field {
+    .search-field+.search-field {
         border-left: 0;
     }
 

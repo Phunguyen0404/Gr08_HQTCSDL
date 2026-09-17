@@ -268,6 +268,10 @@
                 <span class="menu-icon">▣</span>
                 <span>Dashboard</span>
             </a>
+            <a href="transaction-demo.html" class="menu-item">
+                <span class="menu-icon">⚗</span>
+                <span>Mô phỏng giao dịch</span>
+            </a>
             <a href="bookings.html" class="menu-item">
                 <span class="menu-icon">🛏</span>
                 <span>Đặt phòng</span>
@@ -393,7 +397,8 @@
             <div class="invoice-toolbar">
                 <div class="invoice-search-box">
                     <span class="invoice-search-icon">⌕</span>
-                    <input type="text" id="invoiceSearch" class="invoice-search-input" placeholder="Tìm theo mã hóa đơn, tên khách hàng, mã booking...">
+                    <input type="text" id="invoiceSearch" class="invoice-search-input"
+                        placeholder="Tìm theo mã hóa đơn, tên khách hàng, mã booking...">
                 </div>
 
                 <select id="statusFilter" class="status-filter">
@@ -412,7 +417,9 @@
                         <h2>Danh sách chứng từ hóa đơn</h2>
                         <p>Hệ thống tự động đồng bộ khi lễ tân thực hiện Check-out hoặc xuất hóa đơn</p>
                     </div>
-                    <span id="invoiceCount" style="font-size: 12px; font-weight:600; color:var(--lux-muted-fg); letter-spacing:0.1em; text-transform:uppercase;">0 hóa đơn</span>
+                    <span id="invoiceCount"
+                        style="font-size: 12px; font-weight:600; color:var(--lux-muted-fg); letter-spacing:0.1em; text-transform:uppercase;">0
+                        hóa đơn</span>
                 </div>
 
                 <div class="table-wrapper">
@@ -457,7 +464,8 @@
                 Đang tải dữ liệu...
             </div>
             <div class="lux-modal-footer" id="modalInvActions">
-                <button type="button" onclick="closeInvoiceModal()" class="btn-secondary" style="padding: 8px 18px; border: 1px solid var(--lux-border); background: var(--lux-bg-elevated); cursor: pointer; font-size: 12px; font-weight: 600;">Đóng</button>
+                <button type="button" onclick="closeInvoiceModal()" class="btn-secondary"
+                    style="padding: 8px 18px; border: 1px solid var(--lux-border); background: var(--lux-bg-elevated); cursor: pointer; font-size: 12px; font-weight: 600;">Đóng</button>
             </div>
         </div>
     </div>

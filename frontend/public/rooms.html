@@ -54,10 +54,25 @@
             color: var(--lux-fg);
         }
 
-        .icon-blue { background: var(--lux-muted-bg); color: var(--lux-fg); }
-        .icon-green { background: #ecfdf5; color: #059669; }
-        .icon-orange { background: #fffbeb; color: #d97706; }
-        .icon-red { background: #fef2f2; color: #dc2626; }
+        .icon-blue {
+            background: var(--lux-muted-bg);
+            color: var(--lux-fg);
+        }
+
+        .icon-green {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .icon-orange {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .icon-red {
+            background: #fef2f2;
+            color: #dc2626;
+        }
 
         .stat-card-info span {
             display: block;
@@ -74,6 +89,7 @@
             font-family: var(--font-heading);
             color: var(--lux-fg);
         }
+
         /* Panels */
         .admin-card {
             background: var(--lux-bg-elevated);
@@ -355,6 +371,7 @@
             .rooms-stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             .room-form-grid {
                 grid-template-columns: 1fr;
             }
@@ -381,6 +398,10 @@
             <a href="dashboard.html" class="menu-item">
                 <span class="menu-icon">▣</span>
                 <span>Dashboard</span>
+            </a>
+            <a href="transaction-demo.html" class="menu-item">
+                <span class="menu-icon">⚗</span>
+                <span>Mô phỏng giao dịch</span>
             </a>
             <a href="bookings.html" class="menu-item">
                 <span class="menu-icon">🛏</span>
@@ -524,7 +545,8 @@
                     <button type="submit" class="btn-custom btn-primary-custom">
                         🔍 Kiểm tra phòng trống
                     </button>
-                    <button type="button" id="resetCheckAvailability" class="btn-custom btn-secondary-custom" style="display: none;">
+                    <button type="button" id="resetCheckAvailability" class="btn-custom btn-secondary-custom"
+                        style="display: none;">
                         ✕ Hủy lọc ngày
                     </button>
                 </form>
@@ -545,12 +567,14 @@
                     <div class="room-form-grid">
                         <div class="form-group-custom">
                             <label for="roomCode">Mã phòng *</label>
-                            <input id="roomCode" type="text" class="form-control-custom" placeholder="VD: P101" required>
+                            <input id="roomCode" type="text" class="form-control-custom" placeholder="VD: P101"
+                                required>
                         </div>
 
                         <div class="form-group-custom">
                             <label for="roomName">Tên phòng *</label>
-                            <input id="roomName" type="text" class="form-control-custom" placeholder="VD: Phòng 101" required>
+                            <input id="roomName" type="text" class="form-control-custom" placeholder="VD: Phòng 101"
+                                required>
                         </div>
 
                         <div class="form-group-custom">
@@ -562,12 +586,14 @@
 
                         <div class="form-group-custom">
                             <label for="roomPrice">Giá mỗi đêm (VNĐ) *</label>
-                            <input id="roomPrice" type="number" class="form-control-custom" min="0" step="10000" placeholder="VD: 600000" required>
+                            <input id="roomPrice" type="number" class="form-control-custom" min="0" step="10000"
+                                placeholder="VD: 600000" required>
                         </div>
 
                         <div class="form-group-custom">
                             <label for="roomCapacity">Sức chứa tối đa (người) *</label>
-                            <input id="roomCapacity" type="number" class="form-control-custom" min="1" max="10" value="2" required>
+                            <input id="roomCapacity" type="number" class="form-control-custom" min="1" max="10"
+                                value="2" required>
                         </div>
 
                         <div class="form-group-custom">
@@ -583,7 +609,8 @@
 
                         <div class="form-group-custom full-width">
                             <label for="roomNote">Ghi chú phòng</label>
-                            <textarea id="roomNote" class="form-control-custom" rows="2" placeholder="Nhập ghi chú đặc điểm phòng (tầng, hướng nhìn, tiện nghi...)..."></textarea>
+                            <textarea id="roomNote" class="form-control-custom" rows="2"
+                                placeholder="Nhập ghi chú đặc điểm phòng (tầng, hướng nhìn, tiện nghi...)..."></textarea>
                         </div>
                     </div>
 
